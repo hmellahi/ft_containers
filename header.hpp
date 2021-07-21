@@ -12,10 +12,12 @@
 
 # include <iostream>
 # include <string>
+
 namespace ft
 {
-    template <typename T, class Container = std::vector<T> >
-    class stack;
+    // template <typename T, class Container = std::vector<T> >
+    // class stack;
     class map;
-    class vector;
+    template < class T, class Alloc = std::allocator<T> >
+    class Vector;
 }

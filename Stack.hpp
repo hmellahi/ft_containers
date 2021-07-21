@@ -31,7 +31,7 @@ class ft::stack
 		size_t	size(){return c.size();};
 		T		top(){return c.back();};
 		void	pop(){c.pop_back();};
-		T		push(T element){return c.push_back(element);};
+		void		push(T element){c.push_back(element);};
 
 	protected:
 		Container c;

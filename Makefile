@@ -13,7 +13,7 @@
 
 CLANG = clang++
 
-FLAGS = -Wall -Werror -Wextra --std=c++98
+FLAGS = #-Wall -Werror -Wextra --std=c++98
 
 NAME = a.out
 
@@ -24,6 +24,8 @@ all: $(NAME)
 $(NAME): ${SRC}
 	$(CLANG) $(FLAGS) ${SRC} -o $(NAME)
 
+san :
+	$(CLANG) $(FLAGS) ${SRC} -fsanitize=address -g -o $(NAME)
 clean:
 
 fclean: clean

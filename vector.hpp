@@ -18,7 +18,7 @@
 // #include "header.hpp"
 namespace ft
 {
-    template < class T, class Alloc = std::allocator<T>>
+    template < class T, class Alloc = std::allocator<T> >
     class vector;
 	template <typename T, class Container = vector<T> >
     class stack;
@@ -32,7 +32,7 @@ class ft::vector
 		// typedef ft::vector ft::ft::vector<T>;
 		~vector()
 		{
-			ft_destroy_arr();
+			ft_destroy_arr(); // DRY : replace with clear
 			if (_max_capacity)
 				myAllocator.deallocate(_arr, _max_capacity);
 		};
@@ -53,8 +53,7 @@ class ft::vector
 		vector& operator= (const ft::vector<T>& src)
 		{
 			ft_destroy_arr();
-			_max_capacity = src.capacity(); // DRY ???
-			_arr = myAllocator.allocate(_max_capacity);
+			reserve(src.size());
 			ft_init_with_iters(src.begin(), src.end());
 			return *this;
 		}
@@ -73,9 +72,12 @@ class ft::vector
         vector (InputIterator first, InputIterator last,
                  const allocator_type& alloc = allocator_type())
 		{
-			myAllocator = alloc;
 			_index = 0;
-			_max_capacity = 0; // DRY
+			_max_capacity = 0;
+			// myAllocator = alloc; // useles??
+			(void)alloc;
+			// reserve(last - first);
+			reserve(std::distance(first, last));
 			ft_init_with_iters(first, last);
 		} // todo : fix
 
@@ -113,8 +115,11 @@ class ft::vector
 			////////////////////////////// ////////// ////////// ////////// 
 			if (n > _max_capacity)
 			{
-				reserve(n);
 				size_type i = _index - 1;
+				if (n > (_index * 2))
+					reserve(n);
+				else
+					reserve(_index * 2); // todo : right?
 				while (++i < n)
 					push_back(val);
 			}
@@ -246,7 +251,8 @@ class ft::vector
             int elem_to_move = end() - position;
 			ft::vector<T> tmp;
 			tmp.assign(position, end());
-			reserve(_index + 1);
+			if ((1 + _index) > _max_capacity) // DRY BRIH
+				reserve((_index) * 2);
 			// printf("\nI : %d\n", elem_to_move);
 			_index = pos;
 			ft_init_with_val(1, val);
@@ -262,7 +268,7 @@ class ft::vector
 			ft::vector<T> tmp;
 			tmp.assign(position, end());
 			reserve(_index + n);
-			printf("\nI : %lu\n", _index + n);
+			// printf("\nI : %lu\n", _index + n);
 			// printf("%d|%d|%d\n", start, elem_to_move, val);
 			_index = start;
 			ft_init_with_val(n, val);
@@ -278,7 +284,14 @@ class ft::vector
             int elem_to_move = end() - position;
 			ft::vector<T> tmp;
 			tmp.assign(position, end());
-			reserve(_index + (std::distance(last, first)));
+			// if (!_index) // todo
+			difference_type n  = std::distance(first, last);
+			if ((n + _index) > _max_capacity && (n + _index) > (_index * 2)) // DRY BRIH
+				reserve(_index + n);
+			else if ((n + _index) > _max_capacity) // wtf
+				reserve(_index * 2);
+			if (!_max_capacity)
+				reserve(n);
 			_index = start;
 			ft_init_with_iters(first, last);
 			for (int i = 0; i < elem_to_move; i++)
@@ -289,13 +302,17 @@ class ft::vector
            class = typename std::enable_if<!std::is_integral<InputIterator>::value>::type>
 		void assign (InputIterator first, InputIterator last)
 		{
+			// std::cout <<  "d" << last - first << std::endl;
 			ft_destroy_arr();
+			// reserve(last - first);
+			reserve(std::distance(first, last));
 			ft_init_with_iters(first, last);
 		} // todo fix
 
 		void assign (size_type n, const value_type& val)
 		{
 			ft_destroy_arr();
+			reserve(n);
 			ft_init_with_val(n, val);
 		}
 		iterator erase (iterator position)
@@ -339,30 +356,32 @@ class ft::vector
                 typedef int difference_type;
                 iterator(pointer ptr) : _ptr(ptr) { }
 				iterator(){}
-				// void operator =(const iterator &src){ _ptr = src._ptr;}
+				// explicit iterator(const iterator &src);//{ this->_ptr = src._ptr;}
                 // member prefix ++x
-				self_type operator++() {_ptr++; return *this; }
+				self_type& operator++() {_ptr++; return *this; }
 				// member postfix x++
+				// todo : make operators return reference instead of values
                 self_type operator++(int) {self_type i = *this; _ptr++; return i;}
-				self_type operator--() { _ptr--; return *this;}
+				self_type& operator--() { _ptr--; return *this;}
                 self_type operator--(int) { self_type i = *this; _ptr--; return i;}
 				// self_type operator+(int i) { _ptr += i; return *this;}
 				// self_type operator+(int i) { _ptr += i; return *this;}
-				self_type operator-(int i) { _ptr -= i; return *this;}
+				// self_type operator-(int i) { _ptr -= i; return *this;}
 				self_type operator+=(int i) { _ptr += i; return *this;}
 				self_type operator-=(int i) { _ptr -= i; return *this;}
 				friend self_type operator+(self_type it, int i)
 				{
-					it._ptr += i;
-					return it;
+					return (it._ptr + i);
 				}
-				// friend self_type operator-(self_type it, int i)
-				// {
-				// 	it._ptr -= i;
-				// 	return it;
-				// }
+				friend iterator operator+(int i, self_type it)
+				{
+					return (it._ptr + i);
+				}
+				friend self_type operator-(self_type it, int i)
+				{
+					return (it._ptr - i);
+				}
 				difference_type operator-(self_type src)const { return ( _ptr - src._ptr);}
-				difference_type operator+(self_type src)const { return ( _ptr + src._ptr);}				difference_type operator-(self_type src) { return ( _ptr - src._ptr);}
 				// difference_type operator-(const_iterator src) { return ( _ptr - src._ptr);}				difference_type operator-(self_type src) { return ( _ptr - src._ptr);}
 				// difference_type operator+(self_type src) { return ( _ptr + src._ptr);}
                 reference operator*() { return *_ptr; }
@@ -381,27 +400,13 @@ class ft::vector
         {
             public:	
                 typedef const_iterator self_type;
-                // typedef T value_type;
-                // typedef T& reference;
-                // typedef T* pointer;
                 typedef int difference_type;
-                // typedef std::forward_iterator_tag iterator_category;
 				const_iterator(const iterator &src){ this->_ptr = src._ptr;}
                 const_iterator(pointer ptr) : iterator(ptr) { }
                 const_iterator(){}
-				// difference_type operator-(const_iterator src)const { return ( this->_ptr - src._ptr);}
-				// difference_type operator+(iterator src) { return ( this->_ptr + src._ptr);}
-                // self_type operator++() { self_type i = *this; _ptr++; return i; }
-                // self_type operator++(int) { return ++*this; }
-				// self_type operator--() { self_type i = *this; _ptr--; return i; }
-                // self_type operator--(int) { return --*this; }
                 const value_type operator*() { return *this->_ptr; }
-                const pointer operator->() { return this->_ptr; }
-            	const value_type operator[](size_t i) { return this->_ptr[i]; } // todo...
-				// bool operator==(const self_type& rhs) { return _ptr == rhs._ptr; }
-                // bool operator!=(const self_type& rhs) { return _ptr != rhs._ptr; }
-            // private:
-                // pointer _ptr;
+                const T* operator->() const{ return  this->_ptr; }
+            	const value_type operator[](size_t i) { return this->_ptr[i]; }
         };
 		class reverse_iterator : public iterator
         {
@@ -418,29 +423,27 @@ class ft::vector
 				reverse_iterator(const iterator &src){ this->_ptr = src._ptr;}
 				// iterator(const self_type &src){ _ptr = src._ptr;}
 				// void operator =(const iterator &src){ _ptr = src._ptr;}
-                // member prefix ++x
-				self_type operator++() {_ptr--; return *this; }
-				// member postfix x++
-                self_type operator++(int) {self_type i = *this; _ptr--; return i;}
-				self_type operator--() { _ptr++; return *this;}
-                self_type operator--(int) { self_type i = *this; _ptr++; return i;}
-				// self_type operator+(int i) { _ptr += i; return *this;}
-				// self_type operator+(int i) { _ptr += i; return *this;}
-				self_type operator-(int i) { _ptr += i; return *this;}
-				self_type operator+=(int i) { _ptr -= i; return *this;}
-				self_type operator-=(int i) { _ptr += i; return *this;}
-				friend self_type operator+(self_type it, int i)
+				self_type&	operator++() {this->_ptr--; return *this; }
+                self_type	operator++(int) {self_type i = *this; this->_ptr--; return i;}
+				self_type&	operator--() { this->_ptr++; return *this;}
+                self_type	operator--(int) { self_type i = *this; this->_ptr++; return i;}
+				reference operator[](size_t i) { return *(this->_ptr - i);} // todo...
+				self_type operator+=(int i) { this->_ptr -= i; return *this;} // check
+				self_type operator-=(int i) { this->_ptr += i; return *this;}
+				self_type base() const { self_type base(this->_ptr + 1);return (base);}
+				friend reverse_iterator operator+(self_type it, int i)
 				{
-					it._ptr -= i;
-					return it;
+					return (it._ptr - i);
+				}
+				friend reverse_iterator operator+(int i, self_type it)
+				{
+					return (it._ptr - i);
 				}
 				friend self_type operator-(self_type it, int i)
 				{
-					it._ptr += i; // check
-					return it;
+					return (it._ptr + i);
 				}
-            // protected:
-                pointer _ptr;
+				difference_type operator-(self_type src) { return ( -1 *( this->_ptr - src._ptr));}
         };
 		class const_reverse_iterator : public reverse_iterator
         {
@@ -450,16 +453,16 @@ class ft::vector
                 const_reverse_iterator(pointer ptr) : iterator(ptr) { }
                 const_reverse_iterator(){}
                 const value_type operator*() { return *this->_ptr; }
-                const pointer operator->() { return this->_ptr; }
-            	const value_type operator[](size_t i) { return this->_ptr[i]; } // todo...
+                const T* const operator->() { return  this->_ptr; } // todo wtf??
+            	const value_type operator[](size_t i){ return *(this->_ptr - i);}// todo...
         };
 
 		iterator begin(){return iterator(_arr);}
 		const_iterator begin() const{return const_iterator(_arr);}
 		iterator end(){return iterator(_arr + _index);}
 		const_iterator end() const{return const_iterator(_arr + _index);}
-		reverse_iterator rbegin(){return reverse_iterator(_arr + _index);}
-		const_reverse_iterator rbegin() const{return const_reverse_iterator(_arr + _index);}
+		reverse_iterator rbegin(){return reverse_iterator(_arr + _index - 1);}
+		const_reverse_iterator rbegin() const{return const_reverse_iterator(_arr + _index - 1);}
 		reverse_iterator rend(){return reverse_iterator(_arr - 1);}
 		const_reverse_iterator rend() const{return const_reverse_iterator(_arr - 1);};
 
@@ -610,9 +613,14 @@ template <class T, class Alloc>
 
 
 // fix
-// >>> assign
-// >>> copy
-// >>> biderct
+
+
+// wtf is base()??????
+// reverse iters :: 4 []
+// vector/rite2.cpp                   : COMPILE: ✅ | RET: ✅ | OUT: ❌ | STD: [Y]
+// vector/rite.cpp                    : COMPILE: ✅ | RET: ❌ | OUT: ❌ | STD: [Y]
+// vector/rite_eq_ope.cpp             : COMPILE: ✅ | RET: ✅ | OUT: ❌ | STD: [Y]
+
 template <class T, class Alloc>
   void swap (ft::vector<T,Alloc>& x, ft::vector<T,Alloc>& y)
 {

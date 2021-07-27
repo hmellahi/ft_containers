@@ -3,15 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hamza <hamza@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 21:28:08 by hmellahi          #+#    #+#             */
-/*   Updated: 2021/07/21 14:37:55 by hamza            ###   ########.fr       */
+/*   Updated: 2021/07/27 13:29:29 by hmellahi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // #include "Stack.hpp"
 #include "vector.hpp"
+#include <iostream>       // std::cout
+#include <stack>          // std::stack
+#include <vector>         // std::vector
+#include <deque>
 // #include <ft::vector>
 int main2()
 {
@@ -104,27 +108,39 @@ int main2()
     // std::cout << ' ' << *it;
   	// std::cout << '\n';
 	// *iter = "hey";
+std::deque<int> mydeque (3,100);          // deque with 3 elements
+  std::vector<int> myvector (2,200);        // vector with 2 elements
 
+  std::stack<int> first;                    // empty stack
+  std::stack<int> second (mydeque);         // stack initialized to copy of deque
+
+  std::stack<int,std::vector<int> > third;  // empty stack using vector
+  std::stack<int,std::vector<int> > fourth (myvector);
+
+  std::cout << "size of first: " << first.size() << '\n';
+  std::cout << "size of second: " << second.size() << '\n';
+  std::cout << "size of third: " << third.size() << '\n';
+  std::cout << "size of fourth: " << fourth.size() << '\n';
 	//  ft::vector<int> first;                                // empty ft::vector of ints
-	ft::vector<int> first;
-	ft::vector<int> second;
-    ft::vector<int> third;
+// 	ft::vector<int> first;
+// 	ft::vector<int> second;
+//     ft::vector<int> third;
 
-  first.assign(7,4);             // 7 ints with a value of 100
-	for (ft::vector<int>::iterator it = first.begin(); it != first.end(); ++it)
-    std::cout << ' ' << *it;
-	std::cout << "\n";
-  ft::vector<int>::iterator it;
-  it=first.begin() + 1;
+//   first.assign(7,4);             // 7 ints with a value of 100
+// 	for (ft::vector<int>::iterator it = first.begin(); it != first.end(); ++it)
+//     std::cout << ' ' << *it;
+// 	std::cout << "\n";
+//   ft::vector<int>::iterator it;
+//   it=first.begin() + 1;
 
-//   second.assign (it,first.end()-1); // the 5 central values of first
+// //   second.assign (it,first.end()-1); // the 5 central values of first
 
-//   int myints[] = {1776,7,4}; // fix
-//   third.assign (myints,myints+3);   // assigning from array.
+// //   int myints[] = {1776,7,4}; // fix
+// //   third.assign (myints,myints+3);   // assigning from array.
 
-  std::cout << "Size of first: " << int (first.size()) << '\n';
-  std::cout << "Size of second: " << int (second.size()) << '\n';
-  std::cout << "Size of third: " << int (third.size()) << '\n';
+//   std::cout << "Size of first: " << int (first.size()) << '\n';
+//   std::cout << "Size of second: " << int (second.size()) << '\n';
+//   std::cout << "Size of third: " << int (third.size()) << '\n';
 //   ft::vector<int> second (4,100);                      // four ints with value 100
 //   ft::vector<int> third (mylist.begin(),mylist.end());  // iterating through second
 //   ft::vector<int> fourth (third);                       // a copy of third
@@ -178,21 +194,21 @@ int main2()
 //     std::cout << ' ' << *it;
 //   std::cout << '\n';
 
-  ft::vector<int> myvector;
+//   ft::vector<int> myvector;
 
-  // set some values (from 1 to 10)
-  for (int i=1; i<=10; i++) myvector.push_back(i);
+//   // set some values (from 1 to 10)
+//   for (int i=1; i<=10; i++) myvector.push_back(i);
 
-  // erase the 6th element
-  myvector.erase (myvector.begin() + 5);
+//   // erase the 6th element
+//   myvector.erase (myvector.begin() + 5);
 
-  // erase the first 3 elements:
-  myvector.erase (myvector.begin(),myvector.begin()+3);
+//   // erase the first 3 elements:
+//   myvector.erase (myvector.begin(),myvector.begin()+3);
 
-  std::cout << "myvector contains:" << myvector.capacity() << "\n";
-  for (unsigned i=0; i<myvector.size(); ++i)
-    std::cout << ' ' << myvector[i];
-  std::cout << '\n';
+//   std::cout << "myvector contains:" << myvector.capacity() << "\n";
+//   for (unsigned i=0; i<myvector.size(); ++i)
+//     std::cout << ' ' << myvector[i];
+//   std::cout << '\n';
 	// ft::vector<int> myvector;
 //   myvector.push_back (100);
 //   myvector.push_back (200);
@@ -249,17 +265,32 @@ int main2()
 }
 
 // #include "common.hpp"
-#include <vector>
-#define TESTED_NAMESPACE std
-#define TESTED_TYPE int
+// #include <vector>
+// #define TESTED_NAMESPACE std
+// #define TESTED_TYPE int
 
-void	is_empty(TESTED_NAMESPACE::vector<TESTED_TYPE> const &vct)
-{
-	std::cout << "is_empty: " << vct.empty() << std::endl;
-}
+// void	is_empty(TESTED_NAMESPACE::vector<TESTED_TYPE> const &vct)
+// {
+// 	std::cout << "is_empty: " << vct.empty() << std::endl;
+// }
 
 int		main(void)
 {
+	std::deque<int> mydeque (3,100);          // deque with 3 elements
+  std::vector<int> myvector (2,200);        // vector with 2 elements
+
+  std::stack<int> first;                    // empty stack
+  std::stack<int> second (mydeque);         // stack initialized to copy of deque
+
+  std::stack<int,std::vector<int> > third(myvector);  // empty stack using vector
+  std::stack<int,std::vector<int> > fourth (myvector);
+
+  std::cout << "size of first: " << first.size() << '\n';
+  std::cout << "size of second: " << second.size() << '\n';
+   third.pop();
+  std::cout << "size of third: " << third.size() << '\n';
+  std::cout << "size of fourth: " << fourth.size() << '\n';
+
 // 	 ft::vector<int> myvector (3,100);
 //   ft::vector<int>::iterator it;
 // it = myvector.begin();

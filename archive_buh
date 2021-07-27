@@ -46,7 +46,7 @@ class ft::vector
 		typedef		typename allocator_type::const_pointer		const_pointer;
 		typedef		int		difference_type;
 		typedef		size_t	size_type;
-		class iterator;
+		class random_access_it;
 		class const_iterator;
 		// -------> constructors
 		// copy construct
@@ -79,7 +79,7 @@ class ft::vector
 			// reserve(last - first);
 			reserve(std::distance(first, last));
 			ft_init_with_iters(first, last);
-		}
+		} // todo : fix
 
 		explicit vector (size_type n, const value_type& val = value_type(),
 		const allocator_type& alloc = allocator_type())
@@ -245,7 +245,7 @@ class ft::vector
 			ft_destroy_arr();
 		}
 
-		iterator insert(iterator position, const value_type& val)
+		random_access_it insert(random_access_it position, const value_type& val)
 		{
 			difference_type pos = position - begin();
             int elem_to_move = end() - position;
@@ -261,7 +261,7 @@ class ft::vector
 			return (begin() + pos);
 		}
 		
-		void insert (iterator position, size_type n, const value_type& val)
+		void insert (random_access_it position, size_type n, const value_type& val)
 		{
 			difference_type start = position - begin();
             int elem_to_move = end() - position;
@@ -278,7 +278,7 @@ class ft::vector
 
 		template <class InputIterator,
 		    class = typename std::enable_if<!std::is_integral<InputIterator>::value>::type>
-    	void insert (iterator position, InputIterator first, InputIterator last)
+    	void insert (random_access_it position, InputIterator first, InputIterator last)
 		{
 			difference_type start = position - begin();
             int elem_to_move = end() - position;
@@ -316,7 +316,7 @@ class ft::vector
 			reserve(n);
 			ft_init_with_val(n, val);
 		}
-		iterator erase (iterator position)
+		random_access_it erase (random_access_it position)
 		{
 			difference_type pos = position - begin();
 			myAllocator.destroy(_arr + pos);
@@ -326,7 +326,7 @@ class ft::vector
 				push_back(_arr[i + pos + 1]);
 			return position;
 		}
-		iterator erase (iterator first, iterator last)
+		random_access_it erase (random_access_it first, random_access_it last)
 		{
 			difference_type start_pos = first - begin();
 			difference_type last_pos = last - begin();
@@ -345,19 +345,19 @@ class ft::vector
 		}
 
 		// --> Iterators
-	   	class iterator
+	   	class random_access_it
         {
             public:
-				// iterator(const const_iterator&) = delete;
-                typedef iterator self_type;
+				// random_access_it(const const_iterator&) = delete;
+                typedef random_access_it self_type;
                 typedef T value_type;
                 typedef T& reference;
                 typedef T* pointer;
                 typedef std::forward_iterator_tag iterator_category;
                 typedef int difference_type;
-                iterator(pointer ptr) : _ptr(ptr) { }
-				iterator(){}
-				// explicit iterator(const iterator &src);//{ this->_ptr = src._ptr;}
+                random_access_it(pointer ptr) : _ptr(ptr) { }
+				random_access_it(){}
+				// explicit random_access_it(const random_access_it &src);//{ this->_ptr = src._ptr;}
                 // member prefix ++x
 				self_type& operator++() {_ptr++; return *this; }
 				// member postfix x++
@@ -374,7 +374,7 @@ class ft::vector
 				{
 					return (it._ptr + i);
 				}
-				friend iterator operator+(int i, self_type it)
+				friend random_access_it operator+(int i, self_type it)
 				{
 					return (it._ptr + i);
 				}
@@ -397,30 +397,39 @@ class ft::vector
             // protected:
                 pointer _ptr;
         };
-		class const_iterator : public iterator
+		class iterator : public random_access_it
+		{
+			// iterator(pointer ptr) : _ptr(ptr) { }
+			public:
+				iterator(){}
+			// private:
+				iterator(const random_access_it &src){ this->_ptr = src._ptr;}
+		};
+		class const_iterator : public random_access_it
         {
             public:	
                 typedef const_iterator self_type;
                 typedef int difference_type;
 				const_iterator(const iterator &src){ this->_ptr = src._ptr;}
-                const_iterator(pointer ptr) : iterator(ptr) { }
+				const_iterator(const random_access_it &src){ this->_ptr = src._ptr;}
+                const_iterator(pointer ptr) : random_access_it(ptr) { }
                 const_iterator(){}
                 const value_type operator*() { return *this->_ptr; }
                 const T* operator->() const{ return  this->_ptr; }
             	const value_type operator[](size_t i) { return this->_ptr[i]; }
         };
-		class reverse_iterator : public iterator
+		class reverse_iterator : public random_access_it
         {
             public:
-				// iterator(const const_iterator&) = delete;
+				// random_access_it(const const_iterator&) = delete;
                 typedef reverse_iterator self_type;
-                reverse_iterator(pointer ptr) : iterator(ptr) { }
-				reverse_iterator(const iterator &src){ this->_ptr = (src._ptr - 1);}
+                reverse_iterator(pointer ptr) : random_access_it(ptr) { }
+				reverse_iterator(const random_access_it &src){ this->_ptr = (src._ptr - 1);}
                 // reverse_iterator(pointer ptr) : _ptr(ptr) { }
 				reverse_iterator(){}
-				// reverse_iterator(const iterator &src){ this->_ptr = src._ptr;}
-				// iterator(const self_type &src){ _ptr = src._ptr;}
-				// void operator =(const iterator &src){ _ptr = src._ptr;}
+				// reverse_iterator(const random_access_it &src){ this->_ptr = src._ptr;}
+				// random_access_it(const self_type &src){ _ptr = src._ptr;}
+				// void operator =(const random_access_it &src){ _ptr = src._ptr;}
 				self_type&	operator++() {this->_ptr--; return *this; }
                 self_type	operator++(int) {self_type i = *this; this->_ptr--; return i;}
 				self_type&	operator--() { this->_ptr++; return *this;}
@@ -432,7 +441,7 @@ class ft::vector
                 bool operator<(const self_type& rhs) const{ return this->_ptr > rhs._ptr; }
 				self_type operator+=(int i) { this->_ptr -= i; return *this;} // check
 				self_type operator-=(int i) { this->_ptr += i; return *this;}
-				iterator base() const { iterator base(this->_ptr + 1);return (base);}
+				random_access_it base() const { random_access_it base(this->_ptr + 1);return (base);}
 				friend reverse_iterator operator+(self_type it, int i)
 				{
 					return (it._ptr - i);
@@ -452,17 +461,17 @@ class ft::vector
         {
             public:	
                 typedef const_reverse_iterator self_type;
-				const_reverse_iterator(const iterator &src){ this->_ptr = src._ptr;}
-                const_reverse_iterator(pointer ptr) : iterator(ptr) { }
+				const_reverse_iterator(const random_access_it &src){ this->_ptr = src._ptr;}
+                const_reverse_iterator(pointer ptr) : random_access_it(ptr) { }
                 const_reverse_iterator(){}
 				const value_type  operator*() { return *(this->_ptr); }
                 const value_type* operator->() { return  this->_ptr; } // todo wtf??
             	const value_type operator[](size_t i){ return *(this->_ptr - i);}// todo...
         };
 
-		iterator begin(){return iterator(_arr);}
+		random_access_it begin(){return random_access_it(_arr);}
 		const_iterator begin() const{return const_iterator(_arr);}
-		iterator end(){return iterator(_arr + _index);}
+		random_access_it end(){return random_access_it(_arr + _index);}
 		const_iterator end() const{return const_iterator(_arr + _index);}
 		reverse_iterator rbegin(){return reverse_iterator(_arr + _index - 1);}
 		const_reverse_iterator rbegin() const{return const_reverse_iterator(_arr + _index - 1);}
@@ -487,7 +496,7 @@ class ft::vector
 		void	ft_init_with_iters(InputIterator first, InputIterator last)
 		{
 			// Check whether it's an integral type.
-			// If so, it's not an iterator.
+			// If so, it's not an random_access_it.
 			// Otherwise ...... // todo : remove
 			while (first != last)
 				push_back(*first++);
@@ -495,7 +504,6 @@ class ft::vector
 
 		void	ft_init_with_val(size_type n, const value_type& val = value_type())
 		{
-			// std::cout << n << "|"<< val << "|"<< std::endl;
 			for (size_type i = 0; i < n;i++)
 				push_back(val);
 		}
@@ -524,7 +532,6 @@ class ft::vector
 template <class InputIterator1, class InputIterator2>
 bool equal ( InputIterator1 first1, InputIterator1 last1, InputIterator2 first2 )
 {
-	// std::cout << *first1 << "|" << *first2 << std::endl;
   while (first1!=last1)
     if (*first1++ != *first2++) 
       return false;
@@ -535,31 +542,13 @@ template <class InputIterator1, class InputIterator2>
 bool lexicographical_compare (InputIterator1 first1, InputIterator1 last1,
                             InputIterator2 first2, InputIterator2 last2)
 {
-//   while (first1!=last1)
-//   {
-//     // if (*first2<*first1) return false;
-//     // else
-// 	 if (*first1<*first2) return true;
-//     ++first1; ++first2;
-//   }
-// 	// if (*first2 == *first1)
-// 	// return false;
-// //   return (first2!=last2);
-// 	// last2--;
-// 	if (first1 == last1 && first2 != last2)
-// 		return true;
-// 	return false;
-// if (first1 == first2 && last1 == last2)
-	// return  false;
-	// printf("\nf1 : %d, f2 : %d\n", *first1, *first2);
-while (first1!=last1)
-  {
-    if (first2==last2 || *first1>*first2) return false;
-    else if (*first1<*first2) return true;
-    ++first1; ++first2;
-	// printf("f1 : %d, f2 : %d\n", *first1, *first2);
-  }
-  return (first2!=last2);
+	while (first1!=last1)
+	{
+		if (first2==last2 || *first1>*first2) return false;
+		else if (*first1<*first2) return true;
+		++first1; ++first2;
+	}
+	return (first2!=last2);
 }
 
 template <class T, class Alloc>
@@ -607,8 +596,12 @@ template <class T, class Alloc>
 // todo
 // is_integral
 // enable_if
+// swap
 // copy/= preserve allocater??
+// const iter doesnt return non-const
 // prevent casting from CI TO I ;) (RI AS WELL BRUH) nvm
+// create random_it 
+// capacity bro? +1 / *2
 
 template <class T, class Alloc>
   void swap (ft::vector<T,Alloc>& x, ft::vector<T,Alloc>& y)

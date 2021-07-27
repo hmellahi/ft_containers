@@ -1,10 +1,10 @@
-#include "RBT.hpp"
 #include <map>
 #include "map.hpp"
 int main()
 {
-    RBT<pair<int, int >> B;
+    ft::map<int, int> mymap;
     RBT<std::string> b;
+    std::cout << mymap[1];
     // std::cout << a.insert(10)->value;
     // std::cout << a.insert(33)->value;
     // std::cout << a.insert(33)->value;
@@ -13,14 +13,14 @@ int main()
     // b.insert(*make_pair<int, int > (8, 5));
     // std::cout << *make_pair<int, int > (8, 5);
     // b.print();
-    b.insert("HEY");
-    b.insert("BBBB");
+    // b.insert("HEY");
+    // b.insert("BBBB");
     // b.insert(70);
-    b.print();
-    std::cout << (b.search("HEYS"));
+    // b.print();
+    // std::cout << (b.search("HEY"));
     // RBT<char> mymap;
     // std::map<char, std::string> mymap;
-
+    
     // b.insert(40);
     // b.insert(20);
     // b.insert(70);

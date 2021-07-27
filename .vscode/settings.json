@@ -46,6 +46,17 @@
         "streambuf": "cpp",
         "typeinfo": "cpp",
         "list": "cpp",
-        "set": "cpp"
+        "set": "cpp",
+        "__bit_reference": "cpp",
+        "__hash_table": "cpp",
+        "__string": "cpp",
+        "__tree": "cpp",
+        "__functional_base": "cpp",
+        "__node_handle": "cpp",
+        "bitset": "cpp",
+        "chrono": "cpp",
+        "__memory": "cpp",
+        "locale": "cpp",
+        "ratio": "cpp"
     }
 }

@@ -32,6 +32,7 @@ class ft::vector
 		// typedef ft::vector ft::ft::vector<T>;
 		~vector()
 		{
+			// std::cout << is_integral<bool>::value << std::endl;
 			ft_destroy_arr(); // DRY : replace with clear
 			if (_max_capacity)
 				myAllocator.deallocate(_arr, _max_capacity);
@@ -48,6 +49,30 @@ class ft::vector
 		typedef		size_t	size_type;
 		class iterator;
 		class const_iterator;
+
+		// is_integral : iterators
+		template<typename>
+		struct is_integral
+		{static const bool value = false;};
+		template<> struct is_integral<bool>{static const bool value = true;};
+		template<> struct is_integral<int>{static const bool value = true;};
+		template<> struct is_integral<char16_t>{static const bool value = true;};
+		template<> struct is_integral<char32_t>{static const bool value = true;};
+		template<> struct is_integral<signed char>{static const bool value = true;};
+		template<> struct is_integral<short int>{static const bool value = true;};
+		template<> struct is_integral<long long int>{static const bool value = true;};
+		template<> struct is_integral<long int>{static const bool value = true;};
+		template<> struct is_integral<unsigned char>{static const bool value = true;};
+		template<> struct is_integral<unsigned short int>{static const bool value = true;};
+		template<> struct is_integral<unsigned int>{static const bool value = true;};
+		template<> struct is_integral<unsigned long int>{static const bool value = true;};
+		template<> struct is_integral<unsigned long long int>{static const bool value = true;};
+
+		template<bool B, class D = void>
+		struct enable_if {};
+		
+		template<class D>
+		struct enable_if<true, D> { typedef T type; };
 		// -------> constructors
 		// copy construct
 		vector& operator= (const ft::vector<T>& src)
@@ -68,7 +93,7 @@ class ft::vector
 		// fill constructor with n elements.
 		// range constructor
 		template <class InputIterator,
-		    class = typename std::enable_if<!std::is_integral<InputIterator>::value>::type>
+		    class = typename enable_if<!is_integral<InputIterator>::value>::type>
         vector (InputIterator first, InputIterator last,
                  const allocator_type& alloc = allocator_type())
 		{
@@ -277,7 +302,7 @@ class ft::vector
 		}
 
 		template <class InputIterator,
-		    class = typename std::enable_if<!std::is_integral<InputIterator>::value>::type>
+		    class = typename enable_if<!is_integral<InputIterator>::value>::type>
     	void insert (iterator position, InputIterator first, InputIterator last)
 		{
 			difference_type start = position - begin();
@@ -300,7 +325,7 @@ class ft::vector
 		}
 
 		template <class InputIterator,
-           class = typename std::enable_if<!std::is_integral<InputIterator>::value>::type>
+           class = typename enable_if<!is_integral<InputIterator>::value>::type>
 		void assign (InputIterator first, InputIterator last)
 		{
 			// std::cout <<  "d" << last - first << std::endl;
@@ -343,7 +368,11 @@ class ft::vector
 		{
 			return (myAllocator);
 		}
-
+		
+		// template<bool B, class T = void>
+		// struct enable_if {};
+		// template<class T>
+		// struct enable_if<true, T> { typedef T type; };
 		// --> Iterators
 	   	class iterator
         {
@@ -605,8 +634,6 @@ template <class T, class Alloc>
 }
 
 // todo
-// is_integral
-// enable_if
 // copy/= preserve allocater??
 // prevent casting from CI TO I ;) (RI AS WELL BRUH) nvm
 

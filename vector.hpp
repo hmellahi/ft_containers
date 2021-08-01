@@ -34,6 +34,7 @@ class ft::vector
 		// typedef ft::vector ft::ft::vector<T>;
 		~vector()
 		{
+			// std::cout << is_integral<bool>::value << std::endl;
 			ft_destroy_arr(); // DRY : replace with clear
 			if (_max_capacity)
 				myAllocator.deallocate(_arr, _max_capacity);
@@ -46,19 +47,33 @@ class ft::vector
 		typedef		typename allocator_type::const_reference	const_reference;
 		typedef		typename allocator_type::pointer			pointer;
 		typedef		typename allocator_type::const_pointer		const_pointer;
+<<<<<<< HEAD
 		typedef		size_t										size_type;
 		typedef		rand_acc_iterator<value_type> iterator;
 		typedef		typename iterator_traits<iterator>::difference_type	difference_type;
 		typedef		rand_acc_iterator<const value_type> const_iterator;
 		typedef		reverse_iterator<const_iterator> const_reverse_iterator;
 		typedef		reverse_iterator<iterator> reverse_iterator;
+=======
+		typedef		int		difference_type;
+		typedef		size_t	size_type;
+		class iterator;
+		class const_iterator;
+
+		// is_integral : iterators
+>>>>>>> 796a4f676054c8f30e8330ac0f1b0d1ec8c0d963
 		template<typename>
 		struct is_integral
 		{static const bool value = false;};
 		template<> struct is_integral<bool>{static const bool value = true;};
 		template<> struct is_integral<int>{static const bool value = true;};
+<<<<<<< HEAD
 		// template<> struct is_integral<char16_t>{static const bool value = true;};
 		// template<> struct is_integral<char32_t>{static const bool value = true;};
+=======
+		template<> struct is_integral<char16_t>{static const bool value = true;};
+		template<> struct is_integral<char32_t>{static const bool value = true;};
+>>>>>>> 796a4f676054c8f30e8330ac0f1b0d1ec8c0d963
 		template<> struct is_integral<signed char>{static const bool value = true;};
 		template<> struct is_integral<short int>{static const bool value = true;};
 		template<> struct is_integral<long long int>{static const bool value = true;};
@@ -71,7 +86,11 @@ class ft::vector
 
 		template<bool B, class D = void>
 		struct enable_if {};
+<<<<<<< HEAD
 
+=======
+		
+>>>>>>> 796a4f676054c8f30e8330ac0f1b0d1ec8c0d963
 		template<class D>
 		struct enable_if<true, D> { typedef T type; };
 		// -------> constructors
@@ -369,6 +388,129 @@ class ft::vector
 		{
 			return (myAllocator);
 		}
+<<<<<<< HEAD
+=======
+		
+		// template<bool B, class T = void>
+		// struct enable_if {};
+		// template<class T>
+		// struct enable_if<true, T> { typedef T type; };
+		// --> Iterators
+	   	class iterator
+        {
+            public:
+				// iterator(const const_iterator&) = delete;
+                typedef iterator self_type;
+                typedef T value_type;
+                typedef T& reference;
+                typedef T* pointer;
+                typedef std::forward_iterator_tag iterator_category;
+                typedef int difference_type;
+                iterator(pointer ptr) : _ptr(ptr) { }
+				iterator(){}
+				// explicit iterator(const iterator &src);//{ this->_ptr = src._ptr;}
+                // member prefix ++x
+				self_type& operator++() {_ptr++; return *this; }
+				// member postfix x++
+				// todo : make operators return reference instead of values
+                self_type operator++(int) {self_type i = *this; _ptr++; return i;}
+				self_type& operator--() { _ptr--; return *this;}
+                self_type operator--(int) { self_type i = *this; _ptr--; return i;}
+				// self_type operator+(int i) { _ptr += i; return *this;}
+				// self_type operator+(int i) { _ptr += i; return *this;}
+				// self_type operator-(int i) { _ptr -= i; return *this;}
+				self_type operator+=(int i) { _ptr += i; return *this;}
+				self_type operator-=(int i) { _ptr -= i; return *this;}
+				friend self_type operator+(self_type it, int i)
+				{
+					return (it._ptr + i);
+				}
+				friend iterator operator+(int i, self_type it)
+				{
+					return (it._ptr + i);
+				}
+				friend self_type operator-(self_type it, int i)
+				{
+					return (it._ptr - i);
+				}
+				difference_type operator-(self_type src)const { return ( _ptr - src._ptr);}
+				// difference_type operator-(const_iterator src) { return ( _ptr - src._ptr);}				difference_type operator-(self_type src) { return ( _ptr - src._ptr);}
+				// difference_type operator+(self_type src) { return ( _ptr + src._ptr);}
+                reference operator*() { return *_ptr; }
+                pointer operator->() { return _ptr; }
+                reference operator[](size_t i) { return _ptr[i]; } // todo...
+                bool operator==(const self_type& rhs) const{ return _ptr == rhs._ptr; }
+                bool operator!=(const self_type& rhs) const{ return _ptr != rhs._ptr; }
+				bool operator>=(const self_type& rhs) const{ return _ptr >= rhs._ptr; }
+                bool operator<=(const self_type& rhs) const{ return _ptr <= rhs._ptr; }
+				bool operator>(const self_type& rhs) const{ return _ptr > rhs._ptr; }
+                bool operator<(const self_type& rhs) const{ return _ptr < rhs._ptr; }
+            // protected:
+                pointer _ptr;
+        };
+		class const_iterator : public iterator
+        {
+            public:	
+                typedef const_iterator self_type;
+                typedef int difference_type;
+				const_iterator(const iterator &src){ this->_ptr = src._ptr;}
+                const_iterator(pointer ptr) : iterator(ptr) { }
+                const_iterator(){}
+                const value_type operator*() { return *this->_ptr; }
+                const T* operator->() const{ return  this->_ptr; }
+            	const value_type operator[](size_t i) { return this->_ptr[i]; }
+        };
+		class reverse_iterator : public iterator
+        {
+            public:
+				// iterator(const const_iterator&) = delete;
+                typedef reverse_iterator self_type;
+                reverse_iterator(pointer ptr) : iterator(ptr) { }
+				reverse_iterator(const iterator &src){ this->_ptr = (src._ptr - 1);}
+                // reverse_iterator(pointer ptr) : _ptr(ptr) { }
+				reverse_iterator(){}
+				// reverse_iterator(const iterator &src){ this->_ptr = src._ptr;}
+				// iterator(const self_type &src){ _ptr = src._ptr;}
+				// void operator =(const iterator &src){ _ptr = src._ptr;}
+				self_type&	operator++() {this->_ptr--; return *this; }
+                self_type	operator++(int) {self_type i = *this; this->_ptr--; return i;}
+				self_type&	operator--() { this->_ptr++; return *this;}
+                self_type	operator--(int) { self_type i = *this; this->_ptr++; return i;}
+				reference operator[](size_t i) { return *(this->_ptr - i);} // todo...
+				bool operator>=(const self_type& rhs) const{ return this->_ptr <= rhs._ptr; }
+                bool operator<=(const self_type& rhs) const{ return this->_ptr >= rhs._ptr; }
+				bool operator>(const self_type& rhs) const{ return this->_ptr < rhs._ptr; }
+                bool operator<(const self_type& rhs) const{ return this->_ptr > rhs._ptr; }
+				self_type operator+=(int i) { this->_ptr -= i; return *this;} // check
+				self_type operator-=(int i) { this->_ptr += i; return *this;}
+				iterator base() const { iterator base(this->_ptr + 1);return (base);}
+				friend reverse_iterator operator+(self_type it, int i)
+				{
+					return (it._ptr - i);
+				}
+				friend reverse_iterator operator+(int i, self_type it)
+				{
+					return (it._ptr - i);
+				}
+				friend self_type operator-(self_type it, int i)
+				{
+					return (it._ptr + i);
+				}
+				reference operator*() { return *(this->_ptr); }
+				difference_type operator-(self_type src) { return ( -1 *( this->_ptr - src._ptr));}
+        };
+		class const_reverse_iterator : public reverse_iterator
+        {
+            public:	
+                typedef const_reverse_iterator self_type;
+				const_reverse_iterator(const iterator &src){ this->_ptr = src._ptr;}
+                const_reverse_iterator(pointer ptr) : iterator(ptr) { }
+                const_reverse_iterator(){}
+				const value_type  operator*() { return *(this->_ptr); }
+                const value_type* operator->() { return  this->_ptr; } // todo wtf??
+            	const value_type operator[](size_t i){ return *(this->_ptr - i);}// todo...
+        };
+>>>>>>> 796a4f676054c8f30e8330ac0f1b0d1ec8c0d963
 
 		iterator begin(){return iterator(_arr);}
 		const_iterator begin() const{return const_iterator(_arr);}
@@ -498,8 +640,6 @@ template <class T, class Alloc>
 }
 
 // todo
-// is_integral
-// enable_if
 // copy/= preserve allocater??
 // prevent casting from CI TO I ;) (RI AS WELL BRUH) nvm
 

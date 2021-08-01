@@ -4,38 +4,71 @@ template<typename A, typename B>
 class pair
 {
     public:
-        typedef pair self_type;
         A first;
-        B last;
+        B second;
+
+        typedef pair self_type;
+        typedef A first_type;
+        typedef B second_type;
+        
         pair()
         {
+            this->first = first_type();
+            this->second = second_type();
         }
-        pair(A& first, B& last)
+        pair (const first_type& a, const second_type& b)
         {
             this->first = first;
-            this->last = last;
+            this->second = second;
         }
+        // template<class U, class V>
+        // pair (const pair<U,V>& pr)
+        // {
+        //     *this = pr;
+        // }
         ~pair(){}
-        pair(const pair& src);
-        pair &operator=(pair const &rhs)
+        pair(const pair& src) {*this = src;}
+        pair& operator= (const pair& pr)
         {
+            this->first = pr.first;
+            this->second = pr.second;
             return (*this);
         }
-        bool operator>(const self_type& rhs) const{ return first > rhs.first; }
-        bool operator==(const self_type& rhs) const{ return first == rhs.first; }
-        bool operator=(const self_type& rhs) const{ return first = rhs.first; }
-        // friend std::ostream& operator<<(std::ostream& is, pair<A, B>& obj);
 };
 
 template<typename A, typename B>
 std::ostream& operator<<(std::ostream& is, pair<A, B>& obj)
 {
-    is << obj.first << "|" << obj.last << std::endl;
+    is << obj.first << "|" << obj.second << std::endl;
     return is;
 }
 
-template<typename A, typename B>
-pair<A, B> *make_pair(A first, B last)
+template <class T1,class T2>
+pair<T1,T2> make_pair (T1 x, T2 y)
 {
-    return (new pair<A, B>(first, last));
+  return (pair<T1,T2>(x,y));
 }
+
+template <class T1, class T2>
+  bool operator== (const pair<T1,T2>& lhs, const pair<T1,T2>& rhs)
+{ return lhs.first==rhs.first && lhs.second==rhs.second; }
+
+template <class T1, class T2>
+  bool operator!= (const pair<T1,T2>& lhs, const pair<T1,T2>& rhs)
+{ return !(lhs==rhs); }
+
+template <class T1, class T2>
+  bool operator<  (const pair<T1,T2>& lhs, const pair<T1,T2>& rhs)
+{ return lhs.first<rhs.first || (!(rhs.first<lhs.first) && lhs.second<rhs.second); }
+
+template <class T1, class T2>
+  bool operator<= (const pair<T1,T2>& lhs, const pair<T1,T2>& rhs)
+{ return !(rhs<lhs); }
+
+template <class T1, class T2>
+  bool operator>  (const pair<T1,T2>& lhs, const pair<T1,T2>& rhs)
+{ return rhs<lhs; }
+
+template <class T1, class T2>
+  bool operator>= (const pair<T1,T2>& lhs, const pair<T1,T2>& rhs)
+{ return !(lhs<rhs); }

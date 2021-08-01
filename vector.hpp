@@ -14,7 +14,9 @@
 
 # include <iostream>
 # include <string>
+#include <cstddef>
 # include <memory>
+# include "iterators.hpp"
 // #include "header.hpp"
 namespace ft
 {
@@ -44,12 +46,35 @@ class ft::vector
 		typedef		typename allocator_type::const_reference	const_reference;
 		typedef		typename allocator_type::pointer			pointer;
 		typedef		typename allocator_type::const_pointer		const_pointer;
-		typedef		int		difference_type;
-		typedef		size_t	size_type;
-		class iterator;
-		class const_iterator;
+		typedef		size_t										size_type;
+		typedef		rand_acc_iterator<value_type> iterator;
+		typedef		typename iterator_traits<iterator>::difference_type	difference_type;
+		typedef		rand_acc_iterator<const value_type> const_iterator;
+		typedef		reverse_iterator<const_iterator> const_reverse_iterator;
+		typedef		reverse_iterator<iterator> reverse_iterator;
+		template<typename>
+		struct is_integral
+		{static const bool value = false;};
+		template<> struct is_integral<bool>{static const bool value = true;};
+		template<> struct is_integral<int>{static const bool value = true;};
+		// template<> struct is_integral<char16_t>{static const bool value = true;};
+		// template<> struct is_integral<char32_t>{static const bool value = true;};
+		template<> struct is_integral<signed char>{static const bool value = true;};
+		template<> struct is_integral<short int>{static const bool value = true;};
+		template<> struct is_integral<long long int>{static const bool value = true;};
+		template<> struct is_integral<long int>{static const bool value = true;};
+		template<> struct is_integral<unsigned char>{static const bool value = true;};
+		template<> struct is_integral<unsigned short int>{static const bool value = true;};
+		template<> struct is_integral<unsigned int>{static const bool value = true;};
+		template<> struct is_integral<unsigned long int>{static const bool value = true;};
+		template<> struct is_integral<unsigned long long int>{static const bool value = true;};
+
+		template<bool B, class D = void>
+		struct enable_if {};
+
+		template<class D>
+		struct enable_if<true, D> { typedef T type; };
 		// -------> constructors
-		// copy construct
 		vector& operator= (const ft::vector<T>& src)
 		{
 			ft_destroy_arr();
@@ -68,16 +93,14 @@ class ft::vector
 		// fill constructor with n elements.
 		// range constructor
 		template <class InputIterator,
-		    class = typename std::enable_if<!std::is_integral<InputIterator>::value>::type>
+		    class = typename enable_if<!is_integral<InputIterator>::value>::type>
         vector (InputIterator first, InputIterator last,
                  const allocator_type& alloc = allocator_type())
 		{
 			_index = 0;
 			_max_capacity = 0;
-			// myAllocator = alloc; // useles??
-			(void)alloc;
-			// reserve(last - first);
-			reserve(std::distance(first, last));
+			myAllocator = alloc; // useles??
+			reserve(ft::distance(first, last));
 			ft_init_with_iters(first, last);
 		}
 
@@ -148,6 +171,7 @@ class ft::vector
 		{
 			if (n <= _max_capacity) return ;
 			// allocate new array
+			
 			T	*new_arr;
 			// try
 			// {
@@ -159,9 +183,12 @@ class ft::vector
 			// 	exit(0);
 			// }
 			// copy
+						// std::cout << _index << "|b|" << _max_capacity << std::endl;
+
 			size_type i = -1;
 			while (++i < _index)
-				new_arr[i] = _arr[i];
+				// new_arr[i] = _arr[i];
+				myAllocator.construct(new_arr + i, _arr[i]);
 			// free old one
 			if (_max_capacity)
 				myAllocator.deallocate(_arr, _max_capacity);
@@ -212,8 +239,7 @@ class ft::vector
 		{
 			if (_index >= _max_capacity)
 				this->reserve(!(_max_capacity * 2) ? 1 : _max_capacity * 2);
-			// std::cout << _index << "|" << _max_capacity << std::endl;
-			_arr[_index++] = val;
+			myAllocator.construct(_arr + _index++, val);
 		}
 
 		void pop_back()
@@ -277,7 +303,7 @@ class ft::vector
 		}
 
 		template <class InputIterator,
-		    class = typename std::enable_if<!std::is_integral<InputIterator>::value>::type>
+		    class = typename enable_if<!is_integral<InputIterator>::value>::type>
     	void insert (iterator position, InputIterator first, InputIterator last)
 		{
 			difference_type start = position - begin();
@@ -285,7 +311,7 @@ class ft::vector
 			ft::vector<T> tmp;
 			tmp.assign(position, end());
 			// if (!_index) // todo
-			difference_type n  = std::distance(first, last);
+			difference_type n  = ft::distance(first, last);
 			if ((n + _index) > _max_capacity && (n + _index) > (_index * 2)) // DRY BRIH
 				reserve(_index + n);
 			else if (!_index)
@@ -300,13 +326,13 @@ class ft::vector
 		}
 
 		template <class InputIterator,
-           class = typename std::enable_if<!std::is_integral<InputIterator>::value>::type>
+           class = typename enable_if<!is_integral<InputIterator>::value>::type>
 		void assign (InputIterator first, InputIterator last)
 		{
 			// std::cout <<  "d" << last - first << std::endl;
 			ft_destroy_arr();
 			// reserve(last - first);
-			reserve(std::distance(first, last));
+			reserve(ft::distance(first, last));
 			ft_init_with_iters(first, last);
 		} // todo fix
 
@@ -343,122 +369,6 @@ class ft::vector
 		{
 			return (myAllocator);
 		}
-
-		// --> Iterators
-	   	class iterator
-        {
-            public:
-				// iterator(const const_iterator&) = delete;
-                typedef iterator self_type;
-                typedef T value_type;
-                typedef T& reference;
-                typedef T* pointer;
-                typedef std::forward_iterator_tag iterator_category;
-                typedef int difference_type;
-                iterator(pointer ptr) : _ptr(ptr) { }
-				iterator(){}
-				// explicit iterator(const iterator &src);//{ this->_ptr = src._ptr;}
-                // member prefix ++x
-				self_type& operator++() {_ptr++; return *this; }
-				// member postfix x++
-				// todo : make operators return reference instead of values
-                self_type operator++(int) {self_type i = *this; _ptr++; return i;}
-				self_type& operator--() { _ptr--; return *this;}
-                self_type operator--(int) { self_type i = *this; _ptr--; return i;}
-				// self_type operator+(int i) { _ptr += i; return *this;}
-				// self_type operator+(int i) { _ptr += i; return *this;}
-				// self_type operator-(int i) { _ptr -= i; return *this;}
-				self_type operator+=(int i) { _ptr += i; return *this;}
-				self_type operator-=(int i) { _ptr -= i; return *this;}
-				friend self_type operator+(self_type it, int i)
-				{
-					return (it._ptr + i);
-				}
-				friend iterator operator+(int i, self_type it)
-				{
-					return (it._ptr + i);
-				}
-				friend self_type operator-(self_type it, int i)
-				{
-					return (it._ptr - i);
-				}
-				difference_type operator-(self_type src)const { return ( _ptr - src._ptr);}
-				// difference_type operator-(const_iterator src) { return ( _ptr - src._ptr);}				difference_type operator-(self_type src) { return ( _ptr - src._ptr);}
-				// difference_type operator+(self_type src) { return ( _ptr + src._ptr);}
-                reference operator*() { return *_ptr; }
-                pointer operator->() { return _ptr; }
-                reference operator[](size_t i) { return _ptr[i]; } // todo...
-                bool operator==(const self_type& rhs) const{ return _ptr == rhs._ptr; }
-                bool operator!=(const self_type& rhs) const{ return _ptr != rhs._ptr; }
-				bool operator>=(const self_type& rhs) const{ return _ptr >= rhs._ptr; }
-                bool operator<=(const self_type& rhs) const{ return _ptr <= rhs._ptr; }
-				bool operator>(const self_type& rhs) const{ return _ptr > rhs._ptr; }
-                bool operator<(const self_type& rhs) const{ return _ptr < rhs._ptr; }
-            // protected:
-                pointer _ptr;
-        };
-		class const_iterator : public iterator
-        {
-            public:	
-                typedef const_iterator self_type;
-                typedef int difference_type;
-				const_iterator(const iterator &src){ this->_ptr = src._ptr;}
-                const_iterator(pointer ptr) : iterator(ptr) { }
-                const_iterator(){}
-                const value_type operator*() { return *this->_ptr; }
-                const T* operator->() const{ return  this->_ptr; }
-            	const value_type operator[](size_t i) { return this->_ptr[i]; }
-        };
-		class reverse_iterator : public iterator
-        {
-            public:
-				// iterator(const const_iterator&) = delete;
-                typedef reverse_iterator self_type;
-                reverse_iterator(pointer ptr) : iterator(ptr) { }
-				reverse_iterator(const iterator &src){ this->_ptr = (src._ptr - 1);}
-                // reverse_iterator(pointer ptr) : _ptr(ptr) { }
-				reverse_iterator(){}
-				// reverse_iterator(const iterator &src){ this->_ptr = src._ptr;}
-				// iterator(const self_type &src){ _ptr = src._ptr;}
-				// void operator =(const iterator &src){ _ptr = src._ptr;}
-				self_type&	operator++() {this->_ptr--; return *this; }
-                self_type	operator++(int) {self_type i = *this; this->_ptr--; return i;}
-				self_type&	operator--() { this->_ptr++; return *this;}
-                self_type	operator--(int) { self_type i = *this; this->_ptr++; return i;}
-				reference operator[](size_t i) { return *(this->_ptr - i);} // todo...
-				bool operator>=(const self_type& rhs) const{ return this->_ptr <= rhs._ptr; }
-                bool operator<=(const self_type& rhs) const{ return this->_ptr >= rhs._ptr; }
-				bool operator>(const self_type& rhs) const{ return this->_ptr < rhs._ptr; }
-                bool operator<(const self_type& rhs) const{ return this->_ptr > rhs._ptr; }
-				self_type operator+=(int i) { this->_ptr -= i; return *this;} // check
-				self_type operator-=(int i) { this->_ptr += i; return *this;}
-				iterator base() const { iterator base(this->_ptr + 1);return (base);}
-				friend reverse_iterator operator+(self_type it, int i)
-				{
-					return (it._ptr - i);
-				}
-				friend reverse_iterator operator+(int i, self_type it)
-				{
-					return (it._ptr - i);
-				}
-				friend self_type operator-(self_type it, int i)
-				{
-					return (it._ptr + i);
-				}
-				reference operator*() { return *(this->_ptr); }
-				difference_type operator-(self_type src) { return ( -1 *( this->_ptr - src._ptr));}
-        };
-		class const_reverse_iterator : public reverse_iterator
-        {
-            public:	
-                typedef const_reverse_iterator self_type;
-				const_reverse_iterator(const iterator &src){ this->_ptr = src._ptr;}
-                const_reverse_iterator(pointer ptr) : iterator(ptr) { }
-                const_reverse_iterator(){}
-				const value_type  operator*() { return *(this->_ptr); }
-                const value_type* operator->() { return  this->_ptr; } // todo wtf??
-            	const value_type operator[](size_t i){ return *(this->_ptr - i);}// todo...
-        };
 
 		iterator begin(){return iterator(_arr);}
 		const_iterator begin() const{return const_iterator(_arr);}
@@ -535,23 +445,6 @@ template <class InputIterator1, class InputIterator2>
 bool lexicographical_compare (InputIterator1 first1, InputIterator1 last1,
                             InputIterator2 first2, InputIterator2 last2)
 {
-//   while (first1!=last1)
-//   {
-//     // if (*first2<*first1) return false;
-//     // else
-// 	 if (*first1<*first2) return true;
-//     ++first1; ++first2;
-//   }
-// 	// if (*first2 == *first1)
-// 	// return false;
-// //   return (first2!=last2);
-// 	// last2--;
-// 	if (first1 == last1 && first2 != last2)
-// 		return true;
-// 	return false;
-// if (first1 == first2 && last1 == last2)
-	// return  false;
-	// printf("\nf1 : %d, f2 : %d\n", *first1, *first2);
 while (first1!=last1)
   {
     if (first2==last2 || *first1>*first2) return false;

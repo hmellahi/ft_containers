@@ -274,22 +274,22 @@ std::deque<int> mydeque (3,100);          // deque with 3 elements
 // 	std::cout << "is_empty: " << vct.empty() << std::endl;
 // }
 
-int		main(void)
+int		main3(void)
 {
-	std::deque<int> mydeque (3,100);          // deque with 3 elements
-  std::vector<int> myvector (2,200);        // vector with 2 elements
+// 	std::deque<int> mydeque (3,100);          // deque with 3 elements
+//   std::vector<int> myvector (2,200);        // vector with 2 elements
 
-  std::stack<int> first;                    // empty stack
-  std::stack<int> second (mydeque);         // stack initialized to copy of deque
+//   std::stack<int> first;                    // empty stack
+//   std::stack<int> second (mydeque);         // stack initialized to copy of deque
 
-  std::stack<int,std::vector<int> > third(myvector);  // empty stack using vector
-  std::stack<int,std::vector<int> > fourth (myvector);
+//   std::stack<int,std::vector<int> > third(myvector);  // empty stack using vector
+//   std::stack<int,std::vector<int> > fourth (myvector);
 
-  std::cout << "size of first: " << first.size() << '\n';
-  std::cout << "size of second: " << second.size() << '\n';
-   third.pop();
-  std::cout << "size of third: " << third.size() << '\n';
-  std::cout << "size of fourth: " << fourth.size() << '\n';
+//   std::cout << "size of first: " << first.size() << '\n';
+//   std::cout << "size of second: " << second.size() << '\n';
+//    third.pop();
+//   std::cout << "size of third: " << third.size() << '\n';
+//   std::cout << "size of fourth: " << fourth.size() << '\n';
 
 // 	 ft::vector<int> myvector (3,100);
 //   ft::vector<int>::iterator it;
@@ -407,5 +407,102 @@ int		main(void)
 	// vct2.resize(0);
 	// is_empty(vct2);
 	//printSize(vct2, true);
+	// std::vector<int> myvector;
+	// for (int i=1; i<=5; i++) myvector.push_back(i);
+
+	// std::cout << "myvector contains:";
+	// for (std::vector<int>::iterator it = myvector.begin() ; it != myvector.end(); ++it)
+	// 	std::cout << ' ' << *it;
+	// std::cout << '\n';
+
+	
+	return (0);
+}
+
+
+// #include <list>
+// #define T1 int
+// #define T2 std::string
+// typedef std::pair<const T1, T2> T3;
+
+// static int iter = 0;
+
+// template <typename MAP, typename U>
+// void	ft_erase(MAP &mp, U param)
+// {
+// 	std::cout << "\t-- [" << iter++ << "] --" << std::endl;
+// 	mp.erase(param);
+// 	printSize(mp);
+// }
+
+// template <typename MAP, typename U, typename V>
+// void	ft_erase(MAP &mp, U param, V param2)
+// {
+// 	std::cout << "\t-- [" << iter++ << "] --" << std::endl;
+// 	mp.erase(param, param2);
+// 	printSize(mp);
+// }
+
+// int		main(void)
+// {
+	// std::list<T3> lst;
+	// C++ program for illustration
+// of std::allocator() function
+#include <iostream>
+#include <memory>
+#include <string>
+using namespace std;
+
+int main()
+{
+
+	// allocator for string values
+	allocator<string> myAllocator;
+
+	// allocate space for three strings
+	string* str = myAllocator.allocate(3);
+
+	// construct these 3 strings
+	myAllocator.construct(str, "Geeks");
+	myAllocator.construct(str + 1, "for");
+	//myAllocator.construct(str + 2, "Geeks");
+	str[2] = 4;
+	cout << str[0] << str[1] << str[2];
+
+	// destroy these 3 strings
+	myAllocator.destroy(str);
+	myAllocator.destroy(str + 1);
+	myAllocator.destroy(str + 2);
+
+	// deallocate space for 3 strings
+	myAllocator.deallocate(str, 3);
+// }
+
+	// unsigned int lst_size = 10;
+	// for (unsigned int i = 0; i < lst_size; ++i)
+	// 	lst.push_back(T3(i, std::string((lst_size - i), i + 65)));
+	// TESTED_NAMESPACE::map<T1, T2> mp(lst.begin(), lst.end());
+	// printSize(mp);
+
+	// ft_erase(mp, ++mp.begin());
+
+	// ft_erase(mp, mp.begin());
+	// ft_erase(mp, --mp.end());
+
+	// ft_erase(mp, mp.begin(), ++(++(++mp.begin())));
+	// ft_erase(mp, --(--(--mp.end())), --mp.end());
+
+	// mp[10] = "Hello";
+	// mp[11] = "Hi there";
+	// printSize(mp);
+	// ft_erase(mp, --(--(--mp.end())), mp.end());
+
+	// mp[12] = "ONE";
+	// mp[13] = "TWO";
+	// mp[14] = "THREE";
+	// mp[15] = "FOUR";
+	// printSize(mp);
+	// ft_erase(mp, mp.begin(), mp.end());
+
 	return (0);
 }

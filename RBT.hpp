@@ -5,7 +5,7 @@
 template<typename T>
 class RBT
 {
-    private:
+    public:
         typedef T value_type;
         typedef RBT self_type;
         bool _isRed;
@@ -61,16 +61,14 @@ class RBT
         }
         RBT     *find(RBT* root, const value_type& val)
         {
-            if (!root || root->value == val)
+            if (!root || root->value.first == val.first)
                 return root;
-            if (val > root->value)
+            if (val.first > root->value.first)
                 return (find(root->right, val));
-            // else if (val < root->value)
             else
                 return (find(root->left, val));
-            // return root;
         }
-        value_type *search(const value_type& val)
+        RBT *search(const value_type& val)
         {
             // const value_type& ret = find(root, val);
             RBT*    node = find(root, val);

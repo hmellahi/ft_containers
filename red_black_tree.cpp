@@ -1,4 +1,4 @@
-// #include <map>
+#include <map>
 #include "map.hpp"
 // #include <iostream>
 // #include "pair.hpp"
@@ -12,9 +12,15 @@ int main()
 
 //   std:cout << "Home planet: " << homeplanet.first << '\n';
 //   std::cout << "Planet size: " << homeplanet.second << '\n';
-    ft::map<int, char> mymap;
-    mymap[1] = '2';
-    std::cout << mymap[1] << "\n";
+    ft::map<int, std::string> mymap;
+    // std::cout << mymap[1] << "\n";
+    mymap[1] = "hey";
+    // std::cout << mymap[1] << "\n";
+    // std::cout << mymap;
+    // for (ft::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+        // std::cout << it->first << " => " << it->second << '\n';
+    ft::map<int, std::string>::iterator it = mymap.begin();
+    std::cout << it->first;
     // toodo : fking string not working
     // mymap[1] = "bruh";
     // std::cout << mymap[1]  << "\n";

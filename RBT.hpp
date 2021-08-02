@@ -26,7 +26,10 @@ class RBT
             _isRed = true;
         }
         ~RBT(){}
-        RBT(const RBT& src);
+        RBT(const RBT& src)
+        {
+
+        }
         RBT &operator=(RBT const &rhs)
         {
             return (*this);
@@ -74,5 +77,12 @@ class RBT
             RBT*    node = find(root, val);
             // std::string vv = node->value;
             return (node);
+        }
+        value_type  findMin()
+        {
+            RBT*   small = root;
+            while (small->left)
+                small = small->left;
+            return (small ? small->value : value_type());
         }
 };

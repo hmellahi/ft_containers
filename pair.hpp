@@ -12,13 +12,13 @@ class pair
         typedef B second_type;
         
         pair()
+        : first(first_type())
         {
-            this->first = first_type();
             this->second = second_type();
         }
         pair (const first_type& a, const second_type& b)
+        : first(first_type())
         {
-            this->first = first;
             this->second = second;
         }
         // template<class U, class V>
@@ -43,11 +43,15 @@ std::ostream& operator<<(std::ostream& is, pair<A, B>& obj)
     return is;
 }
 
+namespace  ft
+{
+  
 template <class T1,class T2>
 pair<T1,T2> make_pair (T1 x, T2 y)
 {
   return (pair<T1,T2>(x,y));
 }
+} 
 
 template <class T1, class T2>
   bool operator== (const pair<T1,T2>& lhs, const pair<T1,T2>& rhs)

@@ -1,34 +1,65 @@
 #pragma once
 #include <memory>
 // #include "pair.hpp"
+#include "debug.hpp"
 
-template<typename T>
+template<typename T
+        // class Compare = std::less<T>                     // map::key_compare // todo
+        >
 class RBT
 {
     public:
         typedef T value_type;
         typedef RBT self_type;
-        bool _isRed;
         value_type      value;
         RBT  *right;
         RBT  *left;
         RBT  *root;
+        RBT  *parent;
+        std::allocator<self_type> _myAllocater;
 
     public:
         RBT()
         {
-            right = left = root = NULL;
+            right = left = root = parent = NULL;
         }
         RBT(const value_type& val)
         {
             value = val;
             right = left = NULL;
-            _isRed = true;
+            root = this;
+            parent = NULL;
         }
-        ~RBT(){}
-        RBT(const RBT& src)
+        ~RBT()
         {
+            traverseInOrder();
+        }
+        // RBT(const RBT& src)
+        // {
 
+        // }
+        void   destroy(RBT<value_type> *node)
+        {
+            _myAllocater.destroy(node);
+        }
+
+        void    traverseInOrder()//(void (*func)(RBT<value_type> *))
+        {
+            // for (ft::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+                // func(it);
+            if (!root)
+                return ;
+            // RBT<value_type> *curr =  root->search(root->findMin(root));
+            // RBT<value_type> *tmp;
+            // // curr = curr->next();
+            // while (curr != NULL)
+            // {
+            //     tmp = curr->next();
+            //     std::cout << curr->value.first << std::endl;
+            //     _myAllocater.deallocate(curr, 1);
+            //     curr = tmp;
+            // }
+            // exit(0);
         }
         RBT &operator=(RBT const &rhs)
         {
@@ -38,11 +69,15 @@ class RBT
         {
             if (!root)
                 return new_node;
-            if (new_node->value > root->value){
+            if (new_node->value > root->value)
+            {
                 root->right = insert_helper(root->right, new_node);
+                root->right->parent = root;
             }
-            else if (new_node->value < root->value){
+            else if (new_node->value < root->value)
+            {
                 root->left = insert_helper(root->left, new_node);
+                root->left->parent = root;
             }
             return root;
         }
@@ -50,7 +85,8 @@ class RBT
         {
             if (!root) return ;
             print_helper(root->left);
-            std::cout << root->value << std::endl;
+            // std::cout << root->value << std::endl;
+            _myAllocater.deallocate(root, 1);
             print_helper(root->right);
         }
         void    print()
@@ -59,8 +95,11 @@ class RBT
         }
         RBT     *insert(const value_type& val)
         {
-            RBT*    new_node = new RBT(val);
-            return (root = insert_helper(root, new_node));
+            // RBT*    new_node = new RBT(val);
+            RBT*    new_node = _myAllocater.allocate(1);
+            _myAllocater.construct(new_node, val);
+            this->root = insert_helper(root, new_node);
+            return (new_node);
         }
         RBT     *find(RBT* root, const value_type& val)
         {
@@ -73,16 +112,89 @@ class RBT
         }
         RBT *search(const value_type& val)
         {
-            // const value_type& ret = find(root, val);
-            RBT*    node = find(root, val);
-            // std::string vv = node->value;
+            RBT*    node = find(this->root, val);
             return (node);
         }
-        value_type  findMin()
+        RBT *findMin(RBT *root)
         {
             RBT*   small = root;
             while (small->left)
                 small = small->left;
+            return (small);
+        }
+        value_type  findMax(RBT *root)
+        {
+            RBT*   small = root;
+            while (small->right)
+                small = small->right;
             return (small ? small->value : value_type());
+        }
+        RBT<value_type> *next()
+        {
+            RBT<value_type>* curr;
+            RBT<value_type>* p;
+            //If the current node has a non-null right child,
+            if (root == NULL)
+                return NULL;
+            if (right == NULL)
+            {
+                p = parent;
+                curr = root;
+                //move up the tree until we have moved over a left child link
+                while (p && curr == p->right)
+                {
+                    curr = p;
+                    p = p->parent;
+                }
+                curr = p;
+            }
+            //If the current node has a non-null right child,
+            else
+            {
+                // Take a step down to the right
+                curr = right;
+                //Then run down to the left as far as possible
+                while (curr->left)
+                    curr = curr->left;
+            }
+            return (curr);
+        }
+
+        int    erase(const value_type& val)
+        {
+            RBT<value_type>* node = root->search(val);
+            // bool flag = false;
+            // if (!node)
+            //     return 0;
+            // if (!node->right)
+            //     node->parent = node->left;
+            // else if (!node->left)
+            //     node->parent = node->right;
+            // else if (!node->left && node->right)
+            // {
+            //     // find min value in right subtree
+            //     RBT *min = findMin(node->right);
+            //     // copy min content
+            //     node->value = min->value;
+            //     _myAllocater.destroy(min);
+            //     _myAllocater.deallocate(min, 1);
+            //     flag = true;
+            // }
+            // else
+            // {
+            //     if (node->parent && node->parent->right == node)
+            //         node->parent->right = NULL;
+            //     if (node->parent && node->parent->left == node)
+            //         node->parent->right = NULL;
+            // }
+            // // free node
+            // if (!flag)
+            // {
+            //     _myAllocater.destroy(node);
+            //     _myAllocater.deallocate(node, 1);
+            //     node = NULL;
+            // }3
+            (node->parent->value).second = 42;
+            return 1;
         }
 };

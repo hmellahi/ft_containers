@@ -29,7 +29,7 @@ class ft::map
         typedef     Key 										key_type;
         typedef     T											mapped_type;
         typedef     Compare                                     key_compare;
-        typedef     pair<key_type,mapped_type>                  value_type;
+        typedef     pair< key_type,mapped_type>                  value_type;
         typedef		Alloc										allocator_type;
 		typedef		typename allocator_type::reference			reference;
 		typedef		typename allocator_type::const_reference	const_reference;
@@ -37,8 +37,8 @@ class ft::map
 		typedef		typename allocator_type::const_pointer		const_pointer;
         typedef		bidir_iterator<value_type>                  iterator;
 		typedef		bidir_iterator<const value_type>            const_iterator;
-		// typedef		reverse_iterator<const_iterator>            const_reverse_iterator;
-		// typedef		reverse_iterator<iterator>                  reverse_iterator;
+		typedef		reverse_iterator<const_iterator>            const_reverse_iterator;
+		typedef		reverse_iterator<iterator>                  reverse_iterator;
 		typedef		int                                         difference_type;
 		typedef		size_t                                      size_type;
 
@@ -48,6 +48,8 @@ class ft::map
                     const allocator_type& alloc = allocator_type())
         {
             _size = 0;
+            _myAllocator = alloc;
+            keyCampare = comp;
         }
         // // range (2)	
         template <class InputIterator>
@@ -57,16 +59,15 @@ class ft::map
         {
             _size = 0;
             insertIters(first, last);
+            keyCampare = comp;
+            _myAllocator = alloc;
             // todo key_comapre???
         }
         // copy (3)	
         map (const map& x)
         {
-            // x.begin();
-            // iterator first = x.begin();
-            // map::iterator last = x.end();
-            // while (first != last) // DRY
-                // _rbt.insert(*first++);
+            _size = 0;
+            *this = x;
         }
 
         ~map()
@@ -94,6 +95,7 @@ class ft::map
         // with hint (2)	
         iterator insert (iterator position, const value_type& val)
         {
+            (void)position;// todo wtf is position for??
             return insert(val).first;
         }
         // range (3)	
@@ -105,43 +107,120 @@ class ft::map
 
         void erase (iterator position)
         {
-            
+            erase(*position);
         }
         size_type erase (const key_type& k)
         {
-            // RBT<value_type>* node = _rbt.search(make_pair(k, mapped_type()));
-            // if (!node)
-            //     return 0;
-            // // delete node;
-            // _rbt.erase(node);
+            _size--;
             return _rbt.erase(make_pair(k, mapped_type()));
         }
         void erase (iterator first, iterator last)
         {
-
+            while (first != last)
+                erase(*first++);
         }
-        // map(const map& src)
-        // {
 
-        // }
-
-        // explicit map (const key_compare& comp = key_compare(),
-        //       const allocator_type& alloc = allocator_type())
-        // {
-        //     _myAllocator = alloc;
-        // }
-
-        // template <class InputIterator>
-        //     map (InputIterator first, InputIterator last,
-        //         const key_compare& comp = key_compare(),
-        //         const allocator_type& alloc = allocator_type())
-        // {
-
-        // }
-
-        map &operator=(map const &rhs)
+        iterator find (const key_type& k)
         {
-            (void)rhs; // todo
+            return iterator(&_rbt.search(make_pair(k, mapped_type()))->value);
+        }
+        const_iterator find (const key_type& k) const
+        {
+            return const_iterator(&_rbt.search(make_pair(k, mapped_type()))->value);
+        }
+
+        size_type count (const key_type& k) const
+        {
+            if (_rbt.search(make_pair(k, mapped_type())) != NULL)
+                return (1);
+            return (0);
+        }
+
+        iterator lower_bound (const key_type& k)
+        {
+            iterator start = begin(); 
+            iterator last = end(); 
+            while (start != last)
+            {
+                if (!key_compare{}(start->first, k))
+                    return start;
+                start++;
+            }
+            return last;
+        }
+
+        iterator upper_bound(const key_type& k)
+        {
+            iterator start = begin(); 
+            iterator last = end(); 
+            while (start != last)
+            {
+                if (key_compare{}(k, start->first))
+                    return start;
+                start++;
+            }
+            return last;
+        }
+        const_iterator lower_bound (const key_type& k) const
+        {
+            const_iterator start = begin(); 
+            const_iterator last = end(); 
+            while (start != last)
+            {
+                if (!key_compare{}(start->first, k))
+                    return start;
+                start++;
+            }
+            return last;
+        }
+
+        const_iterator upper_bound (const key_type& k) const
+        {
+            const_iterator start = begin(); 
+            const_iterator last = end(); 
+            while (start != last)
+            {
+                if (key_compare{}(k, start->first))
+                    return start;
+                start++;
+            }
+            return last;
+        }
+
+        pair<const_iterator,const_iterator> equal_range (const key_type& k) const
+        {
+            return (make_pair(lower_bound(k), upper_bound(k)));
+        }
+        pair<iterator,iterator>             equal_range (const key_type& k)
+        {
+            return (make_pair(lower_bound(k), upper_bound(k)));
+        }
+
+        void swap (map& src)
+        {
+            map tmp;
+			tmp.copy_inner_data(*this);
+			this->copy_inner_data(src);
+			src.copy_inner_data(tmp);
+			tmp.reset_data();
+        }
+        
+        void    clear()
+        {
+            _rbt.traverse();
+        }
+
+        map &operator=(const map &rhs)
+        {
+            clear();
+            const_iterator start = rhs.begin(); 
+            const_iterator last = rhs.end();
+            while (start != last)
+            {
+                std::cout << start->first <<"|" <<start->second << std::endl;
+                start++;
+                // insert(*start++);
+            }
             return (*this);
         }
 
@@ -164,20 +243,27 @@ class ft::map
 		bool empty() const {return (size() == 0);} 
         
         // --> allocator getter
-        allocator_type get_allocator() const;
+        allocator_type get_allocator() const { return _myAllocator;}
+        //
+        key_compare key_comp() const { return keyCampare; }
 
         // // --> Iterators
-        iterator begin() { return (iterator(_rbt.findMin(_rbt.root)->value, &_rbt));}
-        const_iterator begin() const { return (const_iterator(_rbt.findMin(_rbt.root)->value, &_rbt));}
+        iterator begin() {
+            RBT<value_type>* node = _rbt.findMin(_rbt.root);
+            if (!node) return iterator(NULL, &_rbt);
+            return (iterator(node->value, &_rbt));
+        } // todo : protect | memory leaks bo
+        const_iterator begin() const {
+            RBT<value_type>* node = _rbt.findMin(_rbt.root);
+            if (!node) return iterator(NULL, &_rbt);
+            return (iterator(node->value, &_rbt));
+        }
 		iterator end() {return iterator(NULL, &_rbt);}
-        const_iterator end() const {return const_iterator(NULL, &_rbt);}
-		// const_iterator end() const {return const_iterator(NULL);}
-		// reverse_iterator rbegin(){return reverse_iterator(NULL);}
-		// const_reverse_iterator rbegin() const{return const_reverse_iterator(NULL);}
-		// reverse_iterator rend(){return reverse_iterator(_arr);}
-		// const_reverse_iterator rend() const{rse_iterator(_arr);}
-		// const_reverse_iterator rend() const{return const_reverse_iterator(_arr);};
-        // friend std::ostream& operator<<(std::ostream& is, pair<A, B>& obj);
+        const_iterator end() const {return iterator(NULL, &_rbt);}
+		reverse_iterator rbegin(){return reverse_iterator(end());}
+		// const_reverse_iterator rbegin() const{return const_reverse_iterator(end());}
+		// reverse_iterator rend(){return reverse_iterator(begin));}
+		// const_reverse_iterator rend() const{ return reverse_iterator(begin));}
         
         // todo:::
         // iterator begin();
@@ -189,11 +275,12 @@ class ft::map
         // reverse_iterator rend();
         // const_iterator rend() const;
     
+        RBT<value_type>    _rbt; // todo : private bruh
      private:
-        RBT<value_type>    _rbt;
         size_t  _size;
         size_t  _capacity;
         Alloc   _myAllocator;
+        key_compare keyCampare;
     
         // void   destroy(RBT<value_type> *node)
         // {
@@ -218,4 +305,21 @@ class ft::map
             while (first != last) // DRY
                 insert(*first++);
         }
+
+        void	copy_inner_data(const map& other)
+		{
+			// _arr = other.data();
+            _rbt = other._rbt;
+			_myAllocator = other.get_allocator();
+			_size = other.size();
+			_capacity = other.max_size();
+		}
+
+        void	reset_data()
+		{
+			// _arr = other.data();
+            _rbt.root = NULL;
+			// _myAllocator = NULL;
+			_size = 0;
+		}
 };

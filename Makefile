@@ -13,11 +13,11 @@
 
 CLANG = clang++
 
-FLAGS = -Wall -Werror -Wextra --std=c++11
+FLAGS = --std=c++11 -Wall -Werror
 
 NAME = a.out
 
-SRC = main.cpp
+SRC = red_black_tree.cpp
 
 all: $(NAME)
 

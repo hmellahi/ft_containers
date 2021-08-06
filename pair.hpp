@@ -18,10 +18,10 @@ class ft::pair
             this->second = second_type();
         }
         pair (const first_type& a, const second_type& b)
-        // : first(a)
+        : first(a)
         // :
         {
-            this->first = a;
+            // this->first = a;
             this->second = b;
         }
         // template<class U, class V>
@@ -33,9 +33,9 @@ class ft::pair
         pair(const pair& src)
         :first(src.first)
         {*this = src;}
-        ft::pair<A, B>& operator= (const ft::pair<A, B>& pr)
+        pair<A, B>& operator= (const ft::pair<A, B>& pr)
         {
-          this->first = pr.first;
+            this->first = pr.first;
             this->second = pr.second;
             return (*this);
         }

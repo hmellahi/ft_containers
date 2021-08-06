@@ -264,22 +264,31 @@ class bidir_iterator : public iterator<input_iterator_tag, T>
         typedef T*                          pointer;
         typedef T&                          reference;
         typedef bidirectional_iterator_tag  iterator_category;
+        // std::allocator;
         typedef bidir_iterator self_type;
-        bidir_iterator(pointer ptr, RBT<value_type>* bst = NULL) : _ptr(ptr) {
+        bidir_iterator(pointer ptr, const RBT<value_type>* bst = NULL) : _ptr(ptr) {
             _bst = bst;
         };
-        bidir_iterator(){}
-        bidir_iterator&   operator=(const value_type& it)
+        bidir_iterator(){
+            _ptr = NULL;
+        }
+        ~bidir_iterator()
         {
-            // todo
-            //  _ptr = &it;
-            //  puts("tt");
-            // ();
-            _ptr = new T();
-            *_ptr = it;
+            // if (_ptr)
+                // delete _ptr;
+        }
+        // bidir_iterator(const bidir_iterator& bid_it)
+        // {
+        //     _ptr 
+        // }
+        bidir_iterator&   operator=(const bidir_iterator& bid_it)
+        {
+            if (_ptr)
+                delete _ptr;
+            _ptr = bid_it._ptr;
             return (*this);
         }
-        bidir_iterator(const value_type& it, RBT<value_type>* bst)
+        bidir_iterator(const value_type& it, const RBT<value_type>* bst)
         {
         // {terator
             _ptr = new T();
@@ -289,24 +298,37 @@ class bidir_iterator : public iterator<input_iterator_tag, T>
         operator bidir_iterator<const T> () const { return bidir_iterator<const T>(_ptr); }
         
         self_type& operator++() {// DRY
-            RBT<value_type>* nextNode=_bst->search(*_ptr)->next();
+            RBT<value_type>* curr = _bst->search(*_ptr);
+            if (!curr) return *this;
+            // INFO("\n---------\n");
+            // std::cout << curr->value.first << " curr before >> " << curr->value.second << '\n';
+            RBT<value_type>* nextNode = curr->next();
+            // INFO("\n---------\n");
+            // if (!nextNode)
+
             if (nextNode)
-                *_ptr = nextNode->value;
+                _ptr = new value_type(nextNode->value); // leaks bro ig
             else
                 _ptr = NULL;
             return *this; 
         }
         self_type operator++(int) {
             self_type i = *this;
-            RBT<value_type>* nextNode=_bst->search(*_ptr)->next();
-            if (nextNode)
-                *_ptr = nextNode->value;
-            else
-                _ptr = NULL;
+            ++(*this);
             return i;
         }
-        self_type& operator--() { _ptr--; return *this;}
-        self_type operator--(int) { self_type i = *this; _ptr--; return i;}
+        self_type& operator--() {
+        RBT<value_type>* curr = _bst->search(*_ptr);
+            if (!curr) return *this;
+            RBT<value_type>* prevNode = curr->prev();
+            // std::cout << prevNode->value.first;
+            if (prevNode)
+                _ptr = new value_type(prevNode->value); // todo rm leaks
+            else
+                _ptr = NULL;
+            return *this;
+        }
+        self_type operator--(int) { self_type i = *this; --(*this); return i;}
         self_type operator+=(int i) { _ptr += i; return *this;}
         self_type operator-=(int i) { _ptr -= i; return *this;}
         friend self_type operator+(self_type it, difference_type i)
@@ -333,5 +355,5 @@ class bidir_iterator : public iterator<input_iterator_tag, T>
             const bidir_iterator& rhs) { return !(lhs == rhs);}
     public:
         pointer _ptr;
-        RBT<value_type>* _bst;
+        const RBT<value_type>* _bst;
 };

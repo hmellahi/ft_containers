@@ -1,8 +1,9 @@
 #include <map>
 #include "map.hpp"
+// #include "vector.hpp"
 // #include <iostream>
 // #include "pair.hpp"
-#define NAMESPACE ft
+#define NAMESPACE std
 int main()
 {
     //  pair <std::string,int> planet, homeplanet;
@@ -54,29 +55,131 @@ int main()
 //   for (it=anothermap.begin(); it!=anothermap.end(); ++it)
 //     std::cout << it->first << " => " << it->second << '\n';
 
-NAMESPACE::map<char,int> mymap;
-  NAMESPACE::map<char,int>::iterator it;
+// NAMESPACE::map<char,int> mymap;
+//   NAMESPACE::map<char,int>::iterator it;
 
-  // insert some values:
-  mymap['a']=10;
-  mymap['b']=20;
+//   // insert some values:
+//   mymap['a']=10;
+//   mymap['b']=20;
 //   mymap['c']=30;
 //   mymap['d']=40;
 //   mymap['e']=50;
 //   mymap['f']=60;
-
-//   it=mymap.find('b');
+//  /*
+//         a
+//     b       c
+//                 d
+//                     e
+//                         f
+//  */
+//   it=mymap.find('f');
 //   mymap.erase (it);                   // erasing by iterator
 
-  mymap.erase ('b');          
-//   mymap.erase ('9');           // erasing by key
+// //   mymap.erase ('e');          
+// //   mymap.erase ('9');           // erasing by key
 
-//   it=mymap.find ('e');
-//   mymap.erase ( it, mymap.end() );    // erasing by range
+// //   it=mymap.find ('e');
+// //   mymap.erase ( it, mymap.end() );    // erasing by range
+// // std::cout << mymap['b'];
+//   // show content:
+//   for (it=mymap.begin(); it!=mymap.end(); ++it)
+//     std::cout << it->first << " => " << it->second << '\n';
+  // NAMESPACE::map<char,int> mymap;
+  // NAMESPACE::map<char,int>::key_compare mycomp = mymap.key_comp();
 
-  // show content:
-  for (it=mymap.begin(); it!=mymap.end(); ++it)
+  // mymap['a']=100;
+  // mymap['b']=200;
+  // mymap['c']=300;
+
+  // std::cout << "mymap contains:\n";
+
+  // char highest = 'c';     // key value of last element
+  // // std::cout << mymap.count('d');
+  // NAMESPACE::map<char,int>::iterator it = mymap.begin();
+  // do {
+  //   std::cout << it->first << " => " << it->second << '\n';
+  // } while ( mycomp((*it++).first, highest) );
+
+  // std::cout << '\n';
+
+  // NAMESPACE::map<char,int> mymap;
+
+  // mymap['x']=100;
+  // mymap['y']=200;
+  // mymap['z']=300;
+
+  // std::cout << "mymap contains:\n" << mymap.begin()->second;
+  // for (NAMESPACE::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+  //   std::cout << it->first << " => " << it->second << '\n';
+
+  // mymap.clear();
+  // mymap['a']=1101;
+  // mymap['b']=2202;
+
+  // std::cout << "mymap contains:\n";
+  // for (NAMESPACE::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+  //   std::cout << it->first << " => " << it->second << '\n';
+  // mymap.clear();
+
+//   NAMESPACE::map<char,int> mymap;
+//   NAMESPACE::map<char,int>::iterator itlow,itup;
+
+//   mymap['a']=20;
+//   // mymap['b']=40;
+//   mymap['c']=60;
+//   mymap['d']=80;
+//   mymap['e']=100;
+
+//   itlow=mymap.lower_bound ('b');
+//   std::cout << itlow->first ;  // itlow points to b
+//   itup=mymap.upper_bound ('d');   // itup points to e (not d!)
+// std::cout << itup->first ;
+  // mymap.erase(itlow,itup);        // erases [itlow,itup) // todo : segfault
+
+  NAMESPACE::map<char,int> mymap;
+
+  mymap['b']=20;
+  mymap['a']=10;
+  mymap['c']=30;
+
+  // NAMESPACE::map<char,int> lol = mymap;
+
+  // ft::pair<NAMESPACE::map<char,int>::iterator,NAMESPACE::map<char,int>::iterator> ret;
+  // ret = mymap.equal_range('b');
+
+  // std::cout << "lower bound points to: ";
+  // std::cout << ret.first->first << " => " << ret.first->second << '\n';
+
+  // std::cout << "upper bound points to: " ;
+  // std::cout << ret.second->first << " => " << ret.second->second << '\n';
+
+
+  // // print content:
+  // for (NAMESPACE::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); it++)
+    // std::cout << it->first << " => " << it->second << '\n';
+    NAMESPACE::map<char,int>::iterator it=mymap.begin();
     std::cout << it->first << " => " << it->second << '\n';
+    it++;
+    std::cout << it->first << " => " << it->second << '\n';
+// it++;
+// std::cout << it->first << " => " << it->second << '\n';it++;
+// // if (it)
+// std::cout << it->first << " => " << it->second << '\n';it++;
+// if (it)
+// std::cout << it->first << " => " << it->second << '\n';
+// it++;
+// std::cout << it->first << " => " << it->second << '\n';
+// it++;
+// std::cout << it->first << " => " << it->second << '\n';
+  // foo.swap(bar);
+  // std::cout << foo.size();
+  // std::cout << "foo contains:\n";
+  // for (NAMESPACE::map<char,int>::iterator it=foo.begin(); it!=foo.end(); ++it)
+  //   std::cout << it->first << " => " << it->second << '\n';
+
+  // std::cout << "bar contains:\n";
+  // for (NAMESPACE::map<char,int>::iterator it=bar.begin(); it!=bar.end(); ++it)
+  //   std::cout << it->first << " => " << it->second << '\n';
 // using namespace std;
 //     allocator<int> myAllocator;
   

@@ -180,7 +180,6 @@ class ft::vector
 			// catch (std::bad_alloc& ba)
 			// {
 			// 	std::cerr << "bad_alloc caught: " << ba.what() << std::endl;
-			// 	exit(0);
 			// }
 			// copy
 						// std::cout << _index << "|b|" << _max_capacity << std::endl;

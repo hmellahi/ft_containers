@@ -89,7 +89,7 @@ class ft::map
                 res.second = true;
                 _size++;
             }
-            res.first = iterator(&node->value);
+            res.first = iterator(node->value);
             return res;
         }
         // with hint (2)	
@@ -107,31 +107,32 @@ class ft::map
 
         size_type erase (const key_type& k)
         {
-            _size--;
-            return _rbt.erase(ft::make_pair(k, mapped_type()));
+            return _rbt.erase(ft::make_pair(k, mapped_type())) && _size--;
         }
 
         void erase (iterator position)
         {
-            _size--;
-            _rbt.erase(*position);
+            if (_rbt.erase(*position))
+                _size--;
         }
         void erase (iterator first, iterator last)
         {
             while (first != last)
             {
-                _size--;
-                _rbt.erase(*first++);
+                if (_rbt.erase(*first++))
+                    _size--;
             }
         }
 
         iterator find (const key_type& k)
         {
-            return iterator(&_rbt.search(ft::make_pair(k, mapped_type()))->value, &_rbt);
+            RBT<value_type, Compare> *res = _rbt.search(ft::make_pair(k, mapped_type()));
+            return iterator(res ? res->value : NULL , &_rbt);
         }
         const_iterator find (const key_type& k) const
         {
-            return const_iterator(&_rbt.search(ft::make_pair(k, mapped_type()))->value, &_rbt);
+            RBT<value_type, Compare> *res = _rbt.search(ft::make_pair(k, mapped_type()));
+            return const_iterator(res ? res->value : NULL , &_rbt);
         }
 
         size_type count (const key_type& k) const
@@ -255,7 +256,7 @@ class ft::map
                 _size++;
                 node = _rbt.insert(to_find);
             }
-            return node->value.second;
+            return node->value->second;
         }
 
 

@@ -263,8 +263,6 @@ class bidir_iterator : public iterator<input_iterator_tag, T>
         }
         bidir_iterator&   operator=(const bidir_iterator& bid_it)
         {
-            if (_ptr)
-                delete _ptr;
             _ptr = bid_it._ptr;
             _bst = bid_it._bst; // todo wtf is wrong? take a copy broo
             return (*this);
@@ -282,7 +280,7 @@ class bidir_iterator : public iterator<input_iterator_tag, T>
             if (!curr) { return *this;}
             RBT<value_type, Compare>* nextNode = curr->next();
             if (nextNode)
-                _ptr = new value_type(nextNode->value); // leaks bro ig
+                _ptr = nextNode->value; // leaks bro ig
             else
                 _ptr = NULL;
             return *this;
@@ -297,31 +295,27 @@ class bidir_iterator : public iterator<input_iterator_tag, T>
             // puts("hey1");
             if (!_ptr)
             {
-                _ptr = new value_type(_bst->findMax(_bst->root)); // protect : seg
-                // puts("hey");
+                _ptr = _bst->findMax(_bst->root); // protect : seg
                 return *this;
             }
             RBT<value_type, Compare>* curr = _bst->search(*_ptr);
             if (!curr) { return *this;}
             RBT<value_type, Compare>* prevNode = curr->prev();
             if (prevNode)
-                _ptr = new value_type(prevNode->value); // todo rm leaks
+                _ptr = prevNode->value; // todo rm leaks
             else
-                // _ptr--;
                 _ptr = NULL;
             return *this;
         }
         self_type operator--(int) { self_type i = *this; --(*this); return i;}
         friend self_type operator-(self_type it, difference_type i)
         {
-            // pointer tmp_ptr = it._ptr;
-            // puts("ss");
             i = 1;
             return (--bidir_iterator(it._ptr, it._bst)); // todo change / rm
         }
         difference_type operator-(self_type src)const { return ( _ptr - src._ptr);}
-        reference operator*()const { return _bst->search(*_ptr)->value;  } // todo optimize
-        pointer operator->() const{ return &_bst->search(*_ptr)->value; } // todo optimize
+        reference operator*()const { return *(_bst->search(*_ptr)->value);  } // todo optimize
+        pointer operator->() const{ return _bst->search(*_ptr)->value; } // todo optimize
 
         friend bool operator== (const bidir_iterator& lhs,
             const bidir_iterator& rhs) {

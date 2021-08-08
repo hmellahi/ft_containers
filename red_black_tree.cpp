@@ -3,7 +3,7 @@
 // #include "vector.hpp"
 // #include <iostream>
 // #include "pair.hpp"
-#define NAMESPACE std
+#define NAMESPACE ft
 int main()
 {
     //  pair <std::string,int> planet, homeplanet;
@@ -136,14 +136,22 @@ int main()
 // std::cout << itup->first ;
   // mymap.erase(itlow,itup);        // erases [itlow,itup) // todo : segfault
 
-  NAMESPACE::map<char,int> mymap;
+  NAMESPACE::map<const char,int> mymap;
 
   mymap['b']=20;
   mymap['a']=10;
   mymap['c']=30;
 
-  // NAMESPACE::map<char,int> lol = mymap;
-
+  // NAMESPACE::map<const char,int> lol = mymap;
+  NAMESPACE::map<const char,int>::const_iterator it= mymap.begin();
+  // it++;
+  std::cout << it->first << it->second;
+  // std::cout << mymap['b'] << std::endl;
+  // std::cout << it->first;
+  // it++;
+  // std::cout << it->first;
+  // it++;
+  // std::cout << it->first;
   // ft::pair<NAMESPACE::map<char,int>::iterator,NAMESPACE::map<char,int>::iterator> ret;
   // ret = mymap.equal_range('b');
 
@@ -155,12 +163,17 @@ int main()
 
 
   // // print content:
-  // for (NAMESPACE::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); it++)
+  // for (NAMESPACE::map<const char,int>::reverse_iterator it=lol.rbegin(); it!=lol.rend(); it++)
+  //   std::cout << it->first << " => " << it->second << '\n';
+    // NAMESPACE::map<char,int>::iterator it=mymap.begin();
     // std::cout << it->first << " => " << it->second << '\n';
-    NAMESPACE::map<char,int>::iterator it=mymap.begin();
-    std::cout << it->first << " => " << it->second << '\n';
-    it++;
-    std::cout << it->first << " => " << it->second << '\n';
+    // // std::cout << it->first << " => " << it->second << '\n';
+    // // for (int i = 0; i < 10;i++)
+    // //   it++;
+    // // for (int i = 0; i < 8;i++)
+    // //   it--;
+    // std::cout << it->first << " => " << it->second << '\n';
+    
 // it++;
 // std::cout << it->first << " => " << it->second << '\n';it++;
 // // if (it)
@@ -250,5 +263,5 @@ int main()
     // b.insert(80);
  
     // a.insert(20);
-    return 0;
+  return 0;
 }

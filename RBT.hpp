@@ -1,22 +1,29 @@
 #pragma once
 #include <memory>
-// #include "pair.hpp"
+#include "pair.hpp"
 #include "debug.hpp"
 
-template<typename T
-        // class Compare = std::less<T>                     // map::key_compare // todo
+
+// template <class T1, class T2>
+//   bool operator>  (const ft::pair<T1,T2>& lhs, const ft::pair<T1,T2>& rhs)
+// { return rhs<lhs; }
+
+template<typename T,
+        class Compare = std::less<T>                     // map::key_compare // todo
         >
 class RBT
 {
-    public:
+    public: // private bruh
         typedef T value_type;
         typedef RBT self_type;
+
         value_type      value;
         RBT  *right;
         RBT  *left;
         RBT  *root;
         RBT  *parent;
         std::allocator<self_type> _myAllocater;
+        Compare key_compare;
 
     public:
         RBT()
@@ -24,35 +31,41 @@ class RBT
             right = left = root = parent = NULL;
         }
         RBT(const value_type& val)
+        :value(val)
         {
-            value = val;
             right = left = NULL;
             root = this;
             parent = NULL;
+        }
+        RBT(RBT<value_type, Compare> *root)
+        {
+            right = left = parent = NULL;
+            this->root = root;
         }
         ~RBT()
         {
             // traverseInOrder();
             // traverse(); todo : fix double free
         }
-        // RBT(const RBT& src)
+        // RBT &operator=(const RBT &rhs)
         // {
-
+            
+        //     return (*this);
         // }
-        void   destroy(RBT<value_type> *node)
+        void   destroy(RBT<value_type, Compare> *node)
         {
             _myAllocater.destroy(node);
             _myAllocater.deallocate(node, 1);
         }
 
-        // void    traverseInOrder()//(void (*func)(RBT<value_type> *))
+        // void    traverseInOrder()//(void (*func)(RBT<value_type, Compare> *))
         // {
         //     // for (ft::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
         //         // func(it);
         //     if (!root)
         //         return ;
-        //     // RBT<value_type> *curr =  root->search(root->findMin(root));
-        //     // RBT<value_type> *tmp;
+        //     // RBT<value_type, Compare> *curr =  root->search(root->findMin(root));
+        //     // RBT<value_type, Compare> *tmp;
         //     // // curr = curr->next();
         //     // while (curr != NULL)
         //     // {
@@ -71,31 +84,20 @@ class RBT
         {
             if (!root)
                 return new_node;
-            if (new_node->value > root->value)
+            // if (new_node->value.first > root->value.first)
+            if (!Compare{}(new_node->value.first, root->value.first))
             {
                 root->right = insert_helper(root->right, new_node);
                 root->right->parent = root;
             }
-            else if (new_node->value < root->value)
+            // if (new_node->value.first < root->value.first)
+            else if (Compare{}(new_node->value.first, root->value.first))
             {
                 root->left = insert_helper(root->left, new_node);
                 root->left->parent = root;
             }
             return root;
         }
-        // void    print_helper(RBT *root, void (*func)(RBT<value_type> *))
-        // {
-        //     if (!root) return ;
-        //     print_helper(root->left);
-        //     // std::cout << root->value << std::endl;
-        //     // _myAllocater.deallocate(root, 1);
-        //     func(root);
-        //     print_helper(root->right);
-        // }
-        // void    traverse(void (*RBT)(RBT<value_type> *))
-        // {
-        // //    traverse_helper(root, func);
-        // }
         void    traverse_helper(RBT *root)
         {
             if (!root) return ;
@@ -123,17 +125,22 @@ class RBT
             return (new_node);
         }
         RBT     *find(RBT* root, const value_type& val) const
-            {
+        {
             if (!root || root->value.first == val.first)
                 return root;
-            if (val.first > root->value.first)
+            // if (val.first > root->value.first)
+            if (!Compare{}(val.first, root->value.first))
                 return (find(root->right, val));
             else
                 return (find(root->left, val));
         }
-        RBT *search(const value_type& val) const
+        operator RBT<const value_type, Compare> () const { return RBT<const value_type, Compare>(); }
+        RBT<value_type, Compare> *search(const value_type& val) const
         {
+            // std::cout << val.first << " before |" << val.second << std::endl;
             RBT*    node = find(this->root, val);
+            // std::cout << val.first << " after |" << val.second << std::endl;
+
             return (node);
         }
         RBT *findMin(RBT *root) const
@@ -152,10 +159,10 @@ class RBT
                 small = small->right;
             return (small ? small->value : value_type());
         }
-        RBT<value_type> *prev()
+        RBT<value_type, Compare> *prev()
         {
-            RBT<value_type>* curr;
-            RBT<value_type>* p;
+            RBT<value_type, Compare>* curr;
+            RBT<value_type, Compare>* p;
             if (root == NULL)
                 return NULL;
             //If the current node has a null right child,
@@ -167,7 +174,7 @@ class RBT
                 // _myAllocater.construct(curr, value);
                 // std::cout << curr->value.first << " curr >> " << curr->value.second << '\n';
                 //move up the tree until we have moved over a left child link
-                while (p && curr->value == p->left->value)
+                while (p && curr == p->left) // right?
                 {
                 // std::cout << p->value.first << "inside >> " << p->value.second << '\n';
                     curr = p;
@@ -190,24 +197,23 @@ class RBT
             }
             return (curr);
         }
-        RBT<value_type> *next()
+        RBT<value_type, Compare> *next()
         {
-            RBT<value_type>* curr;
-            RBT<value_type>* p;
+            RBT<value_type, Compare>* curr;
+            RBT<value_type, Compare>* p;
             if (root == NULL)
                 return NULL;
             //If the current node has a null right child,
             if (right == NULL)
             {
                 p = parent;
-                curr = new RBT(value);
-                // curr = _myAllocater.allocate(1); // todo : leaks | wtf bruh??? no need to allocate
-                // _myAllocater.construct(curr, value);
+                // curr = new RBT(value);
+                curr = _myAllocater.allocate(1); // todo : leaks | wtf bruh??? no need to allocate
+                _myAllocater.construct(curr, value);
                 // std::cout << curr->value.first << " curr >> " << curr->value.second << '\n';
                 //move up the tree until we have moved over a left child link
-                while (p && curr->value == p->right->value)
+                while (p && p->right && curr->value.first == p->right->value.first)
                 {
-                // std::cout << p->value.first << "inside >> " << p->value.second << '\n';
                     curr = p;
                     p = p->parent;
                 }
@@ -229,9 +235,10 @@ class RBT
             return (curr);
         }
 
-        int    erase(const value_type& val)
+        size_t    erase(const value_type& val)
         {
-            RBT<value_type>* node = root->search(val);
+            RBT<value_type, Compare>* node = root->search(val);
+            RBT<value_type, Compare>* tmp = ;
             bool flag = false;
             if (!node)
                 return 0;
@@ -244,25 +251,30 @@ class RBT
             //     node->parent = node->right;
             if (node->left && node->right)
             {
-                // find min value in right subtree
+                // Find inorder successor of the node
                 RBT *min = findMin(node->right);
                 // copy min content
-                node->value = min->value;
+                RBT *tmp = new RBT(min->value); // leaks
+                node = tmp;
+                // node->value = min->value;
                 _myAllocater.destroy(min);
                 _myAllocater.deallocate(min, 1);
                 flag = true;
             }
-            else if (node->parent && node->parent->right == node)
-                node->parent->right = node->right;
-            else if (node->parent && node->parent->left == node)
-                node->parent->left = node->left;
+            else if (node->right)
+                node = node->right;
+            else if (node->left)
+                node = node->value;
+            // todo leaks
             // free node
-            if (!flag)
-            {
-                _myAllocater.destroy(node);
-                _myAllocater.deallocate(node, 1);
-            }
+            // if (!flag)
+            // {
+            //     _myAllocater.destroy(node);
+            //     _myAllocater.deallocate(node, 1);
+            // }
             // (node->parent->value).second = 42;
             return 1;
         }
+
+        std::allocator<T> get_allocator() const { return _myAllocater;}
 };

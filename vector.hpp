@@ -430,36 +430,12 @@ class ft::vector
 		pointer		data() const {return _arr;}
 };
 
-template <class InputIterator1, class InputIterator2>
-bool equal ( InputIterator1 first1, InputIterator1 last1, InputIterator2 first2 )
-{
-	// std::cout << *first1 << "|" << *first2 << std::endl;
-  while (first1!=last1)
-    if (*first1++ != *first2++) 
-      return false;
-  return true;
-}
-
-template <class InputIterator1, class InputIterator2>
-bool lexicographical_compare (InputIterator1 first1, InputIterator1 last1,
-                            InputIterator2 first2, InputIterator2 last2)
-{
-while (first1!=last1)
-  {
-    if (first2==last2 || *first1>*first2) return false;
-    else if (*first1<*first2) return true;
-    ++first1; ++first2;
-	// printf("f1 : %d, f2 : %d\n", *first1, *first2);
-  }
-  return (first2!=last2);
-}
-
 template <class T, class Alloc>
 bool operator== (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
 {
 	if (lhs.size() != rhs.size())
 		return false;
-	return (equal(lhs.begin(), lhs.end(), rhs.begin()));
+	return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
 }
 
 template <class T, class Alloc>

@@ -1,6 +1,12 @@
 #pragma once
 #include <iostream>
 
+namespace ft
+{
+    template<typename A, typename B>
+    class pair;
+}
+
 template<typename A, typename B>
 class ft::pair
 {
@@ -32,13 +38,16 @@ class ft::pair
         ~pair(){}
         pair(const pair& src)
         :first(src.first)
-        {*this = src;}
+        {
+          this->second = src.second;
+        }
         pair<A, B>& operator= (const ft::pair<A, B>& pr)
         {
-            this->first = pr.first;
+            this->first = pr.first; //todo const key..
             this->second = pr.second;
             return (*this);
         }
+        operator pair<const A,B> () const { return pair<const A,B>(first, second); }
 };
 
 template<typename A, typename B>

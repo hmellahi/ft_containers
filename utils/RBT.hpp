@@ -9,7 +9,7 @@
 // { return rhs<lhs; }
 
 template<typename T,
-        class Compare = std::less<T>                     // map::key_compare // todo
+        class Compare = std::less<T>                     // map::key_compare // todo    
         >
 class RBT
 {

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+         #
+#    By: hamza <hamza@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/24 19:04:38 by hmellahi          #+#    #+#              #
-#    Updated: 2021/07/09 21:50:59 by hmellahi         ###   ########.fr        #
+#    Updated: 2021/10/04 23:22:10 by hamza            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,12 +17,12 @@ FLAGS = --std=c++11 -Wall -Werror
 
 NAME = a.out
 
-SRC = red_black_tree.cpp
+SRC = tests/red_black_tree.cpp
 
 all: $(NAME)
 
 $(NAME): ${SRC}
-	$(CLANG) $(FLAGS) ${SRC} -o $(NAME)
+	$(CLANG) $(FLAGS) -I src -I utils ${SRC} -o $(NAME)
 
 san :
 	$(CLANG) $(FLAGS) ${SRC} -fsanitize=address -g -o $(NAME)

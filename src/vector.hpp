@@ -48,7 +48,8 @@ class ft::vector
 		typedef		typename allocator_type::pointer			pointer;
 		typedef		typename allocator_type::const_pointer		const_pointer;
 		typedef		size_t										size_type;
-		typedef		typename iterator_traits<iterator>::difference_type	difference_type;
+		typedef		std::ptrdiff_t difference_type;
+		// typedef		typename iterator_traits<iterator<T>>::difference_type	difference_type;
 		typedef		rand_acc_iterator<value_type> iterator;
 		typedef		rand_acc_iterator<const value_type> const_iterator;
 		typedef		reverse_iterator<const_iterator> const_reverse_iterator;

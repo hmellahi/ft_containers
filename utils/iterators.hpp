@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstddef>
+#include "RBT.hpp"
 
 template <class Category, class T, class Distance = ptrdiff_t,
           class Pointer = T*, class Reference = T&>

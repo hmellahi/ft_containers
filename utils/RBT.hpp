@@ -90,13 +90,13 @@ class RBT
             if (!root)
                 return new_node;
             // if (new_node->value->first > root->value->first)
-            if (!Compare{}(new_node->value->first, root->value->first))
+            if (!key_compare(new_node->value->first, root->value->first))
             {
                 root->right = insert_helper(root->right, new_node);
                 root->right->parent = root;
             }
             // if (new_node->value->first < root->value->first)
-            else if (Compare{}(new_node->value->first, root->value->first))
+            else if (key_compare(new_node->value->first, root->value->first))
             {
                 root->left = insert_helper(root->left, new_node);
                 root->left->parent = root;
@@ -133,8 +133,7 @@ class RBT
         {
             if (!root || root->value->first == val.first)
                 return root;
-            // if (val.first > root->value->first)
-            if (!Compare{}(val.first, root->value->first))
+            if (!key_compare(val.first, root->value->first))
                 return (find(root->right, val));
             else
                 return (find(root->left, val));

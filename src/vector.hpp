@@ -30,11 +30,8 @@ template < class T, class Alloc >
 class ft::vector
 {
 	public:
-		// using namespace ft;
-		// typedef ft::vector ft::ft::vector<T>;
 		~vector()
 		{
-			// std::cout << is_integral<bool>::value << std::endl;
 			ft_destroy_arr(); // DRY : replace with clear
 			if (_max_capacity)
 				myAllocator.deallocate(_arr, _max_capacity);
@@ -48,9 +45,8 @@ class ft::vector
 		typedef		typename allocator_type::pointer			pointer;
 		typedef		typename allocator_type::const_pointer		const_pointer;
 		typedef		size_t										size_type;
-		typedef		std::ptrdiff_t difference_type;
-		// typedef		typename iterator_traits<iterator<T>>::difference_type	difference_type;
 		typedef		rand_acc_iterator<value_type> iterator;
+		typedef		typename iterator_traits<iterator>::difference_type	difference_type;
 		typedef		rand_acc_iterator<const value_type> const_iterator;
 		typedef		reverse_iterator<const_iterator> const_reverse_iterator;
 		typedef		reverse_iterator<iterator> reverse_iterator;
@@ -94,7 +90,7 @@ class ft::vector
 		// fill constructor with n elements.
 		// range constructor
 		template <class InputIterator,
-		    class = typename enable_if<!is_integral<InputIterator>::value>::type>
+		     typename enable_if<!is_integral<InputIterator>::value>::type, InputIterator>
         vector (InputIterator first, InputIterator last,
                  const allocator_type& alloc = allocator_type())
 		{
@@ -303,7 +299,7 @@ class ft::vector
 		}
 
 		template <class InputIterator,
-		    class = typename enable_if<!is_integral<InputIterator>::value>::type>
+		    typename enable_if<!is_integral<InputIterator>::value>::type, T>
     	void insert (iterator position, InputIterator first, InputIterator last)
 		{
 			difference_type start = position - begin();
@@ -326,7 +322,7 @@ class ft::vector
 		}
 
 		template <class InputIterator,
-           class = typename enable_if<!is_integral<InputIterator>::value>::type>
+        	typename enable_if<!is_integral<InputIterator>::value>::type, bool> 
 		void assign (InputIterator first, InputIterator last)
 		{
 			// std::cout <<  "d" << last - first << std::endl;

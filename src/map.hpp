@@ -148,7 +148,7 @@ class ft::map
             iterator last = end(); 
             while (start != last)
             {
-                if (!key_compare{}(start->first, k))
+                if (!keyCampare(start->first, k))
                     return start;
                 start++;
             }
@@ -161,7 +161,7 @@ class ft::map
             iterator last = end(); 
             while (start != last)
             {
-                if (key_compare{}(k, start->first))
+                if (keyCampare(k, start->first))
                     return start;
                 start++;
             }
@@ -173,7 +173,7 @@ class ft::map
             const_iterator last = end(); 
             while (start != last)
             {
-                if (!key_compare{}(start->first, k))
+                if (!keyCampare(start->first, k))
                     return start;
                 start++;
             }
@@ -186,7 +186,7 @@ class ft::map
             const_iterator last = end(); 
             while (start != last)
             {
-                if (key_compare{}(k, start->first))
+                if (keyCampare(k, start->first))
                     return start;
                 start++;
             }

@@ -15,7 +15,7 @@ incl_path="$tested_path"
 srcs="srcs"
 
 CC="clang++"
-CFLAGS="-Wall -Wextra -Werror -std=c++11 -I ../../utils"
+CFLAGS="-Wall -Wextra -Werror -std=c++98 -I ../../utils"
 
 if false; then
 	CFLAGS+=" -fsanitize=address -g3"

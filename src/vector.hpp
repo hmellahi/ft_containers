@@ -89,10 +89,9 @@ class ft::vector
 		}
 		// fill constructor with n elements.
 		// range constructor
-		template <class InputIterator,
-		     typename enable_if<!is_integral<InputIterator>::value>::type, InputIterator()>
-        vector (InputIterator first, InputIterator last,
-                 const allocator_type& alloc = allocator_type())
+		template <class InputIterator>
+		vector (InputIterator first, InputIterator last,
+                 const allocator_type& alloc = allocator_type(), typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
 		{
 			_index = 0;
 			_max_capacity = 0;
@@ -298,9 +297,8 @@ class ft::vector
 				push_back(tmp[i]);
 		}
 
-		template <class InputIterator,
-		     typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type = InputIterator()
-    	void insert (iterator position, InputIterator first, InputIterator last)
+		template <class InputIterator>
+    	void insert (iterator position, InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
 		{
 			difference_type start = position - begin();
             int elem_to_move = end() - position;
@@ -321,9 +319,9 @@ class ft::vector
 				push_back(tmp[i]);
 		}
 
-		template <class InputIterator,
-		     typename enable_if<!is_integral<InputIterator>::value>::type, InputIterator()>
-		void assign (InputIterator first, InputIterator last)
+		template <class InputIterator>
+		    //  typename enable_if<!is_integral<InputIterator>::value>, InputIterator>
+		void assign (InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
 		{
 			// std::cout <<  "d" << last - first << std::endl;
 			ft_destroy_arr();
@@ -446,7 +444,7 @@ template <class T, class Alloc>
 {
 	if (operator==(lhs, rhs))
 		return false;
-	return (lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+	return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
 }
 
 template <class T, class Alloc>
@@ -478,3 +476,6 @@ template <class T, class Alloc>
 {
 	x.swap(y);
 }
+
+//todo 
+// move enable_if / is_integral to std

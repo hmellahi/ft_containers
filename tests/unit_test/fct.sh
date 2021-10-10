@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/zsh
 
 EOC="\e[0m"
 BOLD="\e[1m"
@@ -36,6 +36,11 @@ printf "\e[0;1;94m\
 # ****************************************************************************** #
 \e[0m"
 }
+
+# getExecTime()
+# {
+
+# }
 
 compile () {
 	# 1=file 2=define used {ft/std} 3=output_file 4=compile_log
@@ -80,6 +85,18 @@ cmp_one () {
 	rm -f $std_compile_log
 
 	> $ft_log; > $std_log;
+	# a = time ./$ft_bin;
+	# (TIMEFORMAT="%U"; time ls > /dev/null) |& tr -d .
+	# time ./$std_bin;
+	# var=$( { time sleep 0 } 2>&1 |  awk -F ' ' '/user/{print $9}'  | tr -d 's')
+		{ time sleep 0 } 2>&1} |  awk -F ' ' '/user/{print $9}'  | tr -d 's' | read exec1
+#get everything to the right of first "*user "
+	# user=${var#*user }
+	# foo=$({ time some_command 1>&3 2>&4;} 2>&1 | awk -F'[s.]' '/user/{print $3}')
+	# printf "time : $var\n"
+	# var = "ss\n"
+	echo $var
+	# getExecTime $ft_bin $std_bin
 	if [ $ft_ret -eq 0 ]; then
 		./$ft_bin &>$ft_log; ft_ret=$?
 	fi

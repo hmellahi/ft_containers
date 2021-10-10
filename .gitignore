@@ -1,3 +1,4 @@
 push.sh
 archive
-*.vscode
+.vscode
+a.out

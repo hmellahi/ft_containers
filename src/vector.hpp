@@ -70,7 +70,7 @@ class ft::vector
 		template<bool B, class D = void>
 		struct enable_if {};
 		template<class D>
-		struct enable_if<true, D> { typedef T type; };
+		struct enable_if<true, D> { typedef D type; };
 		// -------> constructors
 		vector& operator= (const ft::vector<T>& src)
 		{
@@ -90,7 +90,7 @@ class ft::vector
 		// fill constructor with n elements.
 		// range constructor
 		template <class InputIterator,
-		     typename enable_if<!is_integral<InputIterator>::value>::type, InputIterator>
+		     typename enable_if<!is_integral<InputIterator>::value>::type, InputIterator()>
         vector (InputIterator first, InputIterator last,
                  const allocator_type& alloc = allocator_type())
 		{
@@ -299,7 +299,7 @@ class ft::vector
 		}
 
 		template <class InputIterator,
-		    typename enable_if<!is_integral<InputIterator>::value>::type, T>
+		     typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type = InputIterator()
     	void insert (iterator position, InputIterator first, InputIterator last)
 		{
 			difference_type start = position - begin();
@@ -322,7 +322,7 @@ class ft::vector
 		}
 
 		template <class InputIterator,
-        	typename enable_if<!is_integral<InputIterator>::value>::type, bool> 
+		     typename enable_if<!is_integral<InputIterator>::value>::type, InputIterator()>
 		void assign (InputIterator first, InputIterator last)
 		{
 			// std::cout <<  "d" << last - first << std::endl;

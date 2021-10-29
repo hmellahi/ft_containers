@@ -87,14 +87,14 @@ namespace ft
         }
         return (first2!=last2);
     }
-    // template <typename Iterator>
-    // class reverse_iterator;
+    template <typename Iterator>
+    class reverse_iterator;
 }
 
 template <typename T>
 class rand_acc_iterator;
 template <class Iterator>
-class reverse_iterator
+class ft::reverse_iterator
 {
 // private:
 
@@ -106,12 +106,12 @@ public:
     typedef typename ft::iterator_traits<Iterator>::reference           reference;
     typedef typename ft::iterator_traits<Iterator>::iterator_category   iterator_category;
     typedef Iterator            iterator_type;
-    typedef reverse_iterator    self_type;
+    typedef ft::reverse_iterator<iterator_type>    self_type;
 
     reverse_iterator(){}
     explicit reverse_iterator (iterator_type iter){ it = iter;}
     template <class Iter>
-    reverse_iterator (const reverse_iterator<Iter>& rev_it) {it = rev_it.base();}
+    reverse_iterator (const ft::reverse_iterator<Iter>& rev_it) {it = rev_it.base();}
     self_type&	operator++() {  it--; return *this;}
     self_type	operator++(int) { self_type i = *this; it--; return i;}
     self_type&	operator--() { it++; return *this;}
@@ -127,39 +127,39 @@ public:
 };
 
 template <class Iter, class Iter2>
-    bool operator== (const reverse_iterator<Iter>& lhs,
-        const reverse_iterator<Iter2>& rhs) { return (lhs.base()) == rhs.base();}
+    bool operator== (const ft::reverse_iterator<Iter>& lhs,
+        const ft::reverse_iterator<Iter2>& rhs) { return (lhs.base()) == rhs.base();}
 template <class Iter, class Iter2>
-    bool operator!= (const reverse_iterator<Iter>& lhs,
-        const reverse_iterator<Iter2>& rhs) { return (lhs.it) != (rhs.it);}
+    bool operator!= (const ft::reverse_iterator<Iter>& lhs,
+        const ft::reverse_iterator<Iter2>& rhs) { return (lhs.it) != (rhs.it);}
 template <class Iter, class Iter2>
-    bool operator>= (const reverse_iterator<Iter>& lhs,
-        const reverse_iterator<Iter2>& rhs) { return lhs.base() <= rhs.base();}
+    bool operator>= (const ft::reverse_iterator<Iter>& lhs,
+        const ft::reverse_iterator<Iter2>& rhs) { return lhs.base() <= rhs.base();}
 template <class Iter, class Iter2>
-    bool operator> (const reverse_iterator<Iter>& lhs,
-        const reverse_iterator<Iter2>& rhs) { return lhs.base() < rhs.base();}
+    bool operator> (const ft::reverse_iterator<Iter>& lhs,
+        const ft::reverse_iterator<Iter2>& rhs) { return lhs.base() < rhs.base();}
 template <class Iter, class Iter2>
-    bool operator<= (const reverse_iterator<Iter>& lhs,
-        const reverse_iterator<Iter2>& rhs) { return lhs.base() >= rhs.base();}
+    bool operator<= (const ft::reverse_iterator<Iter>& lhs,
+        const ft::reverse_iterator<Iter2>& rhs) { return lhs.base() >= rhs.base();}
 template <class Iter, class Iter2>
-    bool operator< (const reverse_iterator<Iter>& lhs,
-        const reverse_iterator<Iter2>& rhs) { return lhs.base() > rhs.base();}
+    bool operator< (const ft::reverse_iterator<Iter>& lhs,
+        const ft::reverse_iterator<Iter2>& rhs) { return lhs.base() > rhs.base();}
 
 template <class Iterator, class Iter>
-  typename reverse_iterator<Iterator>::difference_type operator- (
-    const reverse_iterator<Iterator>& lhs,
-    const reverse_iterator<Iter>& rhs)
+  typename ft::reverse_iterator<Iterator>::difference_type operator- (
+    const ft::reverse_iterator<Iterator>& lhs,
+    const ft::reverse_iterator<Iter>& rhs)
 {
     return (-1 * (lhs.base() - rhs.base()));
 }
 
 template <class Iterator>
-  reverse_iterator<Iterator> operator+ (
-             typename reverse_iterator<Iterator>::difference_type n,
-             const reverse_iterator<Iterator>& rev_it)
+  ft::reverse_iterator<Iterator> operator+ (
+             typename ft::reverse_iterator<Iterator>::difference_type n,
+             const ft::reverse_iterator<Iterator>& rev_it)
 {
     // std::cout << "yy";
-    return  reverse_iterator<Iterator>(rev_it.base() - n);
+    return  ft::reverse_iterator<Iterator>(rev_it.base() - n);
 }
 
 template <typename T>
@@ -295,6 +295,7 @@ class bidir_iterator : public iterator<input_iterator_tag, T>
         self_type& operator--() {
             // if (!_ptr && parent) return parent;
             // puts("hey1");
+            // if the ptr is NULL then its must be the last element
             if (!_ptr)
             {
                 _ptr = _bst->findMax(_bst->root); // protect : seg

@@ -46,7 +46,6 @@ int		main(void)
 	for (unsigned int i = 0; i < lst_size; ++i)
 		lst.push_back(T3(i + 1, (i + 1) * 3));
 	TESTED_NAMESPACE::map<T1, T2> mp(lst.begin(), lst.end());
-	printSize(mp);
 
 	ft_const_bound(mp, -10);
 	ft_const_bound(mp, 1);
@@ -60,7 +59,6 @@ int		main(void)
 	mp.upper_bound(7)->second = 842;
 	ft_bound(mp, 5);
 	ft_bound(mp, 7);
-
 	printSize(mp);
 	return (0);
 }

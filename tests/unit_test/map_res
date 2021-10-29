@@ -10,25 +10,89 @@
 #                                                                                #
 # ****************************************************************************** #
 [0m                                     map
-map/bounds.cpp                     : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y]
-map/comp.cpp                       : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y]
-map/copy_construct.cpp             : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y]
-map/empty.cpp                      : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y]
-map/erase.cpp                      : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y]
-map/erase2.cpp                     : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y]
-map/find_count.cpp                 : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y]
-map/insert.cpp                     : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [N]
-map/insert2.cpp                    : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y]
-map/ite_arrow.cpp                  : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[91m❌[0m | STD: [Y]
-map/ite_n0.cpp                     : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [N]
-map/ite_n1.cpp                     : COMPILE: [1m[91m❌[0m | RET: [1m[91m❌[0m | OUT: [1m[92m✅[0m | STD: [N]
-map/ite_type.cpp                   : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [N]
-map/more.cpp                       : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y]
-map/op_sqbr.cpp                    : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y]
-map/relational_ope.cpp             : COMPILE: [1m[91m❌[0m | RET: [1m[91m❌[0m | OUT: [1m[91m❌[0m | STD: [Y]
-map/rev_ite_construct.cpp          : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y]
-map/rite.cpp                       : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y]
-map/rite_arrow.cpp                 : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[91m❌[0m | STD: [Y]
-map/swap.cpp                       : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y]
-map/tricky_construct.cpp           : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y]
-map/tricky_erase.cpp               : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y]
+map/bounds.cpp                     : COMPILE: [1m[92m✅[0m | RET: [1m[91m❌[0m | OUT: [1m[91m❌[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/comp.cpp                       : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/copy_construct.cpp             : COMPILE: [1m[92m✅[0m | RET: [1m[91m❌[0m | OUT: [1m[91m❌[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/empty.cpp                      : COMPILE: [1m[92m✅[0m | RET: [1m[91m❌[0m | OUT: [1m[91m❌[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/erase2.cpp                     : COMPILE: [1m[92m✅[0m | RET: [1m[91m❌[0m | OUT: [1m[91m❌[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/erase.cpp                      : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[91m❌[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/find_count.cpp                 : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/insert2.cpp                    : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/insert.cpp                     : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [N] | LEAKS: [1m[92m✅[0m 
+map/ite_arrow.cpp                  : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[91m❌[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/ite_n0.cpp                     : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [N] | LEAKS: [1m[92m✅[0m 
+map/ite_n1.cpp                     : COMPILE: [1m[91m❌[0m | RET: [1m[91m❌[0m | OUT: [1m[92m✅[0m | STD: [N] | LEAKS: [1m[92m✅[0m 
+map/ite_type.cpp                   : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [N] | LEAKS: [1m[92m✅[0m 
+map/more.cpp                       : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/op_sqbr.cpp                    : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/relational_ope.cpp             : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[91m❌[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/rev_ite_construct.cpp          : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/rite_arrow.cpp                 : COMPILE: [1m[92m✅[0m | RET: [1m[91m❌[0m | OUT: [1m[91m❌[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+[0;1;94m# ****************************************************************************** #
+#                                                                                #
+#                                :::   :::   :::                                 #
+#                              :+:+: :+:+:  :+: :+:                              #
+#                            +:+ +:+:+ +:+ +:+                                   #
+#                           +#+  +:+  +#+ +#+ +#+                                #
+#                          +#+       +#+ +#+ #+#                                 #
+#                         #+#       #+# #+# #+#                                  #
+#                        ###       ### ### ###  containers_test                  #
+#                                                                                #
+# ****************************************************************************** #
+[0m                                     map
+map/bounds.cpp                     : COMPILE: [1m[92m✅[0m | RET: [1m[91m❌[0m | OUT: [1m[91m❌[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/comp.cpp                       : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/copy_construct.cpp             : COMPILE: [1m[92m✅[0m | RET: [1m[91m❌[0m | OUT: [1m[91m❌[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/empty.cpp                      : COMPILE: [1m[92m✅[0m | RET: [1m[91m❌[0m | OUT: [1m[91m❌[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/erase2.cpp                     : COMPILE: [1m[92m✅[0m | RET: [1m[91m❌[0m | OUT: [1m[91m❌[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/erase.cpp                      : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[91m❌[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/find_count.cpp                 : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/insert2.cpp                    : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/insert.cpp                     : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [N] | LEAKS: [1m[92m✅[0m 
+map/ite_arrow.cpp                  : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[91m❌[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/ite_n0.cpp                     : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [N] | LEAKS: [1m[92m✅[0m 
+map/ite_n1.cpp                     : COMPILE: [1m[91m❌[0m | RET: [1m[91m❌[0m | OUT: [1m[92m✅[0m | STD: [N] | LEAKS: [1m[92m✅[0m 
+map/ite_type.cpp                   : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [N] | LEAKS: [1m[92m✅[0m 
+map/more.cpp                       : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/op_sqbr.cpp                    : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/relational_ope.cpp             : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[91m❌[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/rev_ite_construct.cpp          : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/rite_arrow.cpp                 : COMPILE: [1m[92m✅[0m | RET: [1m[91m❌[0m | OUT: [1m[92m✅[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+[0;1;94m# ****************************************************************************** #
+#                                                                                #
+#                                :::   :::   :::                                 #
+#                              :+:+: :+:+:  :+: :+:                              #
+#                            +:+ +:+:+ +:+ +:+                                   #
+#                           +#+  +:+  +#+ +#+ +#+                                #
+#                          +#+       +#+ +#+ #+#                                 #
+#                         #+#       #+# #+# #+#                                  #
+#                        ###       ### ### ###  containers_test                  #
+#                                                                                #
+# ****************************************************************************** #
+[0m                                     map
+map/bounds.cpp                     : COMPILE: [1m[92m✅[0m | RET: [1m[91m❌[0m | OUT: [1m[91m❌[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/comp.cpp                       : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/copy_construct.cpp             : COMPILE: [1m[92m✅[0m | RET: [1m[91m❌[0m | OUT: [1m[91m❌[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/empty.cpp                      : COMPILE: [1m[92m✅[0m | RET: [1m[91m❌[0m | OUT: [1m[91m❌[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/erase2.cpp                     : COMPILE: [1m[92m✅[0m | RET: [1m[91m❌[0m | OUT: [1m[91m❌[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/erase.cpp                      : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[91m❌[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/find_count.cpp                 : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/insert2.cpp                    : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/insert.cpp                     : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [N] | LEAKS: [1m[92m✅[0m 
+map/ite_arrow.cpp                  : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[91m❌[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/ite_n0.cpp                     : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [N] | LEAKS: [1m[92m✅[0m 
+map/ite_n1.cpp                     : COMPILE: [1m[91m❌[0m | RET: [1m[91m❌[0m | OUT: [1m[92m✅[0m | STD: [N] | LEAKS: [1m[92m✅[0m 
+map/ite_type.cpp                   : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [N] | LEAKS: [1m[92m✅[0m 
+map/more.cpp                       : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/op_sqbr.cpp                    : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/relational_ope.cpp             : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[91m❌[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/rev_ite_construct.cpp          : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+map/rite_arrow.cpp                 : COMPILE: [1m[92m✅[0m | RET: [1m[92m✅[0m | OUT: [1m[92m✅[0m | STD: [Y] | LEAKS: [1m[92m✅[0m 
+
+
+ite => 2
+ relational_ope => 1
+erase => 3
+=> 2
+
+kawtar 3tani 3cha dyalha lyoma

@@ -29,14 +29,14 @@ class ft::map
         typedef     Key 										key_type;
         typedef     T											mapped_type;
         typedef     Compare                                     key_compare;
-        typedef     pair<const key_type,mapped_type>                  value_type;
+        typedef     pair<const key_type,mapped_type>            value_type;
         typedef		Alloc										allocator_type;
 		typedef		typename allocator_type::reference			reference;
 		typedef		typename allocator_type::const_reference	const_reference;
 		typedef		typename allocator_type::pointer			pointer;
 		typedef		typename allocator_type::const_pointer		const_pointer;
         typedef		bidir_iterator<value_type, Compare>         iterator;
-		typedef		bidir_iterator<value_type, Compare>          const_iterator; // fix 
+		typedef		bidir_iterator< value_type, Compare>          const_iterator; // fix 
 		typedef		reverse_iterator<const_iterator>            const_reverse_iterator;
 		typedef		reverse_iterator<iterator>                  reverse_iterator;
 		typedef		int                                         difference_type;
@@ -72,9 +72,7 @@ class ft::map
 
         ~map()
         {
-            // traverseInOrder(destroy);
-            // traverseInOrder();
-            // traverseInOrder(free);
+            clear();
         }
 
         // --------> Modifiers
@@ -117,11 +115,26 @@ class ft::map
         }
         void erase (iterator first, iterator last)
         {
+            // value_type next;
             while (first != last)
             {
-                if (_rbt.erase(*first++))
+                // next = first;
+                std::cout << "curr:"<< *first << std::endl;
+                // std::cout << "next:"<< *next << std::endl;
+                if (_rbt.erase(*(first++)))
                     _size--;
+                // first = next;
             }
+            // while (!empty())
+            // {
+                // std::cout << "curr:"<< *(begin()) << std::endl;
+                // erase((begin()));
+            // }
+            // (void)first;
+            // (void)last;
+            // int a = 1;
+            // _rbt.erase(a);
+            // _rbt.erase(a);
         }
 
         iterator find (const key_type& k)
@@ -213,7 +226,10 @@ class ft::map
         
         void    clear()
         {
-            _rbt.traverse();
+            // _rbt.traverse();
+            // erase(begin(), end());
+            _rbt.preOrder(_rbt.root);
+            _rbt.root = NULL;
             _size = 0;
         }
 
@@ -221,16 +237,16 @@ class ft::map
         {   // in C++98, it is required to inherit binary_function<value_type,value_type,bool>
             friend class map;
             protected:
-            Compare comp;
-            value_compare (Compare c) : comp(c) {}  // constructed with map's comparison object
+                Compare comp;
+                value_compare (Compare c) : comp(c) {}  // constructed with map's comparison object
             public:
-            typedef bool result_type;
-            typedef value_type first_argument_type;
-            typedef value_type second_argument_type;
-            bool operator() (const value_type& x, const value_type& y) const
-            {
-                return comp(x.first, y.first);
-            }
+                typedef bool result_type;
+                typedef value_type first_argument_type;
+                typedef value_type second_argument_type;
+                bool operator() (const value_type& x, const value_type& y) const
+                {
+                    return comp(x.first, y.first);
+                }
         };
         value_compare value_comp() const
         {
@@ -294,6 +310,7 @@ class ft::map
             // RBT<value_type, Compare>* node = _rbt.findMax(_rbt.root);
             // if (!node) return iterator(NULL, &_rbt);
             // return reverse_iterator(node->next());
+            return const_reverse_iterator(end());
         }
 		reverse_iterator rend(){return reverse_iterator(begin());}
 		const_reverse_iterator rend() const{ return reverse_iterator(begin());}
@@ -336,7 +353,10 @@ class ft::map
         void    insertIters(InputIterator first, InputIterator last)
         {
             while (first != last) // DRY
+            {
+                // std::cout << "val:" << *first ;
                 insert(*first++);
+            }
         }
 
         void	copy_inner_data(const map& other)
@@ -379,7 +399,7 @@ template <class Key, class T, class Compare, class Alloc>
 {
     if (rhs == lhs)
 		return false;
-	return (lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+	return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
 }
 
 template <class Key, class T, class Compare, class Alloc>

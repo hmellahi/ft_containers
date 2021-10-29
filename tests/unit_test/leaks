@@ -1,0 +1,19 @@
+srcs/map/insert.cpp:6:49: error: redefinition of 'iterator' as different kind of symbol
+typedef TESTED_NAMESPACE::map<T1, T2>::iterator iterator;
+                                                ^
+../../utils/iterators.hpp:7:8: note: previous definition is here
+struct iterator {
+       ^
+srcs/map/insert.cpp:13:8: error: use of class template 'iterator' requires template arguments
+        _pair<iterator, bool> tmp;
+              ^
+../../utils/iterators.hpp:7:8: note: template is declared here
+struct iterator {
+       ^
+srcs/map/insert.cpp:25:2: error: use of class template 'iterator' requires template arguments
+        iterator tmp;
+        ^
+../../utils/iterators.hpp:7:8: note: template is declared here
+struct iterator {
+       ^
+3 errors generated.

@@ -143,9 +143,14 @@ int main()
   mymap['c']=30;
 
   // NAMESPACE::map<const char,int> lol = mymap;
-  NAMESPACE::map<const char,int>::const_iterator it= mymap.begin();
+  NAMESPACE::map<const char,int>::const_iterator it = mymap.begin(), ite = mymap.end();
+  for (; it != ite; ++it)
+    std::cout << it->first << " => " << it->second << '\n';
+    // it-;
+
+			// std::cout << "- " << printPair(it, false) << std::endl;
   // it++;
-  std::cout << it->first << it->second;
+  // std::cout << it->first << it->second;
   // std::cout << mymap['b'] << std::endl;
   // std::cout << it->first;
   // it++;
@@ -163,8 +168,16 @@ int main()
 
 
   // // print content:
-  // for (NAMESPACE::map<const char,int>::reverse_iterator it=lol.rbegin(); it!=lol.rend(); it++)
-  //   std::cout << it->first << " => " << it->second << '\n';
+  // for (NAMESPACE::map<const char,int>::iterator it=lol.rbegin(); it!=lol.rend(); it++)
+  // mymap._rbt.preOrder( mymap._rbt.root);
+  
+  // while (it != mymap.end())
+  // {
+    // std::cout << it->first << " => " << it->second << '\n';it++;}
+  // mymap.erase('a');
+  // mymap.erase('b');
+  // mymap.erase('c');
+  // std::cout << mymap.size();
     // NAMESPACE::map<char,int>::iterator it=mymap.begin();
     // std::cout << it->first << " => " << it->second << '\n';
     // // std::cout << it->first << " => " << it->second << '\n';

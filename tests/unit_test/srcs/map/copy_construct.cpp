@@ -8,34 +8,49 @@ typedef _pair<const T1, T2> T3;
 int		main(void)
 {
 	std::list<T3> lst;
-	unsigned int lst_size = 7;
+	unsigned int lst_size = 5;// fix 7 [todo]
 	for (unsigned int i = 0; i < lst_size; ++i)
+	{
 		lst.push_back(T3(lst_size - i, i));
+		// std::cout << lst_size - i << std::endl;
+	}
 
 	TESTED_NAMESPACE::map<T1, T2> mp(lst.begin(), lst.end());
+	// std::cout << "last" << *(--(--ite));
+	// std::cout << "start" << *(it);
+	std::cout << "------\n";
+	// std::cout << "is erased: "
+	//  mp.erase(2);
+
 	TESTED_NAMESPACE::map<T1, T2>::iterator it = mp.begin(), ite = mp.end();
+	// while (it != ite)
+	// {
+		// std::cout << it->first << std::endl;
+		// it++;
+	// }
+	TESTED_NAMESPACE::map<T1, T2> mp_range(it, ite); // infinite loop [todo]
+	// std::cout << mp_range[1] << std::endl;
+	std::cout << "size: "<< mp.size() << std::endl;
+	// for (int i = 0; it != ite; ++it)
+		// it->second = ++i * 5;
 
-	TESTED_NAMESPACE::map<T1, T2> mp_range(it, --(--ite));
-	for (int i = 0; it != ite; ++it)
-		it->second = ++i * 5;
+	// it = mp.begin(); ite = --(--mp.end());
+	// TESTED_NAMESPACE::map<T1, T2> mp_copy(mp);
+	// for (int i = 0; it != ite; ++it)
+	// 	it->second = ++i * 7;
 
-	it = mp.begin(); ite = --(--mp.end());
-	TESTED_NAMESPACE::map<T1, T2> mp_copy(mp);
-	for (int i = 0; it != ite; ++it)
-		it->second = ++i * 7;
+	// std::cout << "\t-- PART ONE --" << std::endl;
+	// printSize(mp);
+	// printSize(mp_range);
+	// printSize(mp_copy);
 
-	std::cout << "\t-- PART ONE --" << std::endl;
-	printSize(mp);
-	printSize(mp_range);
-	printSize(mp_copy);
+	// mp = mp_copy;
+	// mp_copy = mp_range;
+	// mp_range.clear();
 
-	mp = mp_copy;
-	mp_copy = mp_range;
-	mp_range.clear();
-
-	std::cout << "\t-- PART TWO --" << std::endl;
-	printSize(mp);
-	printSize(mp_range);
-	printSize(mp_copy);
+	// std::cout << "\t-- PART TWO --" << std::endl;
+	// printSize(mp);
+	// printSize(mp_range);
+	// printSize(mp_copy);
 	return (0);
 }

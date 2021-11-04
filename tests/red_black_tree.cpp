@@ -136,16 +136,42 @@ int main()
 // std::cout << itup->first ;
   // mymap.erase(itlow,itup);        // erases [itlow,itup) // todo : segfault
 
-  NAMESPACE::map<const char,int> mymap;
+  // NAMESPACE::map<const char,int> mymap;
 
-  mymap['b']=20;
-  mymap['a']=10;
-  mymap['c']=30;
+  // mymap['a']=10;
+  // mymap['b']=20;
+  // mymap['c']=30;
+  // mymap['d']=40;
+  // mymap['e']=40;
 
-  // NAMESPACE::map<const char,int> lol = mymap;
-  NAMESPACE::map<const char,int>::const_iterator it = mymap.begin(), ite = mymap.end();
-  for (; it != ite; ++it)
-    std::cout << it->first << " => " << it->second << '\n';
+  // // NAMESPACE::map<const char,int> lol = mymap;
+  // NAMESPACE::map<const char,int>::const_iterator it = mymap.begin(), ite = mymap.end();
+  // for (; it != ite; ++it)
+  //   std::cout << it->first << " => " << it->second << '\n';
+  std::map<int, std::string> m;
+  ft::map<int, std::string> ft_m;
+  for (int i = 0; i < 1e6; ++i)
+  {
+      m.insert(std::make_pair(i, "value"));
+      ft_m.insert(ft::make_pair(i, std::string("value")));// todo
+  }
+  // std::cout << "waaath2" << std::endl;
+  // start = get_time();
+  // for (std::map<int, std::string>::iterator it = m.begin(); it != m.end(); ++it)
+  //     ;
+  for (ft::map<int, std::string>::iterator it = ft_m.begin(); it != ft_m.end(); ++it)
+                ;
+  // {
+  //     std::cout << "waaath1" << std::endl;
+  //     int res(0);
+  //     int myints[] = {12, 82, 37, 64, 15};
+  //     ft::map<int, int> m;
+  //     // todo
+  //     for (int i = 0; i < 5; ++i)
+  //         m.insert(ft::make_pair(myints[i], i));
+  //     for (ft::map<int, int>::iterator it = m.begin(); it != m.end(); ++it)
+  //         res += it->first;
+  // }
     // it-;
 
 			// std::cout << "- " << printPair(it, false) << std::endl;

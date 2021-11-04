@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <cstddef>
 #include "RBT.hpp"
@@ -122,7 +123,7 @@ public:
     iterator_type base() const { return iterator_type(it);}
     reverse_iterator operator+ (difference_type n) const { return self_type(it - n); }
     reverse_iterator operator- (difference_type n) const { return self_type(it + n); }
-    reference operator*() const { return *(it - 1); }
+    reference operator*() const { return *(--Iterator(it)); }
     pointer operator->() const { return &(operator*()); }
 };
 

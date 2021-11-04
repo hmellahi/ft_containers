@@ -35,6 +35,8 @@ class ft::pair
         // {
         //     *this = pr;
         // }
+        // operator pair< first_type, second_type> () const { return pair< first_type, second_type>(); }
+        // operator pair< const first_type, second_type> () const { return pair<const first_type, second_type>(); }
         ~pair(){}
         pair(const pair& src)
         :first(src.first)

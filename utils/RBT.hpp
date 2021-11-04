@@ -267,12 +267,12 @@ class RBT
                 small = small->left;
             return (small);
         }
-        value_type  *findMax(RBT *root) const
+        RBT *findMax(RBT *root) const
         {
             RBT*   small = root;
             while (small->right)
                 small = small->right;
-            return (small->value);
+            return (small);
         }
         RBT<value_type, Compare> *prev()
         {

@@ -3,24 +3,24 @@
 #include <cstddef>
 #include "RBT.hpp"
 
-template <class Category, class T, class Distance = ptrdiff_t,
-          class Pointer = T*, class Reference = T&>
-struct iterator {
-    typedef T         value_type;
-    typedef Distance  difference_type;
-    typedef Pointer   pointer;
-    typedef Reference reference;
-    typedef Category  iterator_category;
-};
-
-struct input_iterator_tag {};
-struct output_iterator_tag {};
-struct forward_iterator_tag {};
-struct bidirectional_iterator_tag {};
-struct random_access_iterator_tag {};
 
 namespace ft
 {
+    template <class Category, class T, class Distance = ptrdiff_t,
+            class Pointer = T*, class Reference = T&>
+    struct iterator {
+        typedef T         value_type;
+        typedef Distance  difference_type;
+        typedef Pointer   pointer;
+        typedef Reference reference;
+        typedef Category  iterator_category;
+    };
+
+    struct input_iterator_tag {};
+    struct output_iterator_tag {};
+    struct forward_iterator_tag {};
+    struct bidirectional_iterator_tag {};
+    struct random_access_iterator_tag {};
     template <class Iterator>
     class iterator_traits
     {
@@ -164,15 +164,15 @@ template <class Iterator>
 }
 
 template <typename T>
-class rand_acc_iterator : public iterator<input_iterator_tag, T>
+class rand_acc_iterator : public ft::iterator<std::random_access_iterator_tag, T>
 {
     public:
         typedef T                           value_type; // DRY
         typedef int                         difference_type;
         typedef T*                          pointer;
         typedef T&                          reference;
-        typedef random_access_iterator_tag  iterator_category;
-        // typedef typename iterator::value_type            value_type;
+        typedef std::random_access_iterator_tag  iterator_category;
+        // typedef typename ft::iterator<std::random_access_iterator_tag, T>::value_type            value_type;
         // typedef typename iterator::difference_type       difference_type;
         // typedef typename iterator::pointer               pointer;
         // typedef typename iterator::reference             reference;
@@ -240,7 +240,7 @@ class rand_acc_iterator : public iterator<input_iterator_tag, T>
 
 
 template <typename T, typename Compare>
-class bidir_iterator : public iterator<input_iterator_tag, T>
+class bidir_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T>
 {
     public:
         typedef T                           value_type; // DRY
@@ -248,7 +248,7 @@ class bidir_iterator : public iterator<input_iterator_tag, T>
         typedef T*                          pointer;
         typedef T&                          reference;
         // typedef std::less<T>                   Compare; // TODO REMOVE
-        typedef bidirectional_iterator_tag  iterator_category;
+        typedef ft::bidirectional_iterator_tag  iterator_category;
         // std::allocator;
         typedef bidir_iterator self_type;
         bidir_iterator(pointer ptr, const RBT<value_type, Compare>* bst = NULL)
@@ -270,12 +270,18 @@ class bidir_iterator : public iterator<input_iterator_tag, T>
             _bst = bid_it._bst; // todo wtf is wrong? take a copy broo
             return (*this);
         }
+        // binder2nd
         bidir_iterator(const value_type& it, const RBT<value_type, Compare>* bst)
-        :_ptr(new T(it))
+        :_ptr(new T(it)) // todo use allocater
         {
             _bst = bst; // todo wtf is wrong? take a copy broo
         }
-        operator bidir_iterator<const T, Compare> () const { return bidir_iterator<const T, Compare>(_ptr); } // add _bst
+        // bidir_iterator(pointer ptr, const RBT<value_type, Compare>* bst)
+        // {
+        //     _ptr = ptr;
+        //     _bst = bst; // todo wtf is wrong? take a copy broo
+        // }
+        operator bidir_iterator<const T, Compare> () const { return bidir_iterator<const T, Compare>(_ptr, _bst);}//, Compare>(_ptr, _bst); } // add _bst
         
         self_type& operator++()
         {
@@ -299,7 +305,7 @@ class bidir_iterator : public iterator<input_iterator_tag, T>
             // if the ptr is NULL then its must be the last element
             if (!_ptr)
             {
-                _ptr = _bst->findMax(_bst->root); // protect : seg
+                _ptr = _bst->findMax(_bst->root)->value; // protect : seg
                 return *this;
             }
             RBT<value_type, Compare>* curr = _bst->search(*_ptr);
@@ -318,7 +324,8 @@ class bidir_iterator : public iterator<input_iterator_tag, T>
             return (--bidir_iterator(it._ptr, it._bst)); // todo change / rm
         }
         difference_type operator-(self_type src)const { return ( _ptr - src._ptr);}
-        reference operator*()const { return *(_bst->search(*_ptr)->value);  } // todo optimize
+        reference operator*()const { return *_ptr;  } // todo optimize
+        // reference operator*()const { return *(_bst->search(*_ptr)->value);  } // todo optimize
         pointer operator->() const{ return _bst->search(*_ptr)->value; } // todo optimize
 
         friend bool operator== (const bidir_iterator& lhs,

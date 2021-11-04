@@ -148,7 +148,7 @@ void iterator_tests(void)
     {
         ft::map<int, char>::const_iterator c_it, c_ob(my_it);
         c_it = my_it;
-        EQUAL(&(*my_it) == &(*c_it) && (&(*my_it) == &(*c_ob)));
+        EQUAL(&(*my_it) == &(*c_it) && (&(*my_it) ==    &(*c_ob)));
     }
     std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " == operator "
               << "] --------------------]\t\t\033[0m";
@@ -180,31 +180,31 @@ void iterator_tests(void)
     std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " ++it operator "
               << "] --------------------]\t\t\033[0m";
     {
-    // todo : fix (time out)
+
         /*---------------------------------- time limit test --------------------------------------------*/
-        // {
-        //     time_t start, end, diff;
+        {
+            time_t start, end, diff;
 
-        //     std::map<int, std::string> m;
-        //     ft::map<int, std::string> ft_m;
-        //     for (int i = 0; i < 1e6; ++i)
-        //     {
-        //         m.insert(std::make_pair(i, "value"));
-        //         ft_m.insert(ft::make_pair(i, string("value")));// todo
-        //     }
-        //     std::cout << "waaath2" << std::endl;
-        //     start = get_time();
-        //     for (std::map<int, std::string>::iterator it = m.begin(); it != m.end(); ++it)
-        //         ;
-        //     end = get_time();
-        //     diff = end - start;
-        //     diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
+            std::map<int, std::string> m;
+            ft::map<int, std::string> ft_m;
+            for (int i = 0; i < 1e6; ++i)
+            {
+                m.insert(std::make_pair(i, "value"));
+                ft_m.insert(ft::make_pair(i, string("value")));// todo
+            }
+            // std::cout << "waaath2" << std::endl;
+            start = get_time();
+            for (std::map<int, std::string>::iterator it = m.begin(); it != m.end(); ++it)
+                ;
+            end = get_time();
+            diff = end - start;
+            diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
 
-        //     ualarm(diff * 1e3, 0);
-        //     for (ft::map<int, std::string>::iterator it = ft_m.begin(); it != ft_m.end(); ++it)
-        //         ;
-        //     ualarm(0, 0);
-        // }
+            ualarm(diff * 1e3, 0);
+            for (ft::map<int, std::string>::iterator it = ft_m.begin(); it != ft_m.end(); ++it)
+                ;
+            ualarm(0, 0);
+        }
         bool cond(false);
         {
             int res(0);
@@ -235,32 +235,32 @@ void iterator_tests(void)
     }
     std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " --it operator "
               << "] --------------------]\t\t\033[0m";
-    {
+    {   // todo : fix (time out)
         /*---------------------------------- time limit test --------------------------------------------*/
-        // { todo : fix tle
-        //     time_t start, end, diff;
+        {
+            time_t start, end, diff;
 
-        //     std::map<int, std::string> m;
-        //     ft::map<int, std::string> ft_m;
-        //     for (int i = 0; i < 1e6; ++i)
-        //     {
-        //         m.insert(std::make_pair(i, "value"));
-        //     }
-        //     start = get_time();
-        //     std::map<int, std::string>::iterator it = --m.end();
-        //         ft_m.insert(ft::make_pair(i,string( "value")));// todo
-        //     for (; it != m.begin(); --it)
-        //         ;
-        //     end = get_time();
-        //     diff = end - start;
-        //     diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
+            std::map<int, std::string> m;
+            ft::map<int, std::string> ft_m;
+            for (int i = 0; i < 1e6; ++i)
+            {
+                m.insert(std::make_pair(i, "value"));
+                ft_m.insert(ft::make_pair(i, string("value")));
+            }
+            start = get_time();
+            std::map<int, std::string>::iterator it = --m.end();
+            for (; it != m.begin(); --it)
+                ;
+            end = get_time();
+            diff = end - start;
+            diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
 
-        //     ualarm(diff * 1e3, 0);
-        //     ft::map<int, std::string>::iterator ft_it = --ft_m.end();
-        //     for (; ft_it != ft_m.begin(); --ft_it)
-        //         ;
-        //     ualarm(0, 0);
-        // }
+            ualarm(diff * 1e3, 0);
+            ft::map<int, std::string>::iterator ft_it = --ft_m.end();
+            for (; ft_it != ft_m.begin(); --ft_it)
+                ;
+            ualarm(0, 0);
+        }
         int res(0);
         {
             int myints[] = {12, 82, 37, 64, 15};
@@ -2225,12 +2225,12 @@ int main()
 
     std::cout << YELLOW << "Testing Iterators;" << RESET << std::endl;
     TEST_CASE(iterator_tests);
-    TEST_CASE(const_iterator_tests);
-    TEST_CASE(reverse_iterator_tests);
+    // TEST_CASE(const_iterator_tests);
+    // TEST_CASE(reverse_iterator_tests);
     std::cout << std::endl;
 
     std::cout << YELLOW << "Testing Constructors;" << RESET << std::endl;
-    TEST_CASE(testConstructors);
+    // TEST_CASE(testConstructors);
     std::cout << std::endl;
 
     // std::cout << YELLOW << "Testing Iterator Methods;" << RESET << std::endl;

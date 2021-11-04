@@ -36,9 +36,9 @@ class ft::map
 		typedef		typename allocator_type::pointer			pointer;
 		typedef		typename allocator_type::const_pointer		const_pointer;
         typedef		bidir_iterator<value_type, Compare>         iterator;
-		typedef		bidir_iterator< value_type, Compare>          const_iterator; // fix 
+		typedef		bidir_iterator<const value_type, Compare>          const_iterator; // todo fix
 		typedef		reverse_iterator<const_iterator>            const_reverse_iterator;
-		typedef		reverse_iterator<iterator>                  reverse_iterator;
+		typedef		reverse_iterator<iterator>                 reverse_iterator;
 		typedef		int                                         difference_type;
 		typedef		size_t                                      size_type;
 
@@ -295,26 +295,32 @@ class ft::map
         const_iterator begin() const {
             RBT<value_type, Compare>* node = _rbt.findMin(_rbt.root);
             if (!node) return iterator(NULL, &_rbt);
-            return (const_iterator(node->value, &_rbt));
+            return (iterator(node->value, &_rbt));
         }
 		iterator end() {return iterator(NULL, &_rbt);}
         const_iterator end() const {return iterator(NULL, &_rbt);}
 		reverse_iterator rbegin()
         {
             // RBT<value_type, Compare>* node = _rbt.findMax(_rbt.root);
-            // if (!node) return iterator(NULL, &_rbt);
-            return reverse_iterator(end());
+            // // if (!node) return reverse_iterator(NULL, &_rbt);
+            // return reverse_iterator(node->value);
+            return reverse_iterator(iterator(NULL, &_rbt));
         }
 		const_reverse_iterator rbegin() const
         {
             // RBT<value_type, Compare>* node = _rbt.findMax(_rbt.root);
             // if (!node) return iterator(NULL, &_rbt);
-            // return reverse_iterator(node->next());
-            return const_reverse_iterator(end());
+            // return reverse_iterator(iterator(node->value));
+            // return iterator(node->value);
+            return reverse_iterator(iterator(NULL, &_rbt));
         }
 		reverse_iterator rend(){return reverse_iterator(begin());}
-		const_reverse_iterator rend() const{ return reverse_iterator(begin());}
-        
+		// const_reverse_iterator rend() const{ return reverse_iterator(const_iterator(begin()));}
+        const_reverse_iterator rend() const{
+            RBT<value_type, Compare>* node = _rbt.findMin(_rbt.root);
+            if (!node) return reverse_iterator(iterator(NULL, &_rbt));
+            return reverse_iterator(iterator(node->value, &_rbt));
+        }
         // todo:::
         // iterator begin();
         // const_iterator begin() const;

@@ -148,18 +148,18 @@ int main()
   // NAMESPACE::map<const char,int>::const_iterator it = mymap.begin(), ite = mymap.end();
   // for (; it != ite; ++it)
   //   std::cout << it->first << " => " << it->second << '\n';
-  std::map<int, std::string> m;
-  ft::map<int, std::string> ft_m;
-  for (int i = 0; i < 1e6; ++i)
-  {
-      m.insert(std::make_pair(i, "value"));
-      ft_m.insert(ft::make_pair(i, std::string("value")));// todo
-  }
+  // std::map<int, std::string> m;
+  // ft::map<int, std::string> ft_m;
+  // for (int i = 0; i < 1e6; ++i)
+  // {
+  //     m.insert(std::make_pair(i, "value"));
+  //     ft_m.insert(ft::make_pair(i, std::string("value")));// todo
+  // }
   // std::cout << "waaath2" << std::endl;
   // start = get_time();
   // for (std::map<int, std::string>::iterator it = m.begin(); it != m.end(); ++it)
   //     ;
-  for (ft::map<int, std::string>::iterator it = ft_m.begin(); it != ft_m.end(); ++it)
+  // for (ft::map<int, std::string>::iterator it = ft_m.begin(); it != ft_m.end(); ++it)
                 ;
   // {
   //     std::cout << "waaath1" << std::endl;
@@ -302,5 +302,31 @@ int main()
     // b.insert(80);
  
     // a.insert(20);
+
+    {
+      std::map<int, char> m;
+      std::map<int, char>::iterator it, it1;
+
+      ft::map<int, char> my_m;
+      ft::map<int, char>::iterator my_it, my_it1, tmp;
+
+      for (int i = 0; i < 10; ++i)
+      {
+          my_m.insert(ft::make_pair(i, static_cast<char>(i + 97)));
+          m.insert(std::make_pair(i, static_cast<char>(i + 97)));
+      }
+
+      it = m.begin();
+      it1 = ++(m.begin());
+      my_it = my_m.begin();
+      my_it1 = ++(my_m.begin());
+      {
+          ft::map<int, char>::const_iterator c_it, c_ob(my_it);
+          c_it = my_it;
+          std::cout << "my_it " << *my_it << std::endl;
+          std::cout << "c_it " << c_it->first << std::endl;
+          std::cout << "c_ob " << c_ob->first << std::endl;
+      }
+    }
   return 0;
 }

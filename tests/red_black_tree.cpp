@@ -153,7 +153,7 @@ int main()
   // for (int i = 0; i < 1e6; ++i)
   // {
   //     m.insert(std::make_pair(i, "value"));
-  //     ft_m.insert(ft::make_pair(i, std::string("value")));// todo
+  //     ft_m.insert(ft::make_pair(i, std::std::string("value")));// todo
   // }
   // std::cout << "waaath2" << std::endl;
   // start = get_time();
@@ -335,7 +335,7 @@ int main()
     //   for (int i = 0; i < 1e6; ++i)
     //   {
     //       m.insert(std::make_pair(i, "value"));
-    //       ft_m.insert(ft::make_pair(i, std::string("value")));// todo
+    //       ft_m.insert(ft::make_pair(i, std::std::string("value")));// todo
     //   }
     //   // std::cout << "waaath2" << std::endl;
     //   for (std::map<int, std::string>::iterator it = m.begin(); it != m.end(); ++it)
@@ -360,24 +360,145 @@ int main()
     //         std::cout << it->first << " " << it->second << std::endl;
     // }
 
-    {
+    // {
 
-        ft::map<int, std::string> ft_m;
-        for (int i = 0; i < 6; ++i)
-          ft_m.insert(ft::make_pair(i, std::string("value")));
-        ft::map<int, std::string>::iterator ft_it = --ft_m.end();
-        // ft_m.print2D();
-        // for (; ft_it != ft_m.begin(); ft_it--)
-        //   std::cout << ft_it->first << std::endl;
+    //     ft::map<int, std::string> ft_m;
+    //     for (int i = 0; i < 6; ++i)
+    //       ft_m.insert(ft::make_pair(i, std::std::string("value")));
+    //     // ft::map<int, std::string>::iterator ft_it = --ft_m.end();
+    //     // // ft_m.print2D();
+    //     // for (; ft_it != ft_m.begin(); ft_it--)
+    //     //   std::cout << ft_it->first << std::endl;
 
-        // ft::map<int, std::string>::iterator ft_it = ft_m.begin();
-        // std::cout << "am here" << std::endl;
-        // // for (; ft_it != ft_m.begin(); --ft_it)
-        // // std::cout << ft_it->first << std::endl;
-        // for (; ft_it != ft_m.end(); ++ft_it)
-        //   std::cout << ft_it->first << std::endl;
-        // std::cout << "am here 2" << std::endl;
-    }
+    //     ft::map<int, std::string>::iterator ft_it = ft_m.begin();
+    //     std::cout << "am here" << std::endl;
+    //     // for (; ft_it != ft_m.begin(); --ft_it)
+    //     // std::cout << ft_it->first << std::endl;
+    //     for (; ft_it != ft_m.end(); ++ft_it)
+    //       std::cout << ft_it->first << std::endl;
+    //     std::cout << "am here 2" << std::endl;
+    // }
+    // int res = 0;
+    // {
+    //   int myints[] = {12, 82, 37, 64, 15};
+    //         ft::map<int, int> m;
+    //         for (size_t i = 0; i < 5; ++i)
+    //             m.insert(ft::make_pair(myints[i], (int)i)); //todo
+    //         ft::map<int, int>::iterator it = --m.end();
+    //         for (;; --it)
+    //         {
+    //             if (it == m.begin())
+    //             {
+    //                 res += it->first;
+    //                 break;
+    //             }
+    //             res += it->first;
+    //         }
+    // }
+
+    // {
+    //         std::map<int, std::string> m1;
+    //         std::map<int, std::string> m2;
+    //         ft::map<int, std::string> ft_m1;
+    //         ft::map<int, std::string> ft_m2;
+    //         for (int i = 0; i < 1e6; ++i)
+    //         {
+    //             m1.insert(std::make_pair(i, "string1"));
+    //             m2.insert(std::make_pair(i, "string2"));
+    //             ft_m1.insert(ft::make_pair(i, std::std::string("string1"))); //todo
+    //             ft_m2.insert(ft::make_pair(i, std::std::string("string2")));
+    //         }
+
+    //         m1 = m2;
+    //         /*-----------------------------------------------------*/
+    //         /*------------------ ft::map ---------------------*/
+    //         ft_m1 = ft_m2;
+    //         /*----------------------------------------------------*/
+    //     }
+    //     /*------------------------------------------------------------------------------------------*/
+    //     /*------------------ std::map ---------------------*/
+    //     std::map<int, std::string> m1;
+    //     std::map<int, std::string> m2;
+    //     ft::map<int, std::string> ft_m1;
+    //     ft::map<int, std::string> ft_m2;
+    //     for (int i = 0; i < 10; ++i)
+    //     {
+    //         m1.insert(std::make_pair(i, "string1"));
+    //         m2.insert(std::make_pair(i, "string2"));
+    //         ft_m1.insert(ft::make_pair(i, std::std::string("string1")));
+    //         ft_m2.insert(ft::make_pair(i, std::std::string("string2")));
+    //     }
+
+    //     m1 = m2;
+    //     ft_m1 = ft_m2;
+    //     /*----------------------------------------------------*/
+    //     /*------------------ strings to store the results ----*/
+    //     std::string res, ft_res;
+    //     /*----------------------------------------------------*/
+    //     for (std::map<int, std::string>::iterator it = m1.begin(); it != m1.end(); ++it) // fill res from m1
+    //         res += it->first;
+    //   std::cout << "am here" << std::endl;
+    //     for (ft::map<int, std::string>::iterator it = ft_m1.begin(); it != ft_m1.end(); ++it) // fill ft_res from ft_m1
+    //         ft_res += it->first;
+    //   std::cout << "am here2" << std::endl;
+
+{
+            time_t start, end, diff;
+            std::map<int, std::string> m1;
+            std::map<int, std::string> m2;
+            ft::map<int, std::string> ft_m1;
+            ft::map<int, std::string> ft_m2;
+            for (int i = 0; i < 1e6; ++i)
+            {
+                m1.insert(std::make_pair(i, "string1"));
+                m2.insert(std::make_pair(i, "string2"));
+                ft_m1.insert(ft::make_pair(i, std::string("string1"))); //todo
+                ft_m2.insert(ft::make_pair(i, std::string("string2")));
+            }
+
+            // start = get_time();
+            m1 = m2;
+            // end = get_time();
+            // diff = end - start;
+            // diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
+            /*-----------------------------------------------------*/
+            /*------------------ ft::map ---------------------*/
+            // ualarm(diff * 1e3, 0);
+            ft_m1 = ft_m2;
+            // ualarm(0, 0);
+            /*----------------------------------------------------*/
+        }
+        /*------------------------------------------------------------------------------------------*/
+        /*------------------ std::map ---------------------*/
+        std::map<int, std::string> m1;
+        std::map<int, std::string> m2;
+        ft::map<int, std::string> ft_m1;
+        ft::map<int, std::string> ft_m2;
+        for (int i = 0; i < 10; ++i)
+        {
+            m1.insert(std::make_pair(i, "string1"));
+            m2.insert(std::make_pair(i, "string2"));
+            ft_m1.insert(ft::make_pair(i, std::string("string1")));
+            ft_m2.insert(ft::make_pair(i, std::string("string2")));
+        }
+
+        m1 = m2;
+        ft_m1 = ft_m2;
+        /*----------------------------------------------------*/
+        /*------------------ strings to store the results ----*/
+        std::string res, ft_res;
+        /*----------------------------------------------------*/
+        for (std::map<int, std::string>::iterator it = m1.begin(); it != m1.end(); ++it)
+        { // fill res from m1
+            res += it->second;
+          std::cout << it->second << std::endl;
+        }
+        for (ft::map<int, std::string>::iterator it = ft_m1.begin(); it != ft_m1.end(); ++it) // fill ft_res from ft_m1
+            ft_res += it->second;
+        // printf("%s|%s", ft_res, res);
+        std::cout << ft_res << "|" << res << std::endl;
+        // EQUAL(res == ft_res);
+    // }
     // int res(0);
     // {
     //     int myints[] = {12, 82, 37, 64, 15};

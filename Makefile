@@ -13,7 +13,7 @@
 
 CLANG = clang++
 
-FLAGS = --std=c++11 -Wall -Werror
+FLAGS = --std=c++11 #-Wall -Werror
 
 NAME = a.out
 

@@ -88,9 +88,9 @@ class ft::map
                 _size++;
             }
             res.first = iterator(node->value);
-            std::cout<< "\n---------------\n"<< std::endl;
-            print2D();
-            std::cout<< "\n---------------\n"<< std::endl;
+            // std::cout<< "\n--- inserting " << val.first << "-----------\n"<< std::endl;
+            // print2D();
+            // std::cout<< "\n---------------\n"<< std::endl;
             return res;
         }
         // with hint (2)	
@@ -122,7 +122,7 @@ class ft::map
             while (first != last)
             {
                 // next = first;
-                std::cout << "curr:"<< *first << std::endl;
+                // std::cout << "curr:"<< *first << std::endl;
                 // std::cout << "next:"<< *next << std::endl;
                 if (_rbt.erase(*(first++)))
                     _size--;
@@ -259,10 +259,11 @@ class ft::map
         map &operator=(const map &rhs)
         {
             clear();
-            const_iterator start = rhs.begin(); 
-            const_iterator last = rhs.end();
-            while (start != last)
-                insert(*start++);
+            // const_iterator start = rhs.begin(); 
+            // const_iterator last = rhs.end();
+            // while (start != last)
+            //     insert(*start++);
+            _rbt.cpy(&(rhs._rbt));
             return (*this);
         }
 
@@ -403,10 +404,10 @@ class ft::map
             // count
             // std::cout<<std::endl;
             for (int i = 3; i < space; i++)
-                std::cout<<"-";
-            std::cout<<root->value->first<<"|";
+                std::cout<<" ";
+            std::cout<<root->value->first;
             if (root->parent)
-                std::cout << (root->parent->value->first);
+                std::cout <<"|"<< (root->parent->value->first);
             std::cout<<"\n";
         
             // Process left child

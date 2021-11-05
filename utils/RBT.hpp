@@ -45,6 +45,8 @@ class RBT
             RBT* T2 = x->right;
 
             // do rotate
+            if (x->right)
+                x->right->parent = y;
             x->right = y;
             y->left = T2;
             // update parent
@@ -66,11 +68,16 @@ class RBT
             RBT *T2 = y->left;
 
             // Perform rotation
+            if (y->left)
+                y->left->parent = x;
             y->left = x;
             x->right = T2;
             // update parents
+            // std::cout << y->left->parent->value->first << std::endl;
+            // std::cout << x->value->first << std::endl;
             y->parent = x->parent;
             x->parent = y;
+
 
             // Update heights
             x->height = std::max(getHeight(x->left),
@@ -116,6 +123,16 @@ class RBT
             _myAllocater.deallocate(root, 1);
             root = NULL;
         }
+        void cpy(const RBT<value_type, Compare> *root)
+        {
+            if(!root)
+                return ;
+            cpy(root->left);
+            if (root->value)
+                insert(*(root->value));
+                // std::cout << "val:" << *(root->value) << " ";
+            cpy(root->right);
+        }
         ~RBT()
         {
             // if (value)
@@ -156,10 +173,15 @@ class RBT
             {
                 // right right
                 if (!key_compare(new_node->value->first, root->right->value->first))
+                {
+                    // std::cout << "am here 2 WITH VAL" << new_node->value->first << std::endl;
+                    // std::cout << "am here 2 WITH ROOT" << root->value->first << std::endl;
                     return rotateLeft(root);
+                }
                 // right left
                 else
                 {
+                    // std::cout << "am here" << std::endl;
                     root->right = rotateRight(root->right);
                     return (rotateLeft(root));
                 }

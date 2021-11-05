@@ -1,0 +1,12 @@
+map
+    construct
+        operator= (lhs.size = rhs.size) // tle
+        = operator (lhs.size = 0)
+
+cannot initialize a parameter of type 'RBT<RBT<ft::pair<const int,
+      std::__1::basic_string<char> >, std::__1::less<int> >::value_type, std::__1::less<int> > *' (aka
+      'RBT<ft::pair<const int, std::__1::basic_string<char> >, std::__1::less<int> > *') with an rvalue of
+      type 'const RBT<ft::map<int, std::__1::basic_string<char>, std::__1::less<int>,
+      std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >::value_type,
+      std::__1::less<int> > *' (aka 'const RBT<pair<const int, std::__1::basic_string<char> >,
+      std::__1::less<int> > *')

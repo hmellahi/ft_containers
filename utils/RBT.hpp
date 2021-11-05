@@ -367,31 +367,33 @@ class RBT
                         // std::cout << node->value->first << std::endl;
                         if (node->parent)
                         {
-                            if (node->parent->right == node->right)
+                            if (node->parent->right == node)
                                 node->parent->right = NULL;
                             else
                                 node->parent->left = NULL;
                         }
                         tmp = node;
-                        std::cout << "has no childs: " << node->value->first << std::endl;
+                        // std::cout << "has no childs: " << node->value->first << std::endl;
                         node = NULL;
                     }
                     // else one child
                     // copy child content to the node to be deleted
                     else
                     {
-                        if (node->parent)
-                        {
-                            if (node->parent->right == node->right)
-                                node->parent->right = tmp;
-                            else
-                                node->parent->left = tmp;
-                        }
                         // RBT* tmp2 = node;
+                        RBT* nodeParent = node->parent;
                         *node = *tmp;
+                        node->parent = nodeParent;
                         // node = tmp;
                         // tmp = tmp2;
                         // std::cout << "min: begin2()" << *(node->value);
+                        // if (node->nodeParent)
+                        // {
+                        //     if (node->parent->right == node->right)
+                        //         node->parent->right = tmp;
+                        //     else
+                        //         node->parent->left = tmp;
+                        // }
                     }
                     // free tmp [todo]
                     // _myAllocater.destroy(tmp);
@@ -405,7 +407,7 @@ class RBT
                     RBT* min = findMin(node->right);
                     // copy min values
                     node->value = min->value;
-                    std::cout << "was here 2" << *(min->value);
+                    // std::cout << "was here 2" << *(min->value);
                     // delete min [todo]
                     node->right = del(node->right, *(min->value), is_found);
                 }
@@ -417,10 +419,11 @@ class RBT
 
             // If the tree had only one node
             // then return
-            if (node    == NULL)
+            if (node == NULL)
                 return node;
                     // std::cout << "node: begin()" << *(node->value);
             // update current node height
+            // std::cout << "node " << *(node->value) << std::endl;
             node->height = std::max(getHeight(node->left), getHeight(node->right)) + 1;
             // calculate node balance
             int balance = getBalance(node);

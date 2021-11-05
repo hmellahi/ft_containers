@@ -303,30 +303,98 @@ int main()
  
     // a.insert(20);
 
+    // {
+    //   std::map<int, char> m;
+    //   std::map<int, char>::iterator it, it1;
+
+    //   ft::map<int, char> my_m;
+    //   ft::map<int, char>::iterator my_it, my_it1, tmp;
+
+    //   for (int i = 0; i < 10; ++i)
+    //   {
+    //       my_m.insert(ft::make_pair(i, static_cast<char>(i + 97)));
+    //       m.insert(std::make_pair(i, static_cast<char>(i + 97)));
+    //   }
+
+    //   it = m.begin();
+    //   it1 = ++(m.begin());
+    //   my_it = my_m.begin();
+    //   my_it1 = ++(my_m.begin());
+    //   {
+    //       ft::map<int, char>::const_iterator c_it, c_ob(my_it);
+    //       c_it = my_it;
+    //       std::cout << "my_it " << *my_it << std::endl;
+    //       std::cout << "c_it " << (++c_it)->second << std::endl;
+    //       std::cout << "c_ob " << c_ob->first << std::endl;
+    //   }
+    // }
+    // {
+    //   // time_t start, end, diff;
+    //   std::map<int, std::string> m;
+    //   ft::map<int, std::string> ft_m;
+    //   for (int i = 0; i < 1e6; ++i)
+    //   {
+    //       m.insert(std::make_pair(i, "value"));
+    //       ft_m.insert(ft::make_pair(i, std::string("value")));// todo
+    //   }
+    //   // std::cout << "waaath2" << std::endl;
+    //   for (std::map<int, std::string>::iterator it = m.begin(); it != m.end(); ++it)
+    //       ;
+
+    //   for (ft::map<int, std::string>::iterator it = ft_m.begin(); it != ft_m.end(); ++it)
+    //       ;
+    // }
+    // {
+    //     int res(0), tmp;
+    //     int myints[] = {12, 82, 37, 64, 15};
+    //     ft::map<int, int> m;
+    //     for (int i = 0; i < 5; ++i)
+    //         m.insert(ft::make_pair(myints[i], i));
+    //     ft::map<int, int>::iterator it = m.begin(), eit = --m.end();
+    //     tmp = eit->first;
+    //     std::cout << "tmp " << tmp << std::endl;
+    //     m.erase(eit);
+    //     for (; it != m.end(); ++it)
+    //         res += it->first;
+    //     for (it = m.begin(); it != m.end(); ++it)
+    //         std::cout << it->first << " " << it->second << std::endl;
+    // }
+
     {
-      std::map<int, char> m;
-      std::map<int, char>::iterator it, it1;
 
-      ft::map<int, char> my_m;
-      ft::map<int, char>::iterator my_it, my_it1, tmp;
-
-      for (int i = 0; i < 10; ++i)
-      {
-          my_m.insert(ft::make_pair(i, static_cast<char>(i + 97)));
-          m.insert(std::make_pair(i, static_cast<char>(i + 97)));
-      }
-
-      it = m.begin();
-      it1 = ++(m.begin());
-      my_it = my_m.begin();
-      my_it1 = ++(my_m.begin());
-      {
-          ft::map<int, char>::const_iterator c_it, c_ob(my_it);
-          c_it = my_it;
-          std::cout << "my_it " << *my_it << std::endl;
-          std::cout << "c_it " << c_it->first << std::endl;
-          std::cout << "c_ob " << c_ob->first << std::endl;
-      }
+        std::map<int, std::string> m;
+        ft::map<int, std::string> ft_m;
+        for (int i = 0; i < 1e6; ++i)
+        {
+            m.insert(std::make_pair(i, "value"));
+            ft_m.insert(ft::make_pair(i, std::string("value")));
+        }
+        std::map<int, std::string>::iterator it = --m.end();
+        for (; it != m.begin(); --it)
+            ;
+        ft::map<int, std::string>::iterator ft_it = --ft_m.end();
+        std::cout << "am here" << std::endl;
+        for (; ft_it != ft_m.begin(); --ft_it)
+        std::cout << ft_it->first << std::endl;
+        std::cout << "am here 2" << std::endl;
     }
+    // int res(0);
+    // {
+    //     int myints[] = {12, 82, 37, 64, 15};
+    //     ft::map<int, int> m;
+    //     for (size_t i = 0; i < 5; ++i)
+    //         m.insert(ft::make_pair(myints[i], (int)i)); //todo
+    //     ft::map<int, int>::iterator it = --m.end();
+    //     for (;; --it)
+    //     {
+    //         if (it == m.begin())
+    //         {
+    //             res += it->first;
+    //             break;
+    //         }
+    //         res += it->first;
+    //     }
+    // }
+  
   return 0;
 }

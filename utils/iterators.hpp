@@ -281,7 +281,7 @@ class bidir_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T>
         //     _ptr = ptr;
         //     _bst = bst; // todo wtf is wrong? take a copy broo
         // }
-        operator bidir_iterator<const T, Compare> () const { return bidir_iterator<const T, Compare>(_ptr, new RBT<const T, Compare>(_bst));}//, Compare>(_ptr, _bst); } // add _bst
+        operator bidir_iterator<const T, Compare> () const { return bidir_iterator<const T, Compare>(_ptr, reinterpret_cast<const RBT<const value_type, Compare>*>(_bst)); } // add _bst
         
         self_type& operator++()
         {

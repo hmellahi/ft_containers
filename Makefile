@@ -6,7 +6,7 @@
 #    By: hamza <hamza@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/24 19:04:38 by hmellahi          #+#    #+#              #
-#    Updated: 2021/10/04 23:22:10 by hamza            ###   ########.fr        #
+#    Updated: 2021/11/05 01:21:54 by hamza            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ $(NAME): ${SRC}
 	$(CLANG) $(FLAGS) -I src -I utils ${SRC} -o $(NAME)
 
 san :
-	$(CLANG) $(FLAGS) ${SRC} -fsanitize=address -g -o $(NAME)
+	$(CLANG) $(FLAGS) -I src -I utils  -fsanitize=address -g ${SRC} -o $(NAME)
 clean:
 
 fclean: clean

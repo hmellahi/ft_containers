@@ -300,19 +300,17 @@ class bidir_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T>
             return i;
         }
         self_type& operator--() {
-            // if (!_ptr && parent) return parent;
-            // puts("hey1");
             // if the ptr is NULL then its must be the last element
             if (!_ptr)
             {
-                _ptr = _bst->findMax(_bst->root)->value; // protect : seg
+                _ptr = _bst->findMax(_bst->root)->value; // todo protect : seg
                 return *this;
             }
             RBT<value_type, Compare>* curr = _bst->search(*_ptr);
             if (!curr) { return *this;}
             RBT<value_type, Compare>* prevNode = curr->prev();
             if (prevNode)
-                _ptr = prevNode->value; // todo rm leaks
+                _ptr = prevNode->value;
             else
                 _ptr = NULL;
             return *this;

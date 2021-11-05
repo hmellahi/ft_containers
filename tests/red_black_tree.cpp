@@ -362,21 +362,21 @@ int main()
 
     {
 
-        std::map<int, std::string> m;
         ft::map<int, std::string> ft_m;
-        for (int i = 0; i < 1e6; ++i)
-        {
-            m.insert(std::make_pair(i, "value"));
-            ft_m.insert(ft::make_pair(i, std::string("value")));
-        }
-        std::map<int, std::string>::iterator it = --m.end();
-        for (; it != m.begin(); --it)
-            ;
+        for (int i = 0; i < 6; ++i)
+          ft_m.insert(ft::make_pair(i, std::string("value")));
         ft::map<int, std::string>::iterator ft_it = --ft_m.end();
-        std::cout << "am here" << std::endl;
-        for (; ft_it != ft_m.begin(); --ft_it)
-        std::cout << ft_it->first << std::endl;
-        std::cout << "am here 2" << std::endl;
+        // ft_m.print2D();
+        // for (; ft_it != ft_m.begin(); ft_it--)
+        //   std::cout << ft_it->first << std::endl;
+
+        // ft::map<int, std::string>::iterator ft_it = ft_m.begin();
+        // std::cout << "am here" << std::endl;
+        // // for (; ft_it != ft_m.begin(); --ft_it)
+        // // std::cout << ft_it->first << std::endl;
+        // for (; ft_it != ft_m.end(); ++ft_it)
+        //   std::cout << ft_it->first << std::endl;
+        // std::cout << "am here 2" << std::endl;
     }
     // int res(0);
     // {

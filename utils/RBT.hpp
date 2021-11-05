@@ -47,6 +47,7 @@ class RBT
             // do rotate
             x->right = y;
             y->left = T2;
+            // update parent
             x->parent = y->parent;
             y->parent = x;
             // recalculate x and y heights
@@ -102,7 +103,6 @@ class RBT
             right = left = parent = NULL;
             height = root->height;
             this->root = root;
-            // value = new ;
         }
         void preOrder(RBT *root)
         {
@@ -143,43 +143,9 @@ class RBT
             _myAllocater.destroy(node); // useless
             _myAllocater.deallocate(node, 1);
         }
-        // void    traverseInOrder()//(void (*func)(RBT<value_type, Compare> *))
-        // {
-        //     // for (ft::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
-        //         // func(it);
-        //     if (!root)
-        //         return ;
-        //     // RBT<value_type, Compare> *curr =  root->search(root->findMin(root));
-        //     // RBT<value_type, Compare> *tmp;
-        //     // // curr = curr->next();
-        //     // while (curr != NULL)
-        //     // {
-        //     //     tmp = curr->next();
-        //     //     std::cout << curr->value->first << std::endl;
-        //     //     _myAllocater.deallocate(curr, 1);
-        //     //     curr = tmp;
-        //     // }
-        //     // exit(0);
-        // }
-        // RBT &operator=(RBT const &rhs)
-        // {
-        //     return (*this);
-        // }
-        RBT    *insert_helper(RBT *root, RBT* new_node)
-        {
-            if (!root)
-                return new_node; 
-            if (!key_compare(new_node->value->first, root->value->first))
-            {
-                root->right = insert_helper(root->right, new_node);
-                root->right->parent = root;
-            }
-            else if (key_compare(new_node->value->first, root->value->first))
-            {
-                root->left = insert_helper(root->left, new_node);
-                root->left->parent = root;
-            }
 
+        RBT    *balanceTree(RBT* root, RBT* new_node)
+        {
             // update current node height
             root->height = std::max(getHeight(root->left), getHeight(root->right)) + 1;
             // calculate node balance
@@ -190,19 +156,15 @@ class RBT
             {
                 // right right
                 if (!key_compare(new_node->value->first, root->right->value->first))
-                {
                     return rotateLeft(root);
-                }
                 // right left
                 else
                 {
                     root->right = rotateRight(root->right);
                     return (rotateLeft(root));
                 }
-
             }
             // heavy left side
-            // std::cout << "balance: " << new_node->value->first << "|" << root->left->value->first << std::endl;
             if (balance > 1)
             {
                 // left left
@@ -217,32 +179,31 @@ class RBT
             }
             return root;
         }
-        // void    traverse_helper(RBT *root)
-        // {
-        //     if (!root) return ;
-        //     traverse_helper(root->left);
-        //     // std::cout << root->value << std::endl;
-        //     // _myAllocater.deallocate(root, 1);
-        //     // func(root);
-        //     // _myAllocater.destroy(root);
-        //     RBT* tmp = root->right;
-        //     _myAllocater.deallocate(root, 1); 
-        //     traverse_helper(tmp);
-        //     tmp = NULL;
-        // }
-        // void    traverse()
-        // {
-        //     traverse_helper(root);
-        //     root = NULL;
-        // }
+        RBT    *insert_helper(RBT *root, RBT* new_node)
+        {
+            if (!root)
+                return new_node;
+            if (!key_compare(new_node->value->first, root->value->first))
+            {
+                root->right = insert_helper(root->right, new_node);
+                root->right->parent = root;
+            }
+            else if (key_compare(new_node->value->first, root->value->first))
+            {
+                root->left = insert_helper(root->left, new_node);
+                root->left->parent = root;
+            }
+            return balanceTree(root, new_node);
+        }
+
         RBT     *insert(const value_type& val)
         {
-            // RBT*    new_node = new RBT(val);
             RBT*    new_node = _myAllocater.allocate(1);
             _myAllocater.construct(new_node, val);
             this->root = insert_helper(root, new_node);
             return (new_node);
         }
+
         RBT     *find(RBT* root, const value_type& val) const
         {
             if (!root || root->value->first == val.first)
@@ -252,12 +213,17 @@ class RBT
             else
                 return (find(root->left, val));
         }
-        operator RBT<const value_type, Compare> () const { return RBT<const value_type, Compare>(); }
+
+        operator RBT<const value_type, Compare> () const 
+        {
+            return RBT<const value_type, Compare>();
+        }
+
         RBT<value_type, Compare> *search(const value_type& val) const
         {
-            // std::cout << "val:" << val.first << std::endl;
             return (find(this->root, val));
         }
+
         RBT *findMin(RBT *root) const
         {
             if (!root)  
@@ -267,6 +233,7 @@ class RBT
                 small = small->left;
             return (small);
         }
+
         RBT *findMax(RBT *root) const
         {
             RBT*   small = root;
@@ -274,9 +241,10 @@ class RBT
                 small = small->right;
             return (small);
         }
+
         RBT<value_type, Compare> *prev()
         {
-            RBT<value_type, Compare>* curr;
+            RBT<value_type, Compare>* curr = this;
             RBT<value_type, Compare>* p;
             if (root == NULL)
                 return NULL;
@@ -284,22 +252,12 @@ class RBT
             if (left == NULL)
             {
                 p = parent;
-                // curr = new RBT(*value);
-                curr = this;
-                // curr = _myAllocater.allocate(1); // todo : leaks | wtf bruh??? no need to allocate
-                // _myAllocater.construct(curr, value);
-                // std::cout << curr->value->first << " curr >> " << curr->value->second << '\n';
                 //move up the tree until we have moved over a left child link
-                while (p && curr == p->left) // right?
+                while (p && p->left && curr->value->first == p->left->value->first) // right?
                 {
-                // std::cout << p->value->first << "inside >> " << p->value->second << '\n';
                     curr = p;
                     p = p->parent;
                 }
-                // if (p)
-                    // std::cout << p->value->first << "parent >> " << p->value->second << '\n';
-                // std::cout << p->right->value->first << "parent >> " << p->right->value->second << '\n';
-                // INFO(curr->value->first);
                 curr = p;
             }   
             //If the current node has a non-null right child,
@@ -313,29 +271,23 @@ class RBT
             }
             return (curr);
         }
+
         RBT<value_type, Compare> *next()
         {
-            RBT<value_type, Compare>* curr;
+            RBT<value_type, Compare>* curr = this;
             RBT<value_type, Compare>* p;
-            if (root == NULL)
+            if (curr == NULL)
                 return NULL;
             //If the current node has a null right child,
             if (right == NULL)
             {
                 p = parent;
-                curr = this;
-                // std::cout << "curr: " << curr->value->first << std::endl;
-                // std::cout << "parent: " << p->value->first << std::endl;
                 //move up the tree until we have moved over a left child link
                 while (p && p->right && curr->value->first == p->right->value->first)
                 {
                     curr = p;
                     p = p->parent;
                 }
-                // if (p)
-                    // std::cout << p->value->first << "parent >> " << p->value->second << '\n';
-                // std::cout << p->right->value->first << "parent >> " << p->right->value->second << '\n';
-                // INFO(curr->value->first);
                 curr = p;
             }   
             //If the current node has a non-null right child,
@@ -380,22 +332,10 @@ class RBT
                     // copy child content to the node to be deleted
                     else
                     {
-                        // RBT* tmp2 = node;
                         RBT* nodeParent = node->parent;
                         *node = *tmp;
                         node->parent = nodeParent;
-                        // node = tmp;
-                        // tmp = tmp2;
-                        // std::cout << "min: begin2()" << *(node->value);
-                        // if (node->nodeParent)
-                        // {
-                        //     if (node->parent->right == node->right)
-                        //         node->parent->right = tmp;
-                        //     else
-                        //         node->parent->left = tmp;
-                        // }
                     }
-                    // free tmp [todo]
                     // _myAllocater.destroy(tmp);
                     _valueAllocator.deallocate(tmp->value, 1);
                     _myAllocater.deallocate(tmp, 1);
@@ -422,44 +362,7 @@ class RBT
             if (node == NULL)
                 return node;
                     // std::cout << "node: begin()" << *(node->value);
-            // update current node height
-            // std::cout << "node " << *(node->value) << std::endl;
-            node->height = std::max(getHeight(node->left), getHeight(node->right)) + 1;
-            // calculate node balance
-            int balance = getBalance(node);
-
-            // heavy right side
-            if (balance < -1)
-            {
-                // right right
-                if (!key_compare(node->value->first, root->right->value->first))
-                {
-                    // node->pa
-                    return rotateLeft(node);
-                }
-                // right left
-                else
-                {
-                    node->right = rotateRight(node->right);
-                    return (rotateLeft(node));
-                }
-
-            }
-            // heavy left side
-            if (balance > 1)
-            {
-                // left left
-                if (key_compare(node->value->first, root->left->value->first))
-                    return rotateRight(node);
-                // left right
-                else
-                {
-                    node->left = rotateLeft(node->left);
-                    return (rotateRight(node));
-                }
-
-            }
-            return node;
+            return balanceTree(root, node);
         }
 
         size_t    erase(const value_type& val)

@@ -88,6 +88,9 @@ class ft::map
                 _size++;
             }
             res.first = iterator(node->value);
+            std::cout<< "\n---------------\n"<< std::endl;
+            print2D();
+            std::cout<< "\n---------------\n"<< std::endl;
             return res;
         }
         // with hint (2)	
@@ -381,6 +384,41 @@ class ft::map
 			// _myAllocator = NULL;
 			_size = 0;
 		}
+
+        // Function to print binary tree in 2D
+        // It does reverse inorder traversal
+        void print2DUtil(RBT<value_type, Compare> *root, int space)
+        {
+            // Base case
+            if (root == NULL)
+                return;
+        
+            // Increase distance between levels
+            space += 3;
+        
+            // Process right child first
+            print2DUtil(root->right, space);
+        
+            // Print current node after space
+            // count
+            // std::cout<<std::endl;
+            for (int i = 3; i < space; i++)
+                std::cout<<"-";
+            std::cout<<root->value->first<<"|";
+            if (root->parent)
+                std::cout << (root->parent->value->first);
+            std::cout<<"\n";
+        
+            // Process left child
+            print2DUtil(root->left, space);
+        }
+        public:
+        // Wrapper over print2DUtil()
+        void print2D()
+        {
+            // Pass initial space count as 0
+            print2DUtil((_rbt.root), 1);
+        }
 };
 
 template <class Key, class T, class Compare, class Alloc>

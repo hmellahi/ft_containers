@@ -123,15 +123,20 @@ class RBT
             _myAllocater.deallocate(root, 1);
             root = NULL;
         }
-        void cpy(const RBT<value_type, Compare> *root)
+        void cpy(const RBT<value_type, Compare> *node)
         {
-            if(!root)
+            if(!node)
                 return ;
-            cpy(root->left);
-            if (root->value)
-                insert(*(root->value));
-                // std::cout << "val:" << *(root->value) << " ";
-            cpy(root->right);
+            cpy(node->left);
+            if (node->value)
+            {
+                insert(*(node->value));
+            // std::cout << "copyid " << root->value->first << std::endl;
+                // size();  
+                // std::cout << "val:" <<root->value->second << std::endl;
+            }
+            
+            cpy(node->right);
         }
         ~RBT()
         {

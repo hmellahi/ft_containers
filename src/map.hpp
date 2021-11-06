@@ -170,30 +170,69 @@ class ft::map
             }
             return last;
         }
+//  RBT<value_type, Compare> *bound = NULL;
+        RBT<value_type, Compare>    *findBound(RBT<value_type, Compare> *root, const key_type&k, RBT<value_type, Compare> *bound) const
+        {
+            if (!root) return bound;
+
+            if (keyCampare(k, root->value->first) && (!bound ||  !keyCampare(bound->value->first, root->value->first)))
+                bound = root;
+
+            if (!keyCampare(k, root->value->first))
+                return (findBound(root->right, k, bound));
+            else
+                return (findBound(root->left, k, bound));
+            return bound;
+        }
+
+        RBT<value_type, Compare>    *findBound2(RBT<value_type, Compare> *root, const key_type&k, RBT<value_type, Compare> *bound) const
+        {
+            if (!root) return bound;
+
+            if (!keyCampare(root->value->first, k) && (!bound || keyCampare(bound->value->first, root->value->first)))
+                bound = root;
+
+            if (!keyCampare(k, root->value->first))
+                return (findBound(root->right, k, bound));
+            else
+                return (findBound(root->left, k, bound));
+            return bound;
+        }
+
+        // void    findBound2(RBT<value_type, Compare> *root, const key_type&k) const
+        // {
+        //     if (!root) return;
+
+        //     else if (!keyCampare(root->value->first, k) && (!bound || keyCampare(bound->value->first, root->value->first)))
+        //         bound = root;
+
+        //     if (!keyCampare(k, root->value->first))
+        //         return (findBound2(root->right, k));
+        //     else
+        //         return (findBound2(root->left, k));
+        // }
 
         iterator upper_bound(const key_type& k)
         {
-            iterator start = begin(); 
-            iterator last = end(); 
-            while (start != last)
-            {
-                if (keyCampare(k, start->first))
-                    return start;
-                start++;
-            }
-            return last;
+            RBT<value_type, Compare> *bound = NULL;
+            bound = findBound(_rbt.root, k, bound);
+            return iterator(bound ? bound->value : NULL, &_rbt);
         }
         const_iterator lower_bound (const key_type& k) const
         {
-            const_iterator start = begin(); 
-            const_iterator last = end(); 
-            while (start != last)
-            {
-                if (!keyCampare(start->first, k))
-                    return start;
-                start++;
-            }
-            return last;
+            // const_iterator start = begin(); 
+            // RBT<value_type, Compare> *bound = NULL;
+            // const_iterator last = end(); 
+            // while (start != last)
+            // {
+            //     if (!keyCampare(start->first, k))
+            //         return start;
+            //     start++;
+            // }
+            // return last;
+            RBT<value_type, Compare> *bound = NULL;
+            findBound2(_rbt.root, k, bound);
+            return iterator(bound ? bound->value : NULL, &_rbt);
         }
 
         const_iterator upper_bound (const key_type& k) const
@@ -259,11 +298,8 @@ class ft::map
         map &operator=(const map &rhs)
         {
             clear();
-            // const_iterator start = rhs.begin(); 
-            // const_iterator last = rhs.end();
-            // while (start != last)
-            //     insert(*start++);
-            _rbt.cpy(&(rhs._rbt));
+            _rbt.cpy(rhs._rbt.root);
+            _size = rhs.size();
             return (*this);
         }
 
@@ -468,8 +504,3 @@ template <class Key, class T, class Compare, class Alloc>
 {
 	return (lhs == rhs || operator>(lhs, rhs));
 }
-
-// todo
-// ---> iterators
-// when editing iterators original map not changing 
-// const_iterator => const

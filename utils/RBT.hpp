@@ -131,7 +131,7 @@ class RBT
             if (node->value)
             {
                 insert(*(node->value));
-            // std::cout << "copyid " << root->value->first << std::endl;
+            std::cout << "copyid " << root->value->first << std::endl;
                 // size();  
                 // std::cout << "val:" <<root->value->second << std::endl;
             }

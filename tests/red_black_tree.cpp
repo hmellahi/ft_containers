@@ -523,12 +523,55 @@ int main2()
 }
 
 int main() {
-    int myints[] = {12, 82, 37, 64, 15};
-    ft::map<int, int> m;
-    for (size_t i = 0; i < 5; ++i)
-          m.insert(ft::make_pair(myints[i], (int)i));
-    std::cout << *m.upper_bound(64) << std::endl;
-    std::cout << *m.lower_bound(64) << std::endl;
+    // int myints[] = {12, 82, 37, 64, 15};
+    // ft::map<int, int> m;
+    // for (size_t i = 0; i < 5; ++i)
+    //       m.insert(ft::make_pair(myints[i], (int)i));
+    // std::cout << *m.upper_bound(64) << std::endl;
+    // std::cout << *m.lower_bound(64) << std::endl;
+  {
+    bool cond;
+        /*---------------------------------- time limit test --------------------------------------------*/
+        // {
+        //     int res, ft_res;
+
+        //     std::map<int, std::string> m;
+        //     ft::map<int, std::string> ft_m;
+        //     for (int i = 0; i < 1e6; ++i)
+        //     {
+        //         m.insert(std::make_pair(i, "value"));
+        //         ft_m.insert(ft::make_pair(i, std::string("value")));
+        //     }
+        //     res = m.lower_bound(1e5)->first;
+
+        //     // ualarm(diff * 1e3, 0);
+        //     ft_res = ft_m.lower_bound(1e5)->first;
+        //     cond = ft_res == res;
+        // }
+        std::map<int, std::string> m;
+        ft::map<int, std::string> ft_m;
+        int arr[] = {20, 10, 100, 15, 60, 90, 65, 200, 150}; // size = 9
+        for (int i = 0; i < 9; ++i)
+        {
+            m.insert(std::make_pair(arr[i], "value"));
+            ft_m.insert(ft::make_pair(arr[i], std::string("value")));
+        }
+        std::map<int, std::string> const c_m(m.begin(), m.end());
+        ft::map<int, std::string> c_ft_m(ft_m.begin(), ft_m.end());
+        cond = (cond && (m.lower_bound(15)->first == ft_m.lower_bound(15)->first));
+        cond = (cond && (m.lower_bound(65)->first == ft_m.lower_bound(65)->first));
+        cond = (cond && (m.lower_bound(63)->first == ft_m.lower_bound(63)->first));
+        cond = (cond && (m.lower_bound(120)->first == ft_m.lower_bound(120)->first));
+        cond = (cond && (m.lower_bound(70)->first == ft_m.lower_bound(70)->first));
+        // std::cout << c_ft_m.lower_bound(15)->first << std::endl;
+        // // std::cout << *c_ft_m.lower_bound(15)->  << std::endl;
+        // cond = (cond && (c_m.lower_bound(15)->first == c_ft_m.lower_bound(15)->first));
+        // cond = (cond && (c_m.lower_bound(65)->first == c_ft_m.lower_bound(65)->first));
+        // // cond = (cond && (c_m.lower_bound(63)->first == c_ft_m.lower_bound(63)->first));
+        // cond = (cond && (c_m.lower_bound(120)->first == c_ft_m.lower_bound(120)->first));
+        // cond = (cond && (c_m.lower_bound(70)->first == c_ft_m.lower_bound(70)->first));
+        std::cout << cond << std::endl;
+  }
   if (false)
   {
         bool cond(false);

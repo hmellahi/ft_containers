@@ -324,7 +324,7 @@ class bidir_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T>
         difference_type operator-(self_type src)const { return ( _ptr - src._ptr);}
         reference operator*()const { return *_ptr;  } // todo optimize
         // reference operator*()const { return *(_bst->search(*_ptr)->value);  } // todo optimize
-        pointer operator->() const{ return _bst->search(*_ptr)->value; } // todo optimize
+        pointer operator->() const{ return _ptr; } // todo optimize
 
         friend bool operator== (const bidir_iterator& lhs,
             const bidir_iterator& rhs) {

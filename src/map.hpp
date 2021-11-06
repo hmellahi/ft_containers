@@ -61,7 +61,6 @@ class ft::map
             insertIters(first, last);
             keyCampare = comp;
             _myAllocator = alloc;
-            // todo key_comapre???
         }
         // copy (3)	
         map (const map& x)
@@ -88,9 +87,6 @@ class ft::map
                 _size++;
             }
             res.first = iterator(node->value);
-            // std::cout<< "\n--- inserting " << val.first << "-----------\n"<< std::endl;
-            // print2D();
-            // std::cout<< "\n---------------\n"<< std::endl;
             return res;
         }
         // with hint (2)	
@@ -160,15 +156,9 @@ class ft::map
 
         iterator lower_bound (const key_type& k)
         {
-            iterator start = begin(); 
-            iterator last = end(); 
-            while (start != last)
-            {
-                if (!keyCampare(start->first, k))
-                    return start;
-                start++;
-            }
-            return last;
+            RBT<value_type, Compare> *bound = NULL;
+            bound = findBound2(_rbt.root, k, bound);
+            return iterator(bound ? bound->value : NULL, &_rbt);
         }
 //  RBT<value_type, Compare> *bound = NULL;
         RBT<value_type, Compare>    *findBound(RBT<value_type, Compare> *root, const key_type&k, RBT<value_type, Compare> *bound) const
@@ -188,14 +178,13 @@ class ft::map
         RBT<value_type, Compare>    *findBound2(RBT<value_type, Compare> *root, const key_type&k, RBT<value_type, Compare> *bound) const
         {
             if (!root) return bound;
-
-            if (!keyCampare(root->value->first, k) && (!bound || keyCampare(bound->value->first, root->value->first)))
+            if (!keyCampare(root->value->first, k) && (!bound || !keyCampare(bound->value->first, root->value->first)))
                 bound = root;
 
             if (!keyCampare(k, root->value->first))
-                return (findBound(root->right, k, bound));
+                return (findBound2(root->right, k, bound));
             else
-                return (findBound(root->left, k, bound));
+                return (findBound2(root->left, k, bound));
             return bound;
         }
 
@@ -220,32 +209,16 @@ class ft::map
         }
         const_iterator lower_bound (const key_type& k) const
         {
-            // const_iterator start = begin(); 
-            // RBT<value_type, Compare> *bound = NULL;
-            // const_iterator last = end(); 
-            // while (start != last)
-            // {
-            //     if (!keyCampare(start->first, k))
-            //         return start;
-            //     start++;
-            // }
-            // return last;
             RBT<value_type, Compare> *bound = NULL;
-            findBound2(_rbt.root, k, bound);
+            bound = findBound2(_rbt.root, k, bound);
             return iterator(bound ? bound->value : NULL, &_rbt);
         }
 
         const_iterator upper_bound (const key_type& k) const
         {
-            const_iterator start = begin(); 
-            const_iterator last = end(); 
-            while (start != last)
-            {
-                if (keyCampare(k, start->first))
-                    return start;
-                start++;
-            }
-            return last;
+            RBT<value_type, Compare> *bound = NULL;
+            bound = findBound(_rbt.root, k, bound);
+            return iterator(bound ? bound->value : NULL, &_rbt);
         }
 
         pair<const_iterator,const_iterator> equal_range (const key_type& k) const
@@ -399,10 +372,7 @@ class ft::map
         void    insertIters(InputIterator first, InputIterator last)
         {
             while (first != last) // DRY
-            {
-                // std::cout << "val:" << *first ;
                 insert(*first++);
-            }
         }
 
         void	copy_inner_data(const map& other)
@@ -424,7 +394,7 @@ class ft::map
 
         // Function to print binary tree in 2D
         // It does reverse inorder traversal
-        void print2DUtil(RBT<value_type, Compare> *root, int space)
+        void print2DUtil(RBT<value_type, Compare> *root, int space) const // todo remove
         {
             // Base case
             if (root == NULL)
@@ -442,8 +412,8 @@ class ft::map
             for (int i = 3; i < space; i++)
                 std::cout<<" ";
             std::cout<<root->value->first;
-            if (root->parent)
-                std::cout <<"|"<< (root->parent->value->first);
+            // if (root->parent)
+                // std::cout <<"|"<< (root->parent->value->first);
             std::cout<<"\n";
         
             // Process left child
@@ -451,7 +421,7 @@ class ft::map
         }
         public:
         // Wrapper over print2DUtil()
-        void print2D()
+        void print2D() const
         {
             // Pass initial space count as 0
             print2DUtil((_rbt.root), 1);

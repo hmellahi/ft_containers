@@ -116,8 +116,6 @@ class RBT
             if(!root)
                 return ;
             preOrder(root->left);
-            // if (root->value)
-                // std::cout << "val:" << *(root->value) << " ";
             _valueAllocator.deallocate(root->value, 1);
             preOrder(root->right);
             _myAllocater.deallocate(root, 1);
@@ -131,11 +129,8 @@ class RBT
             if (node->value)
             {
                 insert(*(node->value));
-            std::cout << "copyid " << root->value->first << std::endl;
-                // size();  
                 // std::cout << "val:" <<root->value->second << std::endl;
             }
-            
             cpy(node->right);
         }
         ~RBT()

@@ -1,8 +1,18 @@
 #include <map>
 #include "map.hpp"
 #include <vector>
+#include <sys/time.h>
 // #include <iostream>
 // #include "pair.hpp"
+
+time_t get_time(void)
+{
+    struct timeval time_now;
+
+    gettimeofday(&time_now, NULL);
+    time_t msecs_time = (time_now.tv_sec * 1e3) + (time_now.tv_usec / 1e3);
+    return (msecs_time);
+}
 #define NAMESPACE ft
 int main2()
 {
@@ -470,34 +480,162 @@ int main2()
 //         }
         /*------------------------------------------------------------------------------------------*/
         /*------------------ std::map ---------------------*/
-        // std::map<int, std::string> m1;
-        // std::map<int, std::string> m2;
-        // ft::map<int, std::string> ft_m1;
-        // ft::map<int, std::string> ft_m2;
-        // for (int i = 0; i < 10; ++i)
-        // {
-        //     m1.insert(std::make_pair(i, "string1"));
-        //     m2.insert(std::make_pair(i, "string2"));
-        //     ft_m1.insert(ft::make_pair(i, std::string("string1")));
-        //     ft_m2.insert(ft::make_pair(i, std::string("string2")));
-        // }
+        if (false)
+        {{
+          std::map<int, std::string> m1;
+          std::map<int, std::string> m2;
+          ft::map<int, std::string> ft_m1;
+          ft::map<int, std::string> ft_m2;
+          for (int i = 0; i < 10; ++i)
+          {
+              m1.insert(std::make_pair(i, "string1"));
+              m2.insert(std::make_pair(i, "string2"));
+              ft_m1.insert(ft::make_pair(i, std::string("string1")));
+              ft_m2.insert(ft::make_pair(i, std::string("string2")));
+          }
 
-        // m1 = m2;
-        // ft_m1 = ft_m2;
-        // /*----------------------------------------------------*/
-        // /*------------------ strings to store the results ----*/
-        // std::string res, ft_res;
-        // /*----------------------------------------------------*/
-        // for (std::map<int, std::string>::iterator it = m1.begin(); it != m1.end(); ++it)
-        // { // fill res from m1
-        //     res += it->second;
-        // }
-        // std::cout << "am here " << std::endl;
-        // for (ft::map<int, std::string>::iterator it = ft_m1.begin(); it != ft_m1.end(); ++it) // fill ft_res from ft_m1
-        //     ft_res += it->second;
-        // // printf("%s|%s", ft_res, res);
-        // std::cout << ft_res << std::endl;
-        // std::cout << res << std::endl;
+          m1 = m2;
+          ft_m1 = ft_m2;
+          /*----------------------------------------------------*/
+          /*------------------ strings to store the results ----*/
+          std::string res, ft_res;
+          /*----------------------------------------------------*/
+          for (std::map<int, std::string>::iterator it = m1.begin(); it != m1.end(); ++it)
+          { // fill res from m1
+              res += it->second;
+          }
+          std::cout << "am here " << std::endl;
+          for (ft::map<int, std::string>::iterator it = ft_m1.begin(); it != ft_m1.end(); ++it) // fill ft_res from ft_m1
+              ft_res += it->second;
+          // printf("%s|%s", ft_res, res);
+          std::cout << ft_res << std::endl;
+          std::cout << res << std::endl;
+        }
+        if (false)
+        {
+          time_t start, end, diff;
+            std::map<int, std::string> m1;
+            std::map<int, std::string> m2;
+            ft::map<int, std::string> ft_m1;
+            ft::map<int, std::string> ft_m2;
+            for (int i = 0; i < 1e6; ++i)
+            {
+                m1.insert(std::make_pair(i, "string1"));
+                m2.insert(std::make_pair(i, "string2"));
+                ft_m1.insert(ft::make_pair(i, std::string("string1"))); //todo
+                ft_m2.insert(ft::make_pair(i, std::string("string2")));
+            }
+
+            /*-----------------------------------------------------*/
+            /*------------------ ft::map ---------------------*/
+            start = get_time();
+            m1 = m2;
+            end = get_time();
+            diff = end - start;
+            std::cout << "std " << end - start << std::endl;
+
+            start = get_time();
+            ft_m1 = ft_m2;
+            end = get_time();
+            diff = end - start;
+            std::cout << "ft " <<end - start << std::endl;
+
+            start = get_time();
+            m1.clear();
+            end = get_time();
+            diff = end - start;
+            std::cout << "std clear " <<end - start << std::endl;
+
+            start = get_time();
+            ft_m1.clear();
+            end = get_time();
+            diff = end - start;
+            std::cout << "ft clear" <<end - start << std::endl;
+
+            start = get_time();
+            m2.clear();
+            end = get_time();
+            diff = end - start;
+            std::cout << "std clear " <<end - start << std::endl;
+
+            start = get_time();
+            ft_m2.clear();
+            end = get_time();
+            diff = end - start;
+            std::cout << "ft clear" <<end - start << std::endl;
+        }
+
+      ft::pair<int,std::string> p;
+      p = ft::make_pair(3, "sda");
+      ft::pair<int,std::string> p2(3, "sda");
+}
+using namespace std;
+std::cout << "\t\033[1;37m[-------------------- ["  << std::left << " = operator (lhs.size < rhs.size) "
+              << "] --------------------]\t\t\033[0m";
+    
+    {
+        /*-------------------------------------- time limit test -----------------------------------*/
+        {
+            time_t start, end, diff;
+            /*------------------ std::map ---------------------*/
+            std::map<int, std::string> m1;
+            std::map<int, std::string> m2;
+            ft::map<int, std::string> ft_m1;
+            ft::map<int, std::string> ft_m2;
+
+            for (int i = 0; i < 1e4; ++i)
+            {
+                m1.insert(std::make_pair(i, "string1"));
+                ft_m1.insert(ft::make_pair(i, std::string("string1")));
+            }
+
+            for (int i = 0; i < 1e6; ++i)
+            {
+                m2.insert(std::make_pair(i, "string2"));
+                ft_m2.insert(ft::make_pair(i, std::string("string2")));
+            }
+
+            start = get_time();
+            m1 = m2;
+            end = get_time();
+            diff = end - start;
+            /*-----------------------------------------------------*/
+            /*------------------ ft::map ---------------------*/
+            ft_m1 = ft_m2;
+            /*----------------------------------------------------*/
+        }
+        /*------------------------------------------------------------------------------------------*/
+        /*------------------ std::map ---------------------*/
+        std::map<int, std::string> m1;
+        std::map<int, std::string> m2;
+        ft::map<int, std::string> ft_m1;
+        ft::map<int, std::string> ft_m2;
+        for(int i = 0; i < 100; ++i)
+        {
+            m2.insert(std::make_pair(i, "value"));
+            ft_m2.insert(ft::make_pair(i, string("value")));
+        }
+        m1 = m2;
+        /*-----------------------------------------------------*/
+        /*------------------ ft::map ---------------------*/
+        ft_m1 = ft_m2;
+        /*----------------------------------------------------*/
+        /*------------------ strings to store the results ----*/
+        std::string res, ft_res;
+        /*----------------------------------------------------*/
+        for (std::map<int, std::string>::iterator it = m1.begin(); it != m1.end(); ++it) // fill res from m1
+            res += it->second;
+
+        for (ft::map<int, std::string>::iterator it = ft_m1.begin(); it != ft_m1.end(); ++it) // fill ft_res from ft_m1
+            ft_res += it->second;
+    //   std::cout<< res << std::endl;
+    //   std::cout<< ft_res << std::endl;
+      if (res != ft_res)
+        std::cout << "noooo" <<std::endl;
+    else
+        std::cout << "y" <<std::endl;
+
+    }
         // // EQUAL(res == ft_res);
     // }
     // int res(0);
@@ -530,7 +668,7 @@ int main() {
     // std::cout << *m.upper_bound(64) << std::endl;
     // std::cout << *m.lower_bound(64) << std::endl;
   {
-    bool cond;
+    bool cond = 1;
         /*---------------------------------- time limit test --------------------------------------------*/
         // {
         //     int res, ft_res;
@@ -557,19 +695,18 @@ int main() {
             ft_m.insert(ft::make_pair(arr[i], std::string("value")));
         }
         std::map<int, std::string> const c_m(m.begin(), m.end());
-        ft::map<int, std::string> c_ft_m(ft_m.begin(), ft_m.end());
+        ft::map<int, std::string> const c_ft_m(ft_m.begin(), ft_m.end());
         cond = (cond && (m.lower_bound(15)->first == ft_m.lower_bound(15)->first));
         cond = (cond && (m.lower_bound(65)->first == ft_m.lower_bound(65)->first));
         cond = (cond && (m.lower_bound(63)->first == ft_m.lower_bound(63)->first));
         cond = (cond && (m.lower_bound(120)->first == ft_m.lower_bound(120)->first));
         cond = (cond && (m.lower_bound(70)->first == ft_m.lower_bound(70)->first));
-        // std::cout << c_ft_m.lower_bound(15)->first << std::endl;
-        // // std::cout << *c_ft_m.lower_bound(15)->  << std::endl;
-        // cond = (cond && (c_m.lower_bound(15)->first == c_ft_m.lower_bound(15)->first));
-        // cond = (cond && (c_m.lower_bound(65)->first == c_ft_m.lower_bound(65)->first));
-        // // cond = (cond && (c_m.lower_bound(63)->first == c_ft_m.lower_bound(63)->first));
-        // cond = (cond && (c_m.lower_bound(120)->first == c_ft_m.lower_bound(120)->first));
-        // cond = (cond && (c_m.lower_bound(70)->first == c_ft_m.lower_bound(70)->first));
+
+        cond = (cond && (c_m.lower_bound(15)->first == c_ft_m.lower_bound(15)->first));
+        cond = (cond && (c_m.lower_bound(65)->first == c_ft_m.lower_bound(65)->first));
+        cond = (cond && (c_m.lower_bound(63)->first == c_ft_m.lower_bound(63)->first));
+        cond = (cond && (c_m.lower_bound(120)->first == c_ft_m.lower_bound(120)->first));
+        cond = (cond && (c_m.lower_bound(70)->first == c_ft_m.lower_bound(70)->first));
         std::cout << cond << std::endl;
   }
   if (false)
@@ -705,4 +842,5 @@ int main() {
 
         // EQUAL(cond);
 }
+  return 0;
 }

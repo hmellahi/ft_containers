@@ -569,6 +569,7 @@ int main2()
       p = ft::make_pair(3, "sda");
       ft::pair<int,std::string> p2(3, "sda");
 }
+
 using namespace std;
 std::cout << "\t\033[1;37m[-------------------- ["  << std::left << " = operator (lhs.size < rhs.size) "
               << "] --------------------]\t\t\033[0m";
@@ -667,6 +668,23 @@ int main() {
     //       m.insert(ft::make_pair(myints[i], (int)i));
     // std::cout << *m.upper_bound(64) << std::endl;
     // std::cout << *m.lower_bound(64) << std::endl;
+    int res(0), tmp;
+    int myints[] = {12, 82, 37, 64, 15};
+    ft::map<int, int> m;
+    for (int i = 0; i < 5; ++i)
+        m.insert(ft::make_pair(myints[i], i));
+    ft::map<int, int>::iterator it = m.begin(), eit = --m.end();
+    tmp = eit->first;
+    m.print2D();
+    m.erase(84);
+    std::cout << "--------------------------------" << std::endl;
+    m.print2D();
+    // std::cout << eit->first << std::endl;
+    // m.erase(82); // todo fix erase
+    // for (; it != m.end(); ++it)
+    //     res += it->first;
+    // exit(0);
+  if (false)
   {
     bool cond = 1;
         /*---------------------------------- time limit test --------------------------------------------*/

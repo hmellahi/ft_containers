@@ -412,8 +412,8 @@ class ft::map
             for (int i = 3; i < space; i++)
                 std::cout<<" ";
             std::cout<<root->value->first;
-            // if (root->parent)
-                // std::cout <<"|"<< (root->parent->value->first);
+            if (root->parent)
+                std::cout <<"|"<< (root->parent->value->first);
             std::cout<<"\n";
         
             // Process left child

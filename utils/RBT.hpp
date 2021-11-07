@@ -116,6 +116,7 @@ class RBT
             if(!root)
                 return ;
             preOrder(root->left);
+            // std::cout << "will be deleted: " << root->value->first << std::endl;
             _valueAllocator.deallocate(root->value, 1);
             preOrder(root->right);
             _myAllocater.deallocate(root, 1);
@@ -339,15 +340,14 @@ class RBT
                     if (!tmp)
                     {
                         // std::cout << node->value->first << std::endl;
-                        if (node->parent)
-                        {
-                            if (node->parent->right == node)
-                                node->parent->right = NULL;
-                            else
-                                node->parent->left = NULL;
-                        }
+                        // if (node->parent)
+                        // {
+                        //     if (node->parent->right == node)
+                        //         node->parent->right = NULL;
+                        //     else
+                        //         node->parent->left = NULL;
+                        // }
                         tmp = node;
-                        // std::cout << "has no childs: " << node->value->first << std::endl;
                         node = NULL;
                     }
                     // else one child
@@ -359,6 +359,7 @@ class RBT
                         node->parent = nodeParent;
                     }
                     // _myAllocater.destroy(tmp);
+                    std::cout << "will be deleted: " << tmp->value->first << std::endl;
                     _valueAllocator.deallocate(tmp->value, 1);
                     _myAllocater.deallocate(tmp, 1);
                 }
@@ -384,7 +385,9 @@ class RBT
             if (node == NULL)
                 return node;
                     // std::cout << "node: begin()" << *(node->value);
-            return balanceTree(root, node);
+            RBT new_node = RBT(val);
+            return balanceTree(node, &new_node);
+            // return node;
         }
 
         size_t    erase(const value_type& val)

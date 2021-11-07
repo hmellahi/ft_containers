@@ -434,7 +434,7 @@ class RBT
                     if (!tmp)
                     {
                         tmp = node;
-                        node = NULL;
+                        node = NULL; 
                     }
                     // else one child
                     // copy child content to the node to be deleted

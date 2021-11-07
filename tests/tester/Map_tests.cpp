@@ -1198,6 +1198,8 @@ void testElementAccess()
 
 void testModifiers()
 {
+    if (false)
+    {
     std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " insert method "
               << "] --------------------]\t\t\033[0m";
     {
@@ -1300,7 +1302,7 @@ void testModifiers()
 
         cond = cond && comparemaps(ft_m.begin(), ft_m.end(), m.begin(), m.end()) && comparemaps(ft_anothermap.begin(), ft_anothermap.end(), anothermap.begin(), anothermap.end());
         EQUAL(cond);
-    }
+    }}
 
     std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " erase method "
               << "] --------------------]\t\t\033[0m";
@@ -1351,31 +1353,40 @@ void testModifiers()
         m['f'] = 60;
 
         cond = m.size() == ft_m.size() && comparemaps(m.begin(), m.end(), ft_m.begin(), ft_m.end());
-
+        if (!cond)
+            std::cout << "stoppppp" << std::endl;
         it = m.find('b');
         ft_it = ft_m.find('b');
 
         cond = cond && (it->first == ft_it->first) && (it->second == ft_it->second);
+        if (!cond)
+            std::cout << "stoppppp" << std::endl;
         m.erase(it);       // erasing by iterator
         ft_m.erase(ft_it); // erasing by iterator
 
         cond = cond && comparemaps(m.begin(), m.end(), ft_m.begin(), ft_m.end());
+        if (!cond)
+            std::cout << "stoppppp" << std::endl;
 
         int ret = m.erase('c');       // erasing by key
         int ft_ret = ft_m.erase('c'); // erasing by key
 
         cond = cond && ret == ft_ret && comparemaps(m.begin(), m.end(), ft_m.begin(), ft_m.end());
-
+        if (!cond)
+            std::cout << "stoppppp" << std::endl;
         it = m.find('e');
         ft_it = ft_m.find('e');
 
         cond = cond && (it->first == ft_it->first) && (it->second == ft_it->second) && m.size() == ft_m.size();
-
+if (!cond)
+            std::cout << "stoppppp" << std::endl;
         m.erase(it, m.end());          // erasing by range
-        ft_m.erase(ft_it, ft_m.end()); // erasing by range
+        ft_m.print2D();
+        // ft_m.erase(ft_it, ft_m.end()); // erasing by range
 
         cond = cond && m.empty() == ft_m.empty() && comparemaps(m.begin(), m.end(), ft_m.begin(), ft_m.end());
-
+if (!cond)
+            std::cout << "stoppppp" << std::endl;
         /* ---------- Testing some edge cases ---------- */
 
         std::map<int, std::string> m2;
@@ -1394,12 +1405,14 @@ void testModifiers()
         ft_m2.erase(ft_m2.begin());
 
         cond = cond && m2.size() == ft_m2.size() && comparemaps(m2.begin(), m2.end(), ft_m2.begin(), ft_m2.end());
-
+if (!cond)
+            std::cout << "stoppppp" << std::endl;
         m2.erase(it2->first);
         ft_m2.erase(ft_it2->first);
 
         cond = cond && m2.size() == ft_m2.size() && comparemaps(m2.begin(), m2.end(), ft_m2.begin(), ft_m2.end());
-
+if (!cond)
+            std::cout << "stoppppp" << std::endl;
         std::map<int, std::string> m3;
         ft::map<int, std::string> ft_m3;
         std::vector<int> vec;
@@ -1423,6 +1436,7 @@ void testModifiers()
             if (ret1 != ret2)
             {
                 cond = false;
+                std::cout << "stoppppp" << std::endl;
                 break;
             }
         }
@@ -1438,10 +1452,11 @@ void testModifiers()
             ft_m3.erase(ft_m3.begin(), ft_m3.end());
         }
         cond = cond && (m3.size() == ft_m3.size() && comparemaps(m3.begin(), m3.end(), ft_m3.begin(), ft_m3.end()));
-
+if (!cond)
+            std::cout << "stoppppp0" << std::endl;
         EQUAL(cond);
     }
-
+    exit(0);
     std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " swap method "
               << "] --------------------]\t\t\033[0m";
 
@@ -1513,7 +1528,8 @@ void testModifiers()
         ft_foo['y'] = 200;
 
         cond = foo.size() == ft_foo.size() && bar.size() == ft_bar.size();
-
+        if (!cond)
+            std::cout << "stoppppp" << std::endl;
         bar['a'] = 11;
         bar['b'] = 22;
         bar['c'] = 33;
@@ -1523,12 +1539,14 @@ void testModifiers()
         ft_bar['c'] = 33;
 
         cond = cond && foo.size() == ft_foo.size() && bar.size() == ft_bar.size() && comparemaps(foo.begin(), foo.end(), ft_foo.begin(), ft_foo.end()) && comparemaps(bar.begin(), bar.end(), ft_bar.begin(), ft_bar.end());
-
+        if (!cond)
+            std::cout << "stoppppp" << std::endl;
         foo.swap(bar);
         ft_foo.swap(ft_bar);
 
         cond = cond && foo.size() == ft_foo.size() && bar.size() == ft_bar.size() && comparemaps(foo.begin(), foo.end(), ft_foo.begin(), ft_foo.end()) && comparemaps(bar.begin(), bar.end(), ft_bar.begin(), ft_bar.end());
-
+        if (!cond)
+            std::cout << "stoppppp" << std::endl;
         std::map<std::string, std::string, std::greater<std::string> > m1, m2;
         ft::map<std::string, std::string, std::greater<std::string> > ft_m1, ft_m2;
 
@@ -1551,8 +1569,8 @@ void testModifiers()
         ft_m2["ε"] = "epsilon";
 
     // todo not compiling
-        const std::pair<std::string, std::string> &ref = *(m1.begin());
-        const std::map<std::string, std::string, std::greater<std::string> >::iterator iter = std::next(m1.begin());
+        // const std::pair<std::string, std::string> &ref = *(m1.begin());
+        // const std::map<std::string, std::string, std::greater<std::string> >::iterator iter = std::next(m1.begin());
         // const ft::pair<std::string, std::string> &ft_ref = *(ft_m1.begin());
         // const ft::map<std::string, std::string, std::greater<std::string> >::iterator ft_iter = std::next(ft_m1.begin());
 
@@ -1562,8 +1580,8 @@ void testModifiers()
 
         // cond = cond && ref.first == ft_ref.first && ref.second == ft_ref.second && iter->second == ft_iter->second && iter->first == ft_iter->first && m1.size() == ft_m1.size() && m2.size() && ft_m2.size();
 
-        m1.swap(m2);
-        ft_m1.swap(ft_m2);
+        // m1.swap(m2);
+        // ft_m1.swap(ft_m2);
 
         // _---------------_ << ──────── after swap ──────── >> _---------------_
 
@@ -1571,6 +1589,7 @@ void testModifiers()
 
         EQUAL(cond);
     }
+    exit(0);
     std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " clear method "
               << "] --------------------]\t\t\033[0m";
 
@@ -2250,17 +2269,17 @@ int main()
     // TEST_CASE(testElementAccess);
     // std::cout << std::endl;
 
-    // std::cout << YELLOW << "Testing Modifiers Methods;" << RESET << std::endl;
-    // TEST_CASE(testModifiers)
-    // std::cout << std::endl;
+    std::cout << YELLOW << "Testing Modifiers Methods;" << RESET << std::endl;
+    TEST_CASE(testModifiers)
+    std::cout << std::endl;
 
     // std::cout << YELLOW << "Testing Observers Methods;" << RESET << std::endl;
     // TEST_CASE(testObservers)
     // std::cout << std::endl;
 
-    std::cout << YELLOW << "Testing Operations Methods;" << RESET << std::endl;
-    TEST_CASE(testOperations)
-    std::cout << std::endl;
+    // std::cout << YELLOW << "Testing Operations Methods;" << RESET << std::endl;
+    // TEST_CASE(testOperations)
+    // std::cout << std::endl;
 
     // std::cout << YELLOW << "Testing Allocator Methods;" << RESET << std::endl;
     // TEST_CASE(testAllocatorMethodes)

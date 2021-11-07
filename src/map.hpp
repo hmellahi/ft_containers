@@ -114,26 +114,15 @@ class ft::map
         }
         void erase (iterator first, iterator last)
         {
-            // value_type next;
-            while (first != last)
-            {
-                // next = first;
-                // std::cout << "curr:"<< *first << std::endl;
-                // std::cout << "next:"<< *next << std::endl;
-                if (_rbt.erase(*(first++)))
-                    _size--;
-                // first = next;
-            }
-            // while (!empty())
-            // {
-                // std::cout << "curr:"<< *(begin()) << std::endl;
-                // erase((begin()));
-            // }
-            // (void)first;
-            // (void)last;
-            // int a = 1;
-            // _rbt.erase(a);
-            // _rbt.erase(a);
+            value_type *min = &(*first);
+            value_type *max = &(*last);
+
+            // if (!_rbt.root)
+                // return ;
+            int n = 0;
+            _rbt.del(_rbt.root, min, max, n);
+            std::cout << n << std::endl;
+            _size -= n;
         }
 
         iterator find (const key_type& k)
@@ -160,7 +149,7 @@ class ft::map
             bound = findBound2(_rbt.root, k, bound);
             return iterator(bound ? bound->value : NULL, &_rbt);
         }
-//  RBT<value_type, Compare> *bound = NULL;
+
         RBT<value_type, Compare>    *findBound(RBT<value_type, Compare> *root, const key_type&k, RBT<value_type, Compare> *bound) const
         {
             if (!root) return bound;
@@ -364,7 +353,7 @@ class ft::map
         //     while (curr != NULL)
         //     {
         //         // (*func)(curr);
-        //         _myAllocator.deallocate(curr);
+        //         _myAllocator.te(curr);
         //         curr = curr->next();
         //     }
         // }
@@ -423,8 +412,12 @@ class ft::map
         // Wrapper over print2DUtil()
         void print2D() const
         {
+    std::cout << "\n-----------------" << std::endl;
             // Pass initial space count as 0
             print2DUtil((_rbt.root), 1);
+
+    std::cout << "-----------------\n" << std::endl;
+
         }
 };
 

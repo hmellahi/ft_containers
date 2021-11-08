@@ -50,27 +50,6 @@ class ft::vector
 		typedef		rand_acc_iterator<const value_type> const_iterator;
 		typedef		reverse_iterator<const_iterator> const_reverse_iterator;
 		typedef		reverse_iterator<iterator> reverse_iterator;
-		template<typename>
-		struct is_integral
-		{static const bool value = false;};
-		template<> struct is_integral<bool>{static const bool value = true;};
-		template<> struct is_integral<int>{static const bool value = true;};
-		// template<> struct is_integral<char16_t>{static const bool value = true;};
-		// template<> struct is_integral<char32_t>{static const bool value = true;};
-		template<> struct is_integral<signed char>{static const bool value = true;};
-		template<> struct is_integral<short int>{static const bool value = true;};
-		template<> struct is_integral<long long int>{static const bool value = true;};
-		template<> struct is_integral<long int>{static const bool value = true;};
-		template<> struct is_integral<unsigned char>{static const bool value = true;};
-		template<> struct is_integral<unsigned short int>{static const bool value = true;};
-		template<> struct is_integral<unsigned int>{static const bool value = true;};
-		template<> struct is_integral<unsigned long int>{static const bool value = true;};
-		template<> struct is_integral<unsigned long long int>{static const bool value = true;};
-
-		template<bool B, class D = void>
-		struct enable_if {};
-		template<class D>
-		struct enable_if<true, D> { typedef D type; };
 		// -------> constructors
 		vector& operator= (const ft::vector<T>& src)
 		{
@@ -91,7 +70,7 @@ class ft::vector
 		// range constructor
 		template <class InputIterator>
 		vector (InputIterator first, InputIterator last,
-                 const allocator_type& alloc = allocator_type(), typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
+                 const allocator_type& alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
 		{
 			_index = 0;
 			_max_capacity = 0;
@@ -165,13 +144,13 @@ class ft::vector
 		void reserve (size_type n)
 		{
 			if (n <= _max_capacity) return ;
+
 			// allocate new array
 			T	*new_arr;
-			new_arr = myAllocator.allocate(n); // todo protect uwu :3
+			new_arr = myAllocator.allocate(n);
 			
 			size_type i = -1;
 			while (++i < _index)
-				// new_arr[i] = _arr[i];
 				myAllocator.construct(new_arr + i, _arr[i]);
 			// free old one
 			if (_max_capacity)
@@ -251,9 +230,8 @@ class ft::vector
             int elem_to_move = end() - position;
 			ft::vector<T> tmp;
 			tmp.assign(position, end());
-			if ((1 + _index) > _max_capacity) // DRY BRIH
+			if ((1 + _index) > _max_capacity)
 				reserve((_index) * 2);
-			// printf("\nI : %d\n", elem_to_move);
 			_index = pos;
 			ft_init_with_val(1, val);
 			for (int i = 0; i < elem_to_move; i++)
@@ -267,9 +245,13 @@ class ft::vector
             int elem_to_move = end() - position;
 			ft::vector<T> tmp;
 			tmp.assign(position, end());
-			reserve(_index + n);
-			// printf("\nI : %lu\n", _index + n);
-			// printf("%d|%d|%d\n", start, elem_to_move, val);
+			// reserve(_index + n);
+			if ((n + _index) > _max_capacity && (n + _index) > (_index * 2)) // DRY BRIH
+				reserve(_index + n);
+			else if (!_index)
+				reserve(n);
+			else if ((size_t)n > _max_capacity)
+				reserve(n * 2);
 			_index = start;
 			ft_init_with_val(n, val);
 			for (int i = 0; i < elem_to_move; i++)
@@ -277,13 +259,12 @@ class ft::vector
 		}
 
 		template <class InputIterator>
-    	void insert (iterator position, InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
+    	void insert (iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
 		{
 			difference_type start = position - begin();
             int elem_to_move = end() - position;
 			ft::vector<T> tmp;
 			tmp.assign(position, end());
-			// if (!_index) // todo
 			difference_type n  = ft::distance(first, last);
 			if ((n + _index) > _max_capacity && (n + _index) > (_index * 2)) // DRY BRIH
 				reserve(_index + n);
@@ -291,7 +272,6 @@ class ft::vector
 				reserve(n);
 			else if ((size_t)n > _max_capacity) // wtf
 				reserve(n * 2);
-			// n = 2;
 			_index = start;
 			ft_init_with_iters(first, last);
 			for (int i = 0; i < elem_to_move; i++)
@@ -299,8 +279,8 @@ class ft::vector
 		}
 
 		template <class InputIterator>
-		    //  typename enable_if<!is_integral<InputIterator>::value>, InputIterator>
-		void assign (InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
+		    //  typename ft::enable_if<!ft::is_integral<InputIterator>::value>, InputIterator>
+		void assign (InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
 		{
 			ft_destroy_arr();
 			reserve(ft::distance(first, last));
@@ -454,4 +434,4 @@ template <class T, class Alloc>
 }
 
 //todo 
-// move enable_if / is_integral to ft
+// move ft::enable_if / ft::is_integral to ft

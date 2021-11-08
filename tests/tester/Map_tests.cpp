@@ -435,7 +435,7 @@ void reverse_iterator_tests(void)
 
 void testConstructors()
 {
-    if (false){ // rm
+    // if (false){ // rm
     std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " empty constructor "
               << "] --------------------]\t\t\033[0m";
     {
@@ -732,7 +732,7 @@ void testConstructors()
 
         EQUAL(res == ft_res);
     }
-    }
+    // }÷
     // }
     // /*-------------------------------------------------------------------------------------------------------------------------------------------------------*/
     /*------------------------------------------ test 3 : test with diff size vecotrs ----------------------------------------------------------------------*/
@@ -2257,9 +2257,9 @@ int main()
     // TEST_CASE(reverse_iterator_tests);
     // std::cout << std::endl;
 
-    // std::cout << YELLOW << "Testing Constructors;" << RESET << std::endl;
-    // TEST_CASE(testConstructors);
-    // std::cout << std::endl;
+    std::cout << YELLOW << "Testing Constructors;" << RESET << std::endl;
+    TEST_CASE(testConstructors);
+    std::cout << std::endl;
     // exit(0);
     // std::cout << YELLOW << "Testing Iterator Methods;" << RESET << std::endl;
     // TEST_CASE(testIterators);
@@ -2273,9 +2273,9 @@ int main()
     // TEST_CASE(testElementAccess);
     // std::cout << std::endl;
 
-    std::cout << YELLOW << "Testing Modifiers Methods;" << RESET << std::endl;
-    TEST_CASE(testModifiers)
-    std::cout << std::endl;
+    // std::cout << YELLOW << "Testing Modifiers Methods;" << RESET << std::endl;
+    // TEST_CASE(testModifiers)
+    // std::cout << std::endl;
 
     // std::cout << YELLOW << "Testing Observers Methods;" << RESET << std::endl;
     // TEST_CASE(testObservers)

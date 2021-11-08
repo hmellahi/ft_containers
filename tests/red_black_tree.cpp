@@ -31,6 +31,8 @@ time_t get_time(void)
 using namespace std;
 int main()
 {
+    // std::allocator<int> myAllocator;
+    // std::vector<int> a = 5;
      /*-------------------------------------- time limit test -----------------------------------*/
         {
             time_t start, end, diff;

@@ -25,13 +25,6 @@ public:
 	{
 		this->c = ctnr;
 	}
-	// stack(stack const &src) { *this = src; }
-	// ~stack(){};
-	// stack &operator=(stack const &rhs)
-	// {
-	// 	this->c = rhs.c;
-	// 	return (*this);
-	// }
 
 	bool empty() const { return c.empty(); };
 	size_t size() const { return c.size(); };
@@ -39,6 +32,7 @@ public:
 	const value_type &top() const { return c.back(); };
 	void pop() { c.pop_back(); };
 	void push(T element) { c.push_back(element); };
+	
 	friend bool operator==(const ft::stack<T, Container> &lhs, const ft::stack<T, Container> &rhs)
 	{
 		return (lhs.c == rhs.c);

@@ -2,11 +2,11 @@
 #include <memory>
 #include <iostream>
 #include "RBT.hpp"
-// class pair;
+#include "pair.hpp"
+#include "iterators.hpp"
+
 namespace ft
 {
-    template<typename A, typename B>
-    class pair;
     template < class Key,                                     // map::key_type
         class T,                                       // map::mapped_type
         class Compare = std::less<Key>,                     // map::key_compare
@@ -14,18 +14,16 @@ namespace ft
     > 
     class map;
 }
-#include "pair.hpp"
-#include "iterators.hpp"
 
-template < class Key,                                     // map::key_type
-           class T,                                       // map::mapped_type
-           class Compare,                   // map::key_compare
+
+template < class Key,  // f map::key_type
+           class T,    // map::mapped_type
+           class Compare, // map::key_compare
            class Alloc    // map::allocator_type
            > 
 class ft::map
 {
     public:
-        typedef     map 										self_type;
         typedef     Key 										key_type;
         typedef     T											mapped_type;
         typedef     Compare                                     key_compare;
@@ -36,9 +34,9 @@ class ft::map
 		typedef		typename allocator_type::pointer			pointer;
 		typedef		typename allocator_type::const_pointer		const_pointer;
         typedef		bidir_iterator<value_type, Compare>         iterator;
-		typedef		bidir_iterator<const value_type, Compare>          const_iterator;
+		typedef		bidir_iterator<const value_type, Compare>   const_iterator;
 		typedef		reverse_iterator<const_iterator>            const_reverse_iterator;
-		typedef		reverse_iterator<iterator>                 reverse_iterator;
+		typedef		reverse_iterator<iterator>                  reverse_iterator;
 		typedef		int                                         difference_type;
 		typedef		size_t                                      size_type;
 
@@ -111,6 +109,7 @@ class ft::map
         {
             _rbt.erase(*position) && _size--;
         }
+
         void erase (iterator first, iterator last)
         {
             if (first == last)
@@ -122,7 +121,6 @@ class ft::map
             else
                 _rbt.root = _rbt.iter(_rbt.root, min, value_type(), true, n);
             _size -= n;
-            
         }
 
         iterator find (const key_type& k)
@@ -130,6 +128,7 @@ class ft::map
             RBT<value_type, Compare> *res = _rbt.search(ft::make_pair(k, mapped_type()));
             return iterator(res ? res->value : NULL , &_rbt);
         }
+
         const_iterator find (const key_type& k) const
         {
             RBT<value_type, Compare> *res = _rbt.search(ft::make_pair(k, mapped_type()));
@@ -150,44 +149,31 @@ class ft::map
             return iterator(bound ? bound->value : NULL, &_rbt);
         }
 
-        RBT<value_type, Compare>    *findBound(RBT<value_type, Compare> *root, const key_type&k, RBT<value_type, Compare> *bound) const
-        {
-            if (!root) return bound;
-
-            if (keyCampare(k, root->value->first) && (!bound ||  !keyCampare(bound->value->first, root->value->first)))
-                bound = root;
-
-            if (!keyCampare(k, root->value->first))
-                return (findBound(root->right, k, bound));
-            else
-                return (findBound(root->left, k, bound));
-            return bound;
-        }
-
-        RBT<value_type, Compare>    *findBound2(RBT<value_type, Compare> *root, const key_type&k, RBT<value_type, Compare> *bound) const
-        {
-            if (!root) return bound;
-            if (!keyCampare(root->value->first, k) && (!bound || !keyCampare(bound->value->first, root->value->first)))
-                bound = root;
-
-            if (!keyCampare(k, root->value->first))
-                return (findBound2(root->right, k, bound));
-            else
-                return (findBound2(root->left, k, bound));
-            return bound;
-        }
-
-        // void    findBound2(RBT<value_type, Compare> *root, const key_type&k) const
+        // RBT<value_type, Compare>    *findBound(RBT<value_type, Compare> *root, const key_type&k, RBT<value_type, Compare> *bound) const
         // {
-        //     if (!root) return;
+        //     if (!root) return bound;
 
-        //     else if (!keyCampare(root->value->first, k) && (!bound || keyCampare(bound->value->first, root->value->first)))
+        //     if (keyCampare(k, root->value->first) && (!bound ||  !keyCampare(bound->value->first, root->value->first)))
         //         bound = root;
 
         //     if (!keyCampare(k, root->value->first))
-        //         return (findBound2(root->right, k));
+        //         return (findBound(root->right, k, bound));
         //     else
-        //         return (findBound2(root->left, k));
+        //         return (findBound(root->left, k, bound));
+        //     return bound;
+        // }
+
+        // RBT<value_type, Compare>    *findBound2(RBT<value_type, Compare> *root, const key_type&k, RBT<value_type, Compare> *bound) const
+        // {
+        //     if (!root) return bound;
+        //     if (!keyCampare(root->value->first, k) && (!bound || !keyCampare(bound->value->first, root->value->first)))
+        //         bound = root;
+
+        //     if (!keyCampare(k, root->value->first))
+        //         return (findBound2(root->right, k, bound));
+        //     else
+        //         return (findBound2(root->left, k, bound));
+        //     return bound;
         // }
 
         iterator upper_bound(const key_type& k)
@@ -196,6 +182,7 @@ class ft::map
             bound = findBound(_rbt.root, k, bound);
             return iterator(bound ? bound->value : NULL, &_rbt);
         }
+        
         const_iterator lower_bound (const key_type& k) const
         {
             RBT<value_type, Compare> *bound = NULL;
@@ -214,6 +201,7 @@ class ft::map
         {
             return (ft::make_pair(lower_bound(k), upper_bound(k)));
         }
+
         pair<iterator,iterator>             equal_range (const key_type& k)
         {
             return (ft::make_pair(lower_bound(k), upper_bound(k)));
@@ -228,22 +216,11 @@ class ft::map
 			tmp.reset_data();
         }
         
-        void    clear()
+        class value_compare
         {
-            // _rbt.traverse();
-            // erase(begin(), end());
-            _rbt.preOrder(_rbt.root);
-            _rbt.root = NULL;
-            _size = 0;
-        }
-
-        class value_compare // todo wtf??
-        {   // in C++98, it is required to inherit binary_function<value_type,value_type,bool>
-            friend class map;
-            protected:
+            public:
                 Compare comp;
                 value_compare (Compare c) : comp(c) {}  // constructed with map's comparison object
-            public:
                 typedef bool result_type;
                 typedef value_type first_argument_type;
                 typedef value_type second_argument_type;
@@ -252,6 +229,7 @@ class ft::map
                     return comp(x.first, y.first);
                 }
         };
+
         value_compare value_comp() const
         {
             return value_compare(keyCampare);
@@ -305,31 +283,24 @@ class ft::map
         
         const_iterator end() const {return iterator(NULL, &_rbt);}
 		
-        reverse_iterator rbegin()
-        {
-            // RBT<value_type, Compare>* node = _rbt.findMax(_rbt.root);
-            // // if (!node) return reverse_iterator(NULL, &_rbt);
-            // return reverse_iterator(node->value);
-            return reverse_iterator(iterator(NULL, &_rbt));
-        }
-		const_reverse_iterator rbegin() const
-        {
-            // RBT<value_type, Compare>* node = _rbt.findMax(_rbt.root);
-            // if (!node) return iterator(NULL, &_rbt);
-            // return reverse_iterator(iterator(node->value));
-            // return iterator(node->value);
-            return reverse_iterator(iterator(NULL, &_rbt));
-        }
+        reverse_iterator rbegin(){return reverse_iterator(iterator(NULL, &_rbt));}
+		const_reverse_iterator rbegin() const {return reverse_iterator(iterator(NULL, &_rbt));}
 		reverse_iterator rend(){return reverse_iterator(begin());}
-		// const_reverse_iterator rend() const{ return reverse_iterator(const_iterator(begin()));}
         const_reverse_iterator rend() const{
             RBT<value_type, Compare>* node = _rbt.findMin(_rbt.root);
             if (!node) return reverse_iterator(iterator(NULL, &_rbt));
             return reverse_iterator(iterator(node->value, &_rbt));
         }
+
+        void    clear()
+        {
+            _rbt.preOrder(_rbt.root);
+            _rbt.root = NULL;
+            _size = 0;
+        }
     
         RBT<value_type, Compare>    _rbt;
-    
+
     private:
         size_t  _size;
         size_t  _capacity;
@@ -339,13 +310,12 @@ class ft::map
         template <class InputIterator>
         void    insertIters(InputIterator first, InputIterator last)
         {
-            while (first != last) // DRY
+            while (first != last)
                 insert(*first++);
         }
 
         void	copy_inner_data(const map& other)
 		{
-			// _arr = other.data();
             _rbt.root = other._rbt.root;
 			_myAllocator = other.get_allocator();
 			_size = other.size();
@@ -354,9 +324,7 @@ class ft::map
 
         void	reset_data()
 		{
-			// _arr = other.data();
             _rbt.root = NULL;
-			// _myAllocator = NULL;
 			_size = 0;
 		}
 
@@ -387,16 +355,40 @@ class ft::map
             // Process left child
             print2DUtil(root->left, space);
         }
-        public:
         // Wrapper over print2DUtil()
         void print2D() const
         {
-    std::cout << "\n-----------------" << std::endl;
+            std::cout << "\n-----------------" << std::endl;
             // Pass initial space count as 0
             print2DUtil((_rbt.root), 1);
+            std::cout << "-----------------\n" << std::endl;
+        }
 
-    std::cout << "-----------------\n" << std::endl;
+        RBT<value_type, Compare>    *findBound(RBT<value_type, Compare> *root, const key_type&k, RBT<value_type, Compare> *bound) const
+        {
+            if (!root) return bound;
 
+            if (keyCampare(k, root->value->first) && (!bound ||  !keyCampare(bound->value->first, root->value->first)))
+                bound = root;
+
+            if (!keyCampare(k, root->value->first))
+                return (findBound(root->right, k, bound));
+            else
+                return (findBound(root->left, k, bound));
+            return bound;
+        }
+
+        RBT<value_type, Compare>    *findBound2(RBT<value_type, Compare> *root, const key_type&k, RBT<value_type, Compare> *bound) const
+        {
+            if (!root) return bound;
+            if (!keyCampare(root->value->first, k) && (!bound || !keyCampare(bound->value->first, root->value->first)))
+                bound = root;
+
+            if (!keyCampare(k, root->value->first))
+                return (findBound2(root->right, k, bound));
+            else
+                return (findBound2(root->left, k, bound));
+            return bound;
         }
 };
 

@@ -32,7 +32,7 @@ class ft::vector
 	public:
 		~vector()
 		{
-			ft_destroy_arr(); // DRY : replace with clear
+			ft_destroy_arr();
 			if (_max_capacity)
 				myAllocator.deallocate(_arr, _max_capacity);
 		};
@@ -53,6 +53,7 @@ class ft::vector
 		// -------> constructors
 		vector& operator= (const ft::vector<T>& src)
 		{
+			myAllocator  = src.get_allocator();
 			ft_destroy_arr();
 			reserve(src.size());
 			ft_init_with_iters(src.begin(), src.end());
@@ -64,7 +65,7 @@ class ft::vector
 			_index = 0;
 			myAllocator = alloc;
 			_max_capacity = 0;
-			// _arr = NULL; useles??
+			_arr = NULL;
 		}
 		// fill constructor with n elements.
 		// range constructor
@@ -116,7 +117,7 @@ class ft::vector
 				if (n > (_max_capacity * 2))
 					reserve(n);
 				else
-					reserve(_max_capacity * 2); // todo : right?
+					reserve(_max_capacity * 2);
 				while (++i < n)
 					push_back(val);
 			}
@@ -163,26 +164,31 @@ class ft::vector
 		{
 			return (_arr[n]);
 		}
+
 		const_reference operator[] (size_type n) const
 		{
 			return (_arr[n]);
 		}
+
 		reference at(size_type n)
 		{
 			if (n >= _index)
 				throw std::out_of_range("out of range");
 			return (_arr[n]);
 		}
+
 		const_reference at(size_type n) const
 		{
 			if (n >= _index)
 				throw std::out_of_range("out of range");
 			return (_arr[n]);
 		}
+
 		reference front()
 		{
 			return (_arr[0]);
 		}
+
 		const_reference front() const
 		{
 			return (_arr[0]);
@@ -192,6 +198,7 @@ class ft::vector
 		{
 			return (_arr[_index - 1]);
 		}
+
 		const_reference back() const
 		{
 			return (_arr[_index - 1]);
@@ -206,8 +213,8 @@ class ft::vector
 		}
 
 		void pop_back()
-		{// todo check
-			myAllocator.destroy(_arr + --_index);
+		{
+			myAllocator.destroy(_arr + --_index); // wtf
 		}
 
 		void swap (ft::vector<T>& src)
@@ -245,13 +252,14 @@ class ft::vector
             int elem_to_move = end() - position;
 			ft::vector<T> tmp;
 			tmp.assign(position, end());
-			// reserve(_index + n);
-			if ((n + _index) > _max_capacity && (n + _index) > (_index * 2)) // DRY BRIH
+
+			if ((n + _index) > _max_capacity && (n + _index) > (_index * 2))
 				reserve(_index + n);
 			else if (!_index)
 				reserve(n);
 			else if ((size_t)n > _max_capacity)
 				reserve(n * 2);
+
 			_index = start;
 			ft_init_with_val(n, val);
 			for (int i = 0; i < elem_to_move; i++)
@@ -266,12 +274,14 @@ class ft::vector
 			ft::vector<T> tmp;
 			tmp.assign(position, end());
 			difference_type n  = ft::distance(first, last);
+
 			if ((n + _index) > _max_capacity && (n + _index) > (_index * 2)) // DRY BRIH
 				reserve(_index + n);
 			else if (!_index)
 				reserve(n);
 			else if ((size_t)n > _max_capacity) // wtf
 				reserve(n * 2);
+			
 			_index = start;
 			ft_init_with_iters(first, last);
 			for (int i = 0; i < elem_to_move; i++)
@@ -279,13 +289,12 @@ class ft::vector
 		}
 
 		template <class InputIterator>
-		    //  typename ft::enable_if<!ft::is_integral<InputIterator>::value>, InputIterator>
 		void assign (InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
 		{
 			ft_destroy_arr();
 			reserve(ft::distance(first, last));
 			ft_init_with_iters(first, last);
-		} // todo fix
+		}
 
 		void assign (size_type n, const value_type& val)
 		{
@@ -347,9 +356,6 @@ class ft::vector
 		template <class InputIterator>
 		void	ft_init_with_iters(InputIterator first, InputIterator last)
 		{
-			// Check whether it's an integral type.
-			// If so, it's not an iterator.
-			// Otherwise ......  // DRY
 			while (first != last)
 				push_back(*first++);
 		}
@@ -373,7 +379,6 @@ class ft::vector
 		void	reset_arr()
 		{
 			_arr = NULL;
-			// myAllocator = NULL;
 			_index = 0;
 			_max_capacity =0;
 		}
@@ -423,15 +428,8 @@ template <class T, class Alloc>
 	return (operator==(lhs, rhs) || operator>(lhs, rhs));
 }
 
-// todo
-// copy/= preserve allocater??
-// prevent casting from CI TO I ;) (RI AS WELL BRUH) nvm
-
 template <class T, class Alloc>
   void swap (ft::vector<T,Alloc>& x, ft::vector<T,Alloc>& y)
 {
 	x.swap(y);
 }
-
-//todo 
-// move ft::enable_if / ft::is_integral to ft

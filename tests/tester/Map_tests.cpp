@@ -223,7 +223,7 @@ void iterator_tests(void)
                 m.insert(ft::make_pair(myints[i], i));
             ft::map<int, int>::iterator it = m.begin(), eit = --m.end();
             tmp = eit->first;
-            // m.erase(eit); // todo fix erase
+            m.erase(eit);
             for (; it != m.end(); ++it)
                 res += it->first;
             cond = cond && (res == (210 - tmp));
@@ -435,6 +435,7 @@ void reverse_iterator_tests(void)
 
 void testConstructors()
 {
+    if (false){ // rm
     std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " empty constructor "
               << "] --------------------]\t\t\033[0m";
     {
@@ -549,7 +550,7 @@ void testConstructors()
             for (int i = 0; i < 1e3; i++)
             {
                 m.insert(std::make_pair(i, 'X'));
-                my_m.insert(ft::make_pair(i, 'X'));// todo
+                my_m.insert(ft::make_pair(i, 'X'));
             }
 
             start = get_time();
@@ -582,10 +583,11 @@ void testConstructors()
     std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " Constructors with costum compare "
               << "] --------------------]\t\t\033[0m";
     EQUAL(testmapConstructors());
+}
+    // if (false){ // rm
     std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " operator= (lhs.size = rhs.size) "
               << "] --------------------]\t\t\033[0m";
-    // if (false) // rm
-    { // todo fix tle
+    { // todo fix tle in mac
         // /*-------------------------------------- time limit test -----------------------------------*/
         {
             time_t start, end, diff;
@@ -597,7 +599,7 @@ void testConstructors()
             {
                 m1.insert(std::make_pair(i, "string1"));
                 m2.insert(std::make_pair(i, "string2"));
-                ft_m1.insert(ft::make_pair(i, std::string("string1"))); //todo
+                ft_m1.insert(ft::make_pair(i, std::string("string1")));
                 ft_m2.insert(ft::make_pair(i, std::string("string2")));
             }
 
@@ -642,6 +644,7 @@ void testConstructors()
         EQUAL(res == ft_res);
     }
 
+    // }
     std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " operator= deep copy "
               << "] --------------------]\t\t\033[0m";
     {
@@ -1198,8 +1201,7 @@ void testElementAccess()
 
 void testModifiers()
 {
-    if (false)
-    {
+    if (false){
     std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " insert method "
               << "] --------------------]\t\t\033[0m";
     {
@@ -1279,8 +1281,8 @@ void testModifiers()
 
         ret = m.insert(std::pair<char, int>('z', 500));
         ft_ret = ft_m.insert(ft::pair<char, int>('z', 500));
-
         cond = cond && ret.second == ft_ret.second;
+
 
         // second insert function version (with hint position):
         std::map<char, int>::iterator it = m.begin();
@@ -1302,7 +1304,7 @@ void testModifiers()
 
         cond = cond && comparemaps(ft_m.begin(), ft_m.end(), m.begin(), m.end()) && comparemaps(ft_anothermap.begin(), ft_anothermap.end(), anothermap.begin(), anothermap.end());
         EQUAL(cond);
-    }}
+    }
 
     std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " erase method "
               << "] --------------------]\t\t\033[0m";
@@ -1354,39 +1356,43 @@ void testModifiers()
 
         cond = m.size() == ft_m.size() && comparemaps(m.begin(), m.end(), ft_m.begin(), ft_m.end());
         if (!cond)
-            std::cout << "stoppppp" << std::endl;
+            std::cout << "stoppppp1" << std::endl;
         it = m.find('b');
         ft_it = ft_m.find('b');
 
         cond = cond && (it->first == ft_it->first) && (it->second == ft_it->second);
         if (!cond)
-            std::cout << "stoppppp" << std::endl;
+            std::cout << "stoppppp2" << std::endl;
         m.erase(it);       // erasing by iterator
+        ft_m.print2D();
         ft_m.erase(ft_it); // erasing by iterator
-
+        ft_m.print2D();
         cond = cond && comparemaps(m.begin(), m.end(), ft_m.begin(), ft_m.end());
         if (!cond)
-            std::cout << "stoppppp" << std::endl;
+            std::cout << "stoppppp3" << std::endl;
 
         int ret = m.erase('c');       // erasing by key
         int ft_ret = ft_m.erase('c'); // erasing by key
 
         cond = cond && ret == ft_ret && comparemaps(m.begin(), m.end(), ft_m.begin(), ft_m.end());
         if (!cond)
-            std::cout << "stoppppp" << std::endl;
+            std::cout << "stoppppp4" << std::endl;
+        if (ret != ft_ret)
+            std::cout << "stoppppp4" << std::endl;
+        // exit(0);
         it = m.find('e');
         ft_it = ft_m.find('e');
 
         cond = cond && (it->first == ft_it->first) && (it->second == ft_it->second) && m.size() == ft_m.size();
 if (!cond)
-            std::cout << "stoppppp" << std::endl;
+            std::cout << "stoppppp5" << std::endl;
         m.erase(it, m.end());          // erasing by range
         ft_m.print2D();
-        // ft_m.erase(ft_it, ft_m.end()); // erasing by range
+        ft_m.erase(ft_it, ft_m.end()); // erasing by range
 
         cond = cond && m.empty() == ft_m.empty() && comparemaps(m.begin(), m.end(), ft_m.begin(), ft_m.end());
 if (!cond)
-            std::cout << "stoppppp" << std::endl;
+            std::cout << "stoppppp6" << std::endl;
         /* ---------- Testing some edge cases ---------- */
 
         std::map<int, std::string> m2;
@@ -1406,7 +1412,7 @@ if (!cond)
 
         cond = cond && m2.size() == ft_m2.size() && comparemaps(m2.begin(), m2.end(), ft_m2.begin(), ft_m2.end());
 if (!cond)
-            std::cout << "stoppppp" << std::endl;
+            std::cout << "stoppppp7" << std::endl;
         m2.erase(it2->first);
         ft_m2.erase(ft_it2->first);
 
@@ -1456,7 +1462,8 @@ if (!cond)
             std::cout << "stoppppp0" << std::endl;
         EQUAL(cond);
     }
-    exit(0);
+    }
+    // exit(0);
     std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " swap method "
               << "] --------------------]\t\t\033[0m";
 
@@ -1589,7 +1596,6 @@ if (!cond)
 
         EQUAL(cond);
     }
-    exit(0);
     std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " clear method "
               << "] --------------------]\t\t\033[0m";
 
@@ -1756,7 +1762,7 @@ void testOperations()
 {
     std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " find method "
               << "] --------------------]\t\t\033[0m";
-    if (false){
+    {
         bool cond(true);
         {
             time_t start, end, diff;
@@ -1841,11 +1847,10 @@ void testOperations()
         ft_it2 = ft_m.find('b');
 
         cond = cond && it2->first == ft_it2->first && it2->second == ft_it2->second;
-
-        // if (it2 != m.end()) todo
-        //     m.erase(it2);
-        // if (ft_it2 != ft_m.end())
-        //     ft_m.erase(ft_it2);
+        if (it2 != m.end())
+            m.erase(it2);
+        if (ft_it2 != ft_m.end())
+            ft_m.erase(ft_it2);
 
         cond = cond && comparemaps(m.begin(), m.end(), ft_m.begin(), ft_m.end());
 
@@ -1853,7 +1858,7 @@ void testOperations()
     }
     std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " count method "
               << "] --------------------]\t\t\033[0m";
-    if (false){
+    {
         bool cond;
         /*---------------------------------- time limit test --------------------------------------------*/
         {
@@ -2253,10 +2258,10 @@ int main()
     // TEST_CASE(reverse_iterator_tests);
     // std::cout << std::endl;
 
-    // std::cout << YELLOW << "Testing Constructors;" << RESET << std::endl;
-    // TEST_CASE(testConstructors);
-    // std::cout << std::endl;
-
+    std::cout << YELLOW << "Testing Constructors;" << RESET << std::endl;
+    TEST_CASE(testConstructors);
+    std::cout << std::endl;
+    exit(0);
     // std::cout << YELLOW << "Testing Iterator Methods;" << RESET << std::endl;
     // TEST_CASE(testIterators);
     // std::cout << std::endl;
@@ -2269,17 +2274,17 @@ int main()
     // TEST_CASE(testElementAccess);
     // std::cout << std::endl;
 
-    std::cout << YELLOW << "Testing Modifiers Methods;" << RESET << std::endl;
-    TEST_CASE(testModifiers)
-    std::cout << std::endl;
+    // std::cout << YELLOW << "Testing Modifiers Methods;" << RESET << std::endl;
+    // TEST_CASE(testModifiers)
+    // std::cout << std::endl;
 
     // std::cout << YELLOW << "Testing Observers Methods;" << RESET << std::endl;
     // TEST_CASE(testObservers)
     // std::cout << std::endl;
 
-    // std::cout << YELLOW << "Testing Operations Methods;" << RESET << std::endl;
-    // TEST_CASE(testOperations)
-    // std::cout << std::endl;
+    std::cout << YELLOW << "Testing Operations Methods;" << RESET << std::endl;
+    TEST_CASE(testOperations)
+    std::cout << std::endl;
 
     // std::cout << YELLOW << "Testing Allocator Methods;" << RESET << std::endl;
     // TEST_CASE(testAllocatorMethodes)

@@ -35,7 +35,8 @@ class ft::pair
         :first(src.first), second(src.second)
         {
         }
-        pair<A, B>& operator= (const ft::pair<A, B>& pr)
+        template<typename U, typename V>
+        pair<A, B>& operator= (const ft::pair<U, V>& pr)
         {
             this->first = pr.first;
             this->second = pr.second;

@@ -122,23 +122,22 @@ class RBT
             _myAllocater.deallocate(root, 1);
             root = NULL;
         }
+        bool is_found;
+        
+        RBT*    iter(RBT* node, value_type min, value_type max, bool isLast, int &n)
+        {
+            if (!node) return NULL;
 
-        // void    iter(RBT* node, value_type *min, value_type *max)
-        // {
-        //     if (!node) return ;
-
-        //     // if (min->first < node->value->first)
-        //         iter(node->left, min, max);
+            node->left = iter(node->left, min, max, isLast, n);
+            node->right = iter(node->right, min, max, isLast, n);
             
-        //     if (node->value && node && min && min->first <= node->value->first && (!max || max->first > node->value->first))
-        //     {
-        //         std::cout << *(node->value);
-        //         // _valueAllocator.deallocate(node->value, 1);
-        //     }
-        //     iter(node->right, min, max);
-        //     // _myAllocater.deallocate(node, 1);
-        //     // node = NULL;
-        // }
+            if (node->value->first >= min.first && (isLast || max.first > node->value->first))
+            {
+                node = del(node, *(node->value), is_found);
+                n++;
+            }
+            return node; 
+        }
 
         void cpy(const RBT<value_type, Compare> *node)
         {
@@ -146,10 +145,7 @@ class RBT
                 return ;
             cpy(node->left);
             if (node->value)
-            {
                 insert(*(node->value));
-                // std::cout << "val:" <<root->value->second << std::endl;
-            }
             cpy(node->right);
         }
         ~RBT()
@@ -234,8 +230,7 @@ class RBT
                 root->left = insert_helper(root->left, new_node);
                 root->left->parent = root;
             }
-            // return balanceTree(root, *(new_node->value));
-            return root;
+            return balanceTree(root, *(new_node->value));
         }
 
         RBT     *insert(const value_type& val)
@@ -388,12 +383,12 @@ class RBT
                                         // find inorder successor
                     RBT* minum = findMin(node->right);
                     // copy min values
-                    value_type *tmp2 = node->value;
+                    value_type *tmp = node->value;
                     node->value = minum->value;
-                    minum->value = tmp2;
+                    minum->value = tmp;
                     _valueAllocator.construct(minum->value, *(node->value));
                     // std::cout << "will be changed: " << minum->value->first << std::endl;
-                    node->right = del(node->right, *(minum->value), is_found);
+                    node->right = del(node->right, *(node->value), is_found);
                 }
             }
             else if (!key_compare(val.first, node->value->first))
@@ -406,77 +401,76 @@ class RBT
             if (node == NULL)
                 return node;
                     // std::cout << "node: begin()" << *(node->value);
-            // return balanceTree(node, val);
-            return node;
+            return balanceTree(node, val);
         }
 
-        size_t    erase(const value_type& val)
+        bool    erase(const value_type& val)
         {
             bool is_found;
             root = del(root, val, is_found);
-            return (is_found ? 1 : 0);
+            return (is_found);
         }
 
-        RBT*    del(RBT* node, const value_type *min, const value_type *max , int &n)
-        {
-            if (!node) return node;
+        // RBT*    del(RBT* node, const value_type *min, const value_type *max , int &n)
+        // {
+        //     if (!node) return node;
 
-            // if (val.first == node->value->first)
-            if (node->value && min && min->first <= node->value->first && (!max || max->first > node->value->first))
-            {
-                n++;
-                // in case if node has one child
-                std::cout << "will be changed: " << node->value->first << std::endl;
-                if (!node->right || !node->left)
-                {
-                    RBT* tmp = node->right ? node->right : node->left;
-                    // in case if node to be deleted has no childs
-                    if (!tmp)
-                    {
-                        tmp = node;
-                        node = NULL; 
-                    }
-                    // else one child
-                    // copy child content to the node to be deleted
-                    else
-                    {
-                        RBT* nodeParent = node->parent;
-                        *node = *tmp;
-                        node->parent = nodeParent;
-                    }
-                    // _myAllocater.destroy(tmp);
-                    // std::cout << "will be deleted: " << tmp->value->first << std::endl;
-                    _valueAllocator.deallocate(tmp->value, 1);
-                    _myAllocater.deallocate(tmp, 1);
-                }
-                // else has two childs
-                else
-                {
-                    // find inorder successor
-                    RBT* minum = findMin(node->right);
-                    // copy min values
-                    value_type *tmp2 = node->value;
-                    node->value = minum->value;
-                    minum->value = tmp2;
-                    _valueAllocator.construct(minum->value, *(node->value));
-                    // std::cout << "will be changed: " << minum->value->first << std::endl;
-                    bool is_found;
-                    node->right = del(node->right, *(minum->value), is_found);
-                }
-            }
-            else if (!key_compare(min->first, node->value->first))
-                node->right = del(node->right, min, max, n);
-            else
-                node->left = del(node->left,  min, max, n);
+        //     // if (val.first == node->value->first)
+        //     if (node->value && min && min->first <= node->value->first && (!max || max->first > node->value->first))
+        //     {
+        //         n++;
+        //         // in case if node has one child
+        //         std::cout << "will be changed: " << node->value->first << std::endl;
+        //         if (!node->right || !node->left)
+        //         {
+        //             RBT* tmp = node->right ? node->right : node->left;
+        //             // in case if node to be deleted has no childs
+        //             if (!tmp)
+        //             {
+        //                 tmp = node;
+        //                 node = NULL; 
+        //             }
+        //             // else one child
+        //             // copy child content to the node to be deleted
+        //             else
+        //             {
+        //                 RBT* nodeParent = node->parent;
+        //                 *node = *tmp;
+        //                 node->parent = nodeParent;
+        //             }
+        //             // _myAllocater.destroy(tmp);
+        //             // std::cout << "will be deleted: " << tmp->value->first << std::endl;
+        //             _valueAllocator.deallocate(tmp->value, 1);
+        //             _myAllocater.deallocate(tmp, 1);
+        //         }
+        //         // else has two childs
+        //         else
+        //         {
+        //             // find inorder successor
+        //             RBT* minum = findMin(node->right);
+        //             // copy min values
+        //             value_type *tmp2 = node->value;
+        //             node->value = minum->value;
+        //             minum->value = tmp2;
+        //             _valueAllocator.construct(minum->value, *(node->value));
+        //             // std::cout << "will be changed: " << minum->value->first << std::endl;
+        //             bool is_found;
+        //             node->right = del(node->right, *(minum->value), is_found);
+        //         }
+        //     }
+        //     else if (!key_compare(min->first, node->value->first))
+        //         node->right = del(node->right, min, max, n);
+        //     else
+        //         node->left = del(node->left,  min, max, n);
 
-            // If the tree had only one node
-            // then return
-            if (node == NULL)
-                return node;
-                    // std::cout << "node: begin()" << *(node->value);
-            // return balanceTree(node, *(node->value));
-            return node;
-        }
+        //     // If the tree had only one node
+        //     // then return
+        //     if (node == NULL)
+        //         return node;
+        //             // std::cout << "node: begin()" << *(node->value);
+        //     // return balanceTree(node, *(node->value));
+        //     return node;
+        // }
 
  
 

@@ -6,14 +6,14 @@
 #    By: hamza <hamza@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/24 19:04:38 by hmellahi          #+#    #+#              #
-#    Updated: 2021/11/05 01:21:54 by hamza            ###   ########.fr        #
+#    Updated: 2021/11/08 00:18:24 by hamza            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
 CLANG = clang++
 
-FLAGS = --std=c++98 #-Wall -Werror
+FLAGS = --std=c++11 #-Wall -Werror
 
 NAME = a.out
 

@@ -109,20 +109,23 @@ class ft::map
 
         void erase (iterator position)
         {
-            if (_rbt.erase(*position))
-                _size--;
+            _rbt.erase(*position) && _size--;
         }
         void erase (iterator first, iterator last)
         {
-            value_type *min = &(*first);
-            value_type *max = &(*last);
-
-            // if (!_rbt.root)
-                // return ;
+            if (first == last)
+                return ;
+            value_type min = *first;
             int n = 0;
-            _rbt.del(_rbt.root, min, max, n);
-            std::cout << n << std::endl;
+            if (last != end())
+                _rbt.root = _rbt.iter(_rbt.root, min, *last, false, n);
+            else
+                _rbt.root = _rbt.iter(_rbt.root, min, value_type(), true, n);
+            // _size -= ft::distance(last, first);
+            // std::cout << _size << std::endl;
+            // std::cout << n << std::endl;
             _size -= n;
+            
         }
 
         iterator find (const key_type& k)

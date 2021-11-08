@@ -103,7 +103,6 @@ class ft::vector
 		explicit vector (size_type n, const value_type& val = value_type(),
 		const allocator_type& alloc = allocator_type())
 		{
-			// std::cout << n << std::endl;
 			_index = 0;
 			myAllocator = alloc;
 			_max_capacity = n;
@@ -167,19 +166,9 @@ class ft::vector
 		{
 			if (n <= _max_capacity) return ;
 			// allocate new array
-			
 			T	*new_arr;
-			// try
-			// {
-				new_arr = myAllocator.allocate(n); // todo protect uwu :3
-			// }
-			// catch (std::bad_alloc& ba)
-			// {
-			// 	std::cerr << "bad_alloc caught: " << ba.what() << std::endl;
-			// }
-			// copy
-						// std::cout << _index << "|b|" << _max_capacity << std::endl;
-
+			new_arr = myAllocator.allocate(n); // todo protect uwu :3
+			
 			size_type i = -1;
 			while (++i < _index)
 				// new_arr[i] = _arr[i];
@@ -244,21 +233,11 @@ class ft::vector
 
 		void swap (ft::vector<T>& src)
 		{
-			ft::vector<T> tmp; // todo : fix | double free
+			ft::vector<T> tmp;
 			tmp.copy_inner_arr(*this);
-			// std::cout << "before: " << tmp.data() << std::endl;
 			this->copy_inner_arr(src);
-			// std::cout << tmp.data()  << std::endl;
 			src.copy_inner_arr(tmp);
 			tmp.reset_arr();
-			// src = tmp;
-			// tmp.assign(this->begin(), this->end());
-
-			// this->assign(src.begin(), src.end());
-			
-			// src = tmp; // check
-			// src.assign(tmp.begin(), tmp.end());
-			// delete tmp; wtf
 		}
 
 		void	clear()
@@ -323,9 +302,7 @@ class ft::vector
 		    //  typename enable_if<!is_integral<InputIterator>::value>, InputIterator>
 		void assign (InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
 		{
-			// std::cout <<  "d" << last - first << std::endl;
 			ft_destroy_arr();
-			// reserve(last - first);
 			reserve(ft::distance(first, last));
 			ft_init_with_iters(first, last);
 		} // todo fix
@@ -392,14 +369,13 @@ class ft::vector
 		{
 			// Check whether it's an integral type.
 			// If so, it's not an iterator.
-			// Otherwise ...... // todo : remove
+			// Otherwise ......  // DRY
 			while (first != last)
 				push_back(*first++);
 		}
 
 		void	ft_init_with_val(size_type n, const value_type& val = value_type())
 		{
-			// std::cout << n << "|"<< val << "|"<< std::endl;
 			for (size_type i = 0; i < n;i++)
 				push_back(val);
 		}
@@ -478,4 +454,4 @@ template <class T, class Alloc>
 }
 
 //todo 
-// move enable_if / is_integral to std
+// move enable_if / is_integral to ft

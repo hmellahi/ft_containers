@@ -36,7 +36,7 @@ class ft::map
 		typedef		typename allocator_type::pointer			pointer;
 		typedef		typename allocator_type::const_pointer		const_pointer;
         typedef		bidir_iterator<value_type, Compare>         iterator;
-		typedef		bidir_iterator<const value_type, Compare>          const_iterator; // todo fix
+		typedef		bidir_iterator<const value_type, Compare>          const_iterator;
 		typedef		reverse_iterator<const_iterator>            const_reverse_iterator;
 		typedef		reverse_iterator<iterator>                 reverse_iterator;
 		typedef		int                                         difference_type;
@@ -121,9 +121,6 @@ class ft::map
                 _rbt.root = _rbt.iter(_rbt.root, min, *last, false, n);
             else
                 _rbt.root = _rbt.iter(_rbt.root, min, value_type(), true, n);
-            // _size -= ft::distance(last, first);
-            // std::cout << _size << std::endl;
-            // std::cout << n << std::endl;
             _size -= n;
             
         }
@@ -296,15 +293,19 @@ class ft::map
             RBT<value_type, Compare>* node = _rbt.findMin(_rbt.root);
             if (!node) return iterator(NULL, &_rbt);
             return (iterator(node->value, &_rbt));
-        } // todo : protect | memory leaks bo
+        }
+
         const_iterator begin() const {
             RBT<value_type, Compare>* node = _rbt.findMin(_rbt.root);
             if (!node) return iterator(NULL, &_rbt);
             return (iterator(node->value, &_rbt));
         }
+
 		iterator end() {return iterator(NULL, &_rbt);}
+        
         const_iterator end() const {return iterator(NULL, &_rbt);}
-		reverse_iterator rbegin()
+		
+        reverse_iterator rbegin()
         {
             // RBT<value_type, Compare>* node = _rbt.findMax(_rbt.root);
             // // if (!node) return reverse_iterator(NULL, &_rbt);
@@ -326,40 +327,15 @@ class ft::map
             if (!node) return reverse_iterator(iterator(NULL, &_rbt));
             return reverse_iterator(iterator(node->value, &_rbt));
         }
-        // todo:::
-        // iterator begin();
-        // const_iterator begin() const;
-        // iterator end();
-        // const_iterator end() const;
-        // reverse_iterator rbegin();
-        // const_iterator rbegin() const;
-        // reverse_iterator rend();
-        // const_iterator rend() const;
     
-        RBT<value_type, Compare>    _rbt; // todo : private bruh
-     private:
+        RBT<value_type, Compare>    _rbt;
+    
+    private:
         size_t  _size;
         size_t  _capacity;
         Alloc   _myAllocator;
         key_compare keyCampare;
     
-        // void   destroy(RBT<value_type> *node)
-        // {
-        //     _myAllocator.destroy(node);
-        // }
-
-        // void    traverseInOrder()//(void (*func)(RBT<value_type> *))
-        // {
-        //     // for (ft::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
-        //         // func(it);
-        //     RBT<value_type> *curr =  _rbt.search(_rbt.findMin(&_rbt));
-        //     while (curr != NULL)
-        //     {
-        //         // (*func)(curr);
-        //         _myAllocator.te(curr);
-        //         curr = curr->next();
-        //     }
-        // }
         template <class InputIterator>
         void    insertIters(InputIterator first, InputIterator last)
         {

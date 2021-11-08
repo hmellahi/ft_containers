@@ -69,7 +69,6 @@ namespace ft
     template <class InputIterator1, class InputIterator2>
     bool equal ( InputIterator1 first1, InputIterator1 last1, InputIterator2 first2 )
     {
-        // std::cout << *first1 << "|" << *first2 << std::endl;
         while (first1!=last1)
             if (*first1++ != *first2++) 
             return false;
@@ -117,8 +116,8 @@ public:
     self_type	operator++(int) { self_type i = *this; it--; return i;}
     self_type&	operator--() { it++; return *this;}
     self_type	operator--(int) { self_type i = *this; it++; return i;}
-    reference operator[](difference_type i) const { return this->base()[- i - 1];} // todo...
-    self_type operator+=(difference_type i) { it -= i; return *this;} // check
+    reference operator[](difference_type i) const { return this->base()[- i - 1];}
+    self_type operator+=(difference_type i) { it -= i; return *this;}
     self_type operator-=(difference_type i) { it += i; return *this;}
     iterator_type base() const { return iterator_type(it);}
     reverse_iterator operator+ (difference_type n) const { return self_type(it - n); }
@@ -159,7 +158,6 @@ template <class Iterator>
              typename ft::reverse_iterator<Iterator>::difference_type n,
              const ft::reverse_iterator<Iterator>& rev_it)
 {
-    // std::cout << "yy";
     return  ft::reverse_iterator<Iterator>(rev_it.base() - n);
 }
 
@@ -175,7 +173,7 @@ class rand_acc_iterator : public ft::iterator<std::random_access_iterator_tag, T
         // typedef typename ft::iterator<std::random_access_iterator_tag, T>::value_type            value_type;
         // typedef typename iterator::difference_type       difference_type;
         // typedef typename iterator::pointer               pointer;
-        // typedef typename iterator::reference             reference;
+        // typedef typename iterator::reference             reference; // todo
         // typedef typename iterator::iterator_category     iterator_category;
         typedef rand_acc_iterator self_type;
         rand_acc_iterator(pointer ptr) : _ptr(ptr) { };
@@ -189,7 +187,6 @@ class rand_acc_iterator : public ft::iterator<std::random_access_iterator_tag, T
         }
         rand_acc_iterator(const value_type& it)
         {
-        // {terator
             _ptr = *it;
         }
         operator rand_acc_iterator<const T> () const { return rand_acc_iterator<const T>(_ptr); }
@@ -213,12 +210,9 @@ class rand_acc_iterator : public ft::iterator<std::random_access_iterator_tag, T
             return (it._ptr - i);
         }
         difference_type operator-(self_type src)const { return ( _ptr - src._ptr);}
-        // difference_type operator-(difference_type i)const { return ( _ptr - i);}
-        // difference_type operator+(difference_type i)const { return ( _ptr + i);}
-        // difference_type operator-(self_type src)const { return ( _ptr - src._ptr);}
         reference operator*()const { return *_ptr; }
         pointer operator->() const{ return _ptr; }
-        reference operator[](size_t i) { return _ptr[i]; } // todo...
+        reference operator[](size_t i) { return _ptr[i]; }
 
         friend bool operator!= (const rand_acc_iterator& lhs,
                         const rand_acc_iterator& rhs) { return lhs._ptr != rhs._ptr;}
@@ -240,17 +234,15 @@ class rand_acc_iterator : public ft::iterator<std::random_access_iterator_tag, T
 
 
 template <typename T, typename Compare>
-class bidir_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T>
+class bidir_iterator : public ft::iterator<std::bidirectional_iterator_tag, T>
 {
     public:
-        typedef T                           value_type; // DRY
-        typedef int                         difference_type;
-        typedef T*                          pointer;
-        typedef T&                          reference;
-        // typedef std::less<T>                   Compare; // TODO REMOVE
-        typedef ft::bidirectional_iterator_tag  iterator_category;
-        // std::allocator;
-        typedef bidir_iterator self_type;
+        typedef T                               value_type; // DRY
+        typedef int                             difference_type;
+        typedef T*                              pointer;
+        typedef T&                              reference;
+        typedef std::bidirectional_iterator_tag iterator_category;
+        typedef bidir_iterator                  self_type;
         bidir_iterator(pointer ptr, const RBT<value_type, Compare>* bst = NULL)
         : _ptr(ptr)
         {
@@ -259,29 +251,15 @@ class bidir_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T>
         bidir_iterator(){
             _ptr = NULL;
         }
-        ~bidir_iterator()
-        {
-            // if (_ptr)    
-                // delete _ptr;
-        }
+        ~bidir_iterator(){}
         bidir_iterator&   operator=(const bidir_iterator& bid_it)
         {
             _ptr = bid_it._ptr;
-            _bst = bid_it._bst; // todo wtf is wrong? take a copy broo
+            _bst = bid_it._bst;
             return (*this);
         }
-        // binder2nd
-        bidir_iterator(const value_type& it, const RBT<value_type, Compare>* bst)
-        :_ptr(new T(it)) // todo use allocater
-        {
-            _bst = bst; // todo wtf is wrong? take a copy broo
-        }
-        // bidir_iterator(pointer ptr, const RBT<value_type, Compare>* bst)
-        // {
-        //     _ptr = ptr;
-        //     _bst = bst; // todo wtf is wrong? take a copy broo
-        // }
-        operator bidir_iterator<const T, Compare> () const { return bidir_iterator<const T, Compare>(_ptr, reinterpret_cast<const RBT<const value_type, Compare>*>(_bst)); } // add _bst
+
+        operator bidir_iterator<const T, Compare> () const { return bidir_iterator<const T, Compare>(_ptr, reinterpret_cast<const RBT<const value_type, Compare>*>(_bst)); }
         
         self_type& operator++()
         {
@@ -289,7 +267,7 @@ class bidir_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T>
             if (!curr) { return *this;}
             RBT<value_type, Compare>* nextNode = curr->next();
             if (nextNode)
-                _ptr = nextNode->value; // leaks bro ig
+                _ptr = nextNode->value;
             else
                 _ptr = NULL;
             return *this;
@@ -303,7 +281,7 @@ class bidir_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T>
             // if the ptr is NULL then its must be the last element
             if (!_ptr)
             {
-                _ptr = _bst->findMax(_bst->root)->value; // todo protect : seg
+                _ptr = _bst->findMax(_bst->root)->value; // todo protect : seg??
                 return *this;
             }
             RBT<value_type, Compare>* curr = _bst->search(*_ptr);
@@ -316,15 +294,9 @@ class bidir_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T>
             return *this;
         }
         self_type operator--(int) { self_type i = *this; --(*this); return i;}
-        friend self_type operator-(self_type it, difference_type i)
-        {
-            i = 1;
-            return (--bidir_iterator(it._ptr, it._bst)); // todo change / rm
-        }
         difference_type operator-(self_type src)const { return ( _ptr - src._ptr);}
-        reference operator*()const { return *_ptr;  } // todo optimize
-        // reference operator*()const { return *(_bst->search(*_ptr)->value);  } // todo optimize
-        pointer operator->() const{ return _ptr; } // todo optimize
+        reference operator*()const { return *_ptr;  }
+        pointer operator->() const{ return _ptr; }
 
         friend bool operator== (const bidir_iterator& lhs,
             const bidir_iterator& rhs) {

@@ -214,7 +214,7 @@ class ft::vector
 
 		void pop_back()
 		{
-			myAllocator.destroy(_arr + --_index); // wtf
+			myAllocator.destroy(_arr + --_index);
 		}
 
 		void swap (ft::vector<T>& src)
@@ -253,7 +253,7 @@ class ft::vector
 			ft::vector<T> tmp;
 			tmp.assign(position, end());
 
-			if ((n + _index) > _max_capacity && (n + _index) > (_index * 2))
+			if ((n + _max_capacity) > (_max_capacity * 2))
 				reserve(_index + n);
 			else if (!_index)
 				reserve(n);
@@ -275,11 +275,11 @@ class ft::vector
 			tmp.assign(position, end());
 			difference_type n  = ft::distance(first, last);
 
-			if ((n + _index) > _max_capacity && (n + _index) > (_index * 2)) // DRY BRIH
+			if ((n + _max_capacity) > (_max_capacity * 2))
 				reserve(_index + n);
 			else if (!_index)
 				reserve(n);
-			else if ((size_t)n > _max_capacity) // wtf
+			else if ((size_t)n > _max_capacity)
 				reserve(n * 2);
 			
 			_index = start;
@@ -428,8 +428,11 @@ template <class T, class Alloc>
 	return (operator==(lhs, rhs) || operator>(lhs, rhs));
 }
 
-template <class T, class Alloc>
-  void swap (ft::vector<T,Alloc>& x, ft::vector<T,Alloc>& y)
+namespace ft
 {
-	x.swap(y);
+	template <class T, class Alloc>
+	void swap (ft::vector<T,Alloc>& x, ft::vector<T,Alloc>& y)
+	{
+		x.swap(y);
+	}
 }

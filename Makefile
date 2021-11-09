@@ -13,16 +13,23 @@
 
 CLANG = clang++
 
-FLAGS = --std=c++11 #-Wall -Werror
+FLAGS = --std=c++98 -Wall -Werror -Werror #-D NS
 
 NAME = a.out
 
-SRC = tests/red_black_tree.cpp
+SRC = tests/main2.cpp
 
 all: $(NAME)
 
 $(NAME): ${SRC}
+	$(CLANG) $(FLAGS) -I src -I utils -D NS ${SRC} -o $(NAME) 
+
+std: ${SRC}
+	$(CLANG) $(FLAGS) -I src -I utils -D NS ${SRC} -o $(NAME)
+	./a.out > 1
 	$(CLANG) $(FLAGS) -I src -I utils ${SRC} -o $(NAME)
+	./a.out > 2
+	diff 1 2
 
 san :
 	$(CLANG) $(FLAGS) -I src -I utils  -fsanitize=address -g ${SRC} -o $(NAME)

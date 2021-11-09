@@ -75,6 +75,16 @@ namespace ft
         return true;
     }
 
+    template <class InputIterator1, class InputIterator2, class BinaryPredicate>
+    bool equal (InputIterator1 first1, InputIterator1 last1,
+              InputIterator2 first2, BinaryPredicate pred)
+    {
+        while (first1!=last1)
+            if (!pred(*first1++, *first2++)) 
+                return false;
+        return true;
+    }
+
     template <class InputIterator1, class InputIterator2>
     bool lexicographical_compare (InputIterator1 first1, InputIterator1 last1,
                                 InputIterator2 first2, InputIterator2 last2)
@@ -87,6 +97,22 @@ namespace ft
         }
         return (first2!=last2);
     }
+
+    template <class InputIterator1, class InputIterator2, class Compare>
+    bool lexicographical_compare (InputIterator1 first1, InputIterator1 last1,
+                                InputIterator2 first2, InputIterator2 last2,
+                                Compare comp)
+    {
+         while (first1!=last1)
+        {
+            if ((!comp(*first1,*first2) && !comp(*first2,*first1)) || *first1>*first2) return false;
+            else if (*first1<*first2) return true;
+            ++first1; ++first2;
+        }
+        return (first2!=last2);
+        // return (!comp(a,b) && !comp(b,a));
+    }
+    
     template <typename Iterator>
     class reverse_iterator;
 
@@ -200,6 +226,7 @@ class rand_acc_iterator : public ft::iterator<std::random_access_iterator_tag, T
         typedef rand_acc_iterator self_type;
         rand_acc_iterator(pointer ptr) : _ptr(ptr) { };
         rand_acc_iterator(){}
+        self_type base() const { return self_type(_ptr);}
         rand_acc_iterator&   operator=(const value_type& it)
         {
             // todo
@@ -248,8 +275,6 @@ class rand_acc_iterator : public ft::iterator<std::random_access_iterator_tag, T
                         const rand_acc_iterator& rhs) { return lhs._ptr < rhs._ptr;}
         friend bool operator== (const rand_acc_iterator& lhs,
                         const rand_acc_iterator& rhs) { return lhs._ptr == rhs._ptr;}
-        // friend bool operator- (const rand_acc_iterator& lhs,
-                        // const rand_acc_iterator& rhs) { return lhs._ptr - rhs._ptr;}
     private:
         pointer _ptr;
 };

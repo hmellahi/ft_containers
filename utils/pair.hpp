@@ -42,15 +42,14 @@ class ft::pair
             this->second = pr.second;
             return (*this);
         }
-        // operator pair<const A,B> () const { return pair<const A,B>(first, second); }
 };
 
-template<typename A, typename B>
-std::ostream& operator<<(std::ostream& is, ft::pair<A, B>& obj)
-{
-    is << obj.first << "|" << obj.second << std::endl;
-    return is;
-}
+// template<typename A, typename B>
+// std::ostream& operator<<(std::ostream& is, ft::pair<A, B>& obj)
+// {
+//     is << obj.first << "|" << obj.second << std::endl;
+//     return is;
+// }
 
 namespace  ft
 {

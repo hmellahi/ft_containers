@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 #include <cstddef>
-#include "RBT.hpp"
+#include "AVL.hpp"
 
 
 namespace ft
@@ -121,8 +121,6 @@ namespace ft
     {static const bool value = false;};
     template<> struct is_integral<bool>{static const bool value = true;};
     template<> struct is_integral<int>{static const bool value = true;};
-    // template<> struct is_integral<char16_t>{static const bool value = true;};
-    // template<> struct is_integral<char32_t>{static const bool value = true;};
     template<> struct is_integral<signed char>{static const bool value = true;};
     template<> struct is_integral<short int>{static const bool value = true;};
     template<> struct is_integral<long long int>{static const bool value = true;};
@@ -213,25 +211,18 @@ template <typename T>
 class rand_acc_iterator : public ft::iterator<std::random_access_iterator_tag, T>
 {
     public:
-        typedef T                           value_type; // DRY
+        typedef T                           value_type;
         typedef int                         difference_type;
         typedef T*                          pointer;
         typedef T&                          reference;
         typedef std::random_access_iterator_tag  iterator_category;
-        // typedef typename ft::iterator<std::random_access_iterator_tag, T>::value_type            value_type;
-        // typedef typename iterator::difference_type       difference_type;
-        // typedef typename iterator::pointer               pointer;
-        // typedef typename iterator::reference             reference; // todo
-        // typedef typename iterator::iterator_category     iterator_category;
         typedef rand_acc_iterator self_type;
         rand_acc_iterator(pointer ptr) : _ptr(ptr) { };
         rand_acc_iterator(){}
         self_type base() const { return self_type(_ptr);}
         rand_acc_iterator&   operator=(const value_type& it)
         {
-            // todo
              _ptr = &it;
-            //  puts("tt");
             return (*this);
         }
         rand_acc_iterator(const value_type& it)
@@ -290,7 +281,7 @@ class bidir_iterator : public ft::iterator<std::bidirectional_iterator_tag, T>
         typedef T&                              reference;
         typedef std::bidirectional_iterator_tag iterator_category;
         typedef bidir_iterator                  self_type;
-        bidir_iterator(pointer ptr, const RBT<value_type, Compare>* bst = NULL)
+        bidir_iterator(pointer ptr, const AVL<value_type, Compare>* bst = NULL)
         : _ptr(ptr)
         {
             _bst = bst;
@@ -306,13 +297,13 @@ class bidir_iterator : public ft::iterator<std::bidirectional_iterator_tag, T>
             return (*this);
         }
 
-        operator bidir_iterator<const T, Compare> () const { return bidir_iterator<const T, Compare>(_ptr, reinterpret_cast<const RBT<const value_type, Compare>*>(_bst)); }
+        operator bidir_iterator<const T, Compare> () const { return bidir_iterator<const T, Compare>(_ptr, reinterpret_cast<const AVL<const value_type, Compare>*>(_bst)); }
         
         self_type& operator++()
         {
-            RBT<value_type, Compare>* curr = _bst->search(*_ptr);
+            AVL<value_type, Compare>* curr = _bst->search(*_ptr);
             if (!curr) { return *this;}
-            RBT<value_type, Compare>* nextNode = curr->next();
+            AVL<value_type, Compare>* nextNode = curr->next();
             if (nextNode)
                 _ptr = nextNode->value;
             else
@@ -328,12 +319,15 @@ class bidir_iterator : public ft::iterator<std::bidirectional_iterator_tag, T>
             // if the ptr is NULL then its must be the last element
             if (!_ptr)
             {
-                _ptr = _bst->findMax(_bst->root)->value; // todo protect : seg??
+                std::cout << "am here";
+                AVL<value_type, Compare>* max = _bst->findMax(_bst->root);
+                if (max)
+                    _ptr = max->value;
                 return *this;
             }
-            RBT<value_type, Compare>* curr = _bst->search(*_ptr);
+            AVL<value_type, Compare>* curr = _bst->search(*_ptr);
             if (!curr) { return *this;}
-            RBT<value_type, Compare>* prevNode = curr->prev();
+            AVL<value_type, Compare>* prevNode = curr->prev();
             if (prevNode)
                 _ptr = prevNode->value;
             else
@@ -353,5 +347,5 @@ class bidir_iterator : public ft::iterator<std::bidirectional_iterator_tag, T>
             const bidir_iterator& rhs) { return !(lhs == rhs);}
     public:
         pointer _ptr;
-        const RBT<value_type, Compare>* _bst;
+        const AVL<value_type, Compare>* _bst;
 };

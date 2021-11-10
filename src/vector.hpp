@@ -12,32 +12,18 @@
 
 #pragma once
 
-# include <iostream>
-# include <string>
-#include <cstddef>
-# include <memory>
-# include "iterators.hpp"
-// #include "header.hpp"
+#include "iterators.hpp"
+
 namespace ft
 {
     template < class T, class Alloc = std::allocator<T> >
     class vector;
-	template <typename T, class Container = vector<T> >
-    class stack;
 }
 
 template < class T, class Alloc >
 class ft::vector
 {
 	public:
-		~vector()
-		{
-			ft_destroy_arr();
-			if (_max_capacity)
-				myAllocator.deallocate(_arr, _max_capacity);
-		};
-
-
 		typedef		T											value_type;
 		typedef		Alloc										allocator_type;
 		typedef		typename allocator_type::reference			reference;
@@ -50,11 +36,20 @@ class ft::vector
 		typedef		rand_acc_iterator<const value_type> const_iterator;
 		typedef		reverse_iterator<const_iterator> const_reverse_iterator;
 		typedef		reverse_iterator<iterator> reverse_iterator;
+		
+		
+		~vector()
+		{
+			clear();
+			if (_max_capacity)
+				myAllocator.deallocate(_arr, _max_capacity);
+		};
+
+		
 		// -------> constructors
 		vector& operator= (const ft::vector<T>& src)
 		{
-			myAllocator  = src.get_allocator();
-			ft_destroy_arr();
+			clear();
 			reserve(src.size());
 			ft_init_with_iters(src.begin(), src.end());
 			return *this;
@@ -228,7 +223,9 @@ class ft::vector
 
 		void	clear()
 		{
-			ft_destroy_arr();
+			for (size_type i = 0; i< _index;i++)
+				myAllocator.destroy(_arr + i);
+			_index = 0;
 		}
 
 		iterator insert(iterator position, const value_type& val)
@@ -291,14 +288,14 @@ class ft::vector
 		template <class InputIterator>
 		void assign (InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
 		{
-			ft_destroy_arr();
+			clear();
 			reserve(ft::distance(first, last));
 			ft_init_with_iters(first, last);
 		}
 
 		void assign (size_type n, const value_type& val)
 		{
-			ft_destroy_arr();
+			clear();
 			reserve(n);
 			ft_init_with_val(n, val);
 		}
@@ -345,13 +342,6 @@ class ft::vector
 		size_type	_index;
 		T			*_arr;
 		Alloc	myAllocator;
-
-		void	ft_destroy_arr()
-		{
-			for (size_type i = 0; i< _index;i++)
-				myAllocator.destroy(_arr + i);
-			_index = 0;
-		}
 
 		template <class InputIterator>
 		void	ft_init_with_iters(InputIterator first, InputIterator last)
@@ -436,3 +426,5 @@ namespace ft
 		x.swap(y);
 	}
 }
+
+// todo wtf is explicit constructor

@@ -3,15 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   stack.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmellahi <hmellahi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hamza <hamza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 21:12:58 by hmellahi          #+#    #+#             */
-/*   Updated: 2021/07/27 13:42:50 by hmellahi         ###   ########.fr       */
+/*   Updated: 2021/11/10 03:44:21 by hamza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #include "vector.hpp"
+
+namespace ft
+{
+	template <typename T, class Container = vector<T> >
+    class stack;
+}
 
 template <typename T, class Container>
 class ft::stack

@@ -2,3 +2,4 @@ push.sh
 archive
 .vscode
 a.out
+a.out.dSYM

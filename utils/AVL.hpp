@@ -1,48 +1,41 @@
 #pragma once
-#include <memory>
 #include "pair.hpp"
-#include "debug.hpp"
-#include <stdlib.h>  
 
-
-// template <class T1, class T2>
-//   bool operator>  (const ft::pair<T1,T2>& lhs, const ft::pair<T1,T2>& rhs)
-// { return rhs<lhs; }
 
 template<typename T,
         class Compare = std::less<T> 
         >
-class RBT
+class AVL
 {
     public: // private bruh
         typedef T value_type;
-        typedef RBT self_type;
+        typedef AVL self_type;
 
         value_type      *value;
-        RBT  *right;
-        RBT  *left;
+        AVL  *right;
+        AVL  *left;
         int     height;
-        RBT  *root;
-        RBT  *parent;
+        AVL  *root;
+        AVL  *parent;
         std::allocator<self_type> _myAllocater;
         std::allocator<value_type> _valueAllocator;
         Compare key_compare;
 
-        int     getHeight(RBT *node) const
+        int     getHeight(AVL *node) const
         {
             if (node == NULL) return 0;
             return node->height;
         }
         
-        int     getBalance(RBT *node) const
+        int     getBalance(AVL *node) const
         {
             return (getHeight(node->left) - getHeight(node->right));
         }
 
-        RBT*   rotateRight(RBT* y)
+        AVL*   rotateRight(AVL* y)
         {
-            RBT* x = y->left;
-            RBT* T2 = x->right;
+            AVL* x = y->left;
+            AVL* T2 = x->right;
 
             // do rotate
             if (x->right)
@@ -60,12 +53,12 @@ class RBT
             return (x);
         }
 
-        RBT*   rotateLeft(RBT* x)
+        AVL*   rotateLeft(AVL* x)
         {
-            RBT *y = x->right;
+            AVL *y = x->right;
             // if (!y)
                 // exit(0);
-            RBT *T2 = y->left;
+            AVL *T2 = y->left;
 
             // Perform rotation
             if (y->left)
@@ -88,13 +81,13 @@ class RBT
         }
 
     public:
-        RBT()
+        AVL()
         {
             right = left = root = parent = NULL;
             value = NULL;
             height = 0;
         }
-        RBT(const value_type& val)
+        AVL(const value_type& val)
         {
             value = _valueAllocator.allocate(1);
             _valueAllocator.construct(value, val);
@@ -103,13 +96,13 @@ class RBT
             root = this;
             parent = NULL;
         }
-        RBT(RBT<value_type, Compare> *root)
+        AVL(AVL<value_type, Compare> *root)
         {
             right = left = parent = NULL;
             height = root->height;
             this->root = root;
         }
-        void preOrder(RBT *root)
+        void preOrder(AVL *root)
         {
             if(!root)
                 return ;
@@ -121,7 +114,7 @@ class RBT
         }
         bool is_found;
         
-        RBT*    iter(RBT* node, value_type min, value_type max, bool isLast, int &n)
+        AVL*    iter(AVL* node, value_type min, value_type max, bool isLast, int &n)
         {
             if (!node) return NULL;
 
@@ -136,7 +129,7 @@ class RBT
             return node; 
         }
 
-        void cpy(const RBT<value_type, Compare> *node)
+        void cpy(const AVL<value_type, Compare> *node)
         {
             if(!node)
                 return ;
@@ -145,10 +138,10 @@ class RBT
                 insert(*(node->value));
             cpy(node->right);
         }
-        ~RBT()
+        ~AVL()
         {
         }
-        RBT &operator=(const RBT &rhs)
+        AVL &operator=(const AVL &rhs)
         {
             root = rhs.root;
             left = rhs.left;
@@ -161,13 +154,13 @@ class RBT
             height = rhs.height;
             return (*this);
         }
-        void   destroy(RBT<value_type, Compare> *node)
+        void   destroy(AVL<value_type, Compare> *node)
         {
             _myAllocater.destroy(node); // useless
             _myAllocater.deallocate(node, 1);
         }
 
-        RBT    *balanceTree(RBT* root, const value_type& key)
+        AVL    *balanceTree(AVL* root, const value_type& key)
         {
             // update current node height
             root->height = std::max(getHeight(root->left), getHeight(root->right)) + 1;
@@ -202,7 +195,7 @@ class RBT
             }
             return root;
         }
-        RBT    *insert_helper(RBT *root, RBT* new_node)
+        AVL    *insert_helper(AVL *root, AVL* new_node)
         {
             if (!root)
                 return new_node;
@@ -219,15 +212,15 @@ class RBT
             return balanceTree(root, *(new_node->value));
         }
 
-        RBT     *insert(const value_type& val)
+        AVL     *insert(const value_type& val)
         {
-            RBT*    new_node = _myAllocater.allocate(1);
+            AVL*    new_node = _myAllocater.allocate(1);
             _myAllocater.construct(new_node, val);
             this->root = insert_helper(root, new_node);
             return (new_node);
         }
 
-        RBT     *find(RBT* root, const value_type& val) const
+        AVL     *find(AVL* root, const value_type& val) const
         {
             if (!root || root->value->first == val.first)
                 return root;
@@ -237,38 +230,38 @@ class RBT
                 return (find(root->left, val));
         }
 
-        operator RBT<const value_type, Compare> () const 
+        operator AVL<const value_type, Compare> () const 
         {
-            return RBT<const value_type, Compare>();
+            return AVL<const value_type, Compare>();
         }
 
-        RBT<value_type, Compare> *search(const value_type& val) const
+        AVL<value_type, Compare> *search(const value_type& val) const
         {
             return (find(this->root, val));
         }
 
-        RBT *findMin(RBT *root) const
+        AVL *findMin(AVL *root) const
         {
             if (!root)  
                 return NULL;
-            RBT*   small = root;
+            AVL*   small = root;
             while (small->left)
                 small = small->left;
             return (small);
         }
 
-        RBT *findMax(RBT *root) const
+        AVL *findMax(AVL *root) const
         {
-            RBT*   small = root;
+            AVL*   small = root;
             while (small->right)
                 small = small->right;
             return (small);
         }
 
-        RBT<value_type, Compare> *prev()
+        AVL<value_type, Compare> *prev()
         {
-            RBT<value_type, Compare>* curr = this;
-            RBT<value_type, Compare>* p;
+            AVL<value_type, Compare>* curr = this;
+            AVL<value_type, Compare>* p;
             if (root == NULL)
                 return NULL;
             //If the current node has a null right child,
@@ -295,10 +288,10 @@ class RBT
             return (curr);
         }
 
-        RBT<value_type, Compare> *next()
+        AVL<value_type, Compare> *next()
         {
-            RBT<value_type, Compare>* curr = this;
-            RBT<value_type, Compare>* p;
+            AVL<value_type, Compare>* curr = this;
+            AVL<value_type, Compare>* p;
             if (curr == NULL)
                 return NULL;
             //If the current node has a null right child,
@@ -325,7 +318,7 @@ class RBT
             return (curr);
         }
 
-        RBT*    del(RBT* node, const value_type& val, bool &is_found)
+        AVL*    del(AVL* node, const value_type& val, bool &is_found)
         {
             if (!node) return node;
             if (val.first == node->value->first)
@@ -335,7 +328,7 @@ class RBT
                 
                 if (!node->right || !node->left)
                 {
-                    RBT* tmp = node->right ? node->right : node->left;
+                    AVL* tmp = node->right ? node->right : node->left;
                     // in case if node to be deleted has no childs
                     if (!tmp)
                     {
@@ -346,7 +339,7 @@ class RBT
                     // copy child content to the node to be deleted
                     else
                     {
-                        RBT* nodeParent = node->parent;
+                        AVL* nodeParent = node->parent;
                         *node = *tmp;
                         node->parent = nodeParent;
                     }
@@ -357,7 +350,7 @@ class RBT
                 else
                 {
                     // find inorder successor
-                    RBT* minum = findMin(node->right);
+                    AVL* minum = findMin(node->right);
                     // copy min values
                     value_type *tmp = node->value;
                     node->value = minum->value;

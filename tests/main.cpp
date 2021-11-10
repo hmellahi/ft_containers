@@ -2,17 +2,19 @@
 #include <string>
 #include <deque>
 #include <list>
-// #if 1 //CREATE A REAL STL EXAMPLE
-	// #include <map>
-	// #include <stack>
-	// #include <vector>
-	// namespace ft = std;
-// #else
-	#include <map.hpp>
-	#include <stack.hpp>
-	#include <vector.hpp>
-// #endif
-
+#include <sys/time.h>
+#if NS
+#define NAMESPACE "FT  : "
+#include "../src/vector.hpp"
+#include "../src/stack.hpp"
+#include "../src/map.hpp"
+#else
+#define NAMESPACE "STD : "
+#include <vector>
+#include <stack>
+#include <map>
+namespace ft = std;
+#endif
 using namespace std;
 
 bool fncomp (char lhs, char rhs) {return lhs<rhs;}
@@ -43,6 +45,9 @@ public:
 
 int main(int argc, char** argv)
 {
+	clock_t start = clock();
+    	std::cout << "	======================>\033[1;31m init and iterators tests \033[0m<============================ " << std::endl;
+
 	// vector tests
 
 	{
@@ -70,21 +75,6 @@ int main(int argc, char** argv)
 		std::cout << ' ' << *it;
 	std::cout << '\n';
 }
-
-	{
-		ft::vector<int> myvector;
-	int myint;
-
-	std::cout << "Please enter some integers (enter 0 to end):\n";
-
-	do {
-	std::cin >> myint;
-	myvector.push_back (myint);
-	} while (myint);
-
-	std::cout << "myvector stores " << int(myvector.size()) << " numbers.\n";
-	}
-
 
 	{
 		ft::vector<int> myvector;
@@ -275,6 +265,8 @@ int main(int argc, char** argv)
   	mymap.erase (++mymap.begin());
 		std::cout << it->first << std::endl;
 	}
+std::cout.precision(10);
+	std::cout << NAMESPACE << std::fixed <<  float(clock() - start)/CLOCKS_PER_SEC  << std::endl;
 
 	return (0);
 }

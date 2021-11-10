@@ -13,36 +13,22 @@
 
 CLANG = clang++
 
-FLAGS = --std=c++98 -Wall -Werror -Werror #-D NS
+FLAGS = --std=c++98 -Wall -Werror -Werror
 
 NAME = a.out
 
 SRC = tests/main.cpp
+# SRC = main2.cpp
 
 all: $(NAME)
 
-$(NAME): ${SRC}
-	$(CLANG) $(FLAGS) -I src -I utils -D NS ${SRC} -o $(NAME) 
-	# ./a.out
-	# rm -rf $(NAME)
-
-# a: ${SRC}
-# 	$(CLANG) $(FLAGS) -I src -I utils ${SRC} -o $(NAME)
-# 	./a.out
-# 	rm -rf $(NAME)
+$(NAME): ft
 	
-diff: ${SRC}
+ft: ${SRC}
 	$(CLANG) $(FLAGS) -I src -I utils -D NS ${SRC} -o $(NAME)
-	./a.out > 1
+
+std :
 	$(CLANG) $(FLAGS) -I src -I utils ${SRC} -o $(NAME)
-	./a.out > 2
-	diff 1 2
-	rm -rf 1 2
-	rm -rf $(NAME)
-
-
-san :
-	$(CLANG) $(FLAGS) -I src -I utils  -fsanitize=address -g ${SRC} -o $(NAME)
 
 clean:
 

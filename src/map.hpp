@@ -32,8 +32,8 @@ class ft::map
 		typedef		typename allocator_type::const_reference	const_reference;
 		typedef		typename allocator_type::pointer			pointer;
 		typedef		typename allocator_type::const_pointer		const_pointer;
-        typedef		bidir_iterator<value_type, Compare>         iterator;
-		typedef		bidir_iterator<const value_type, Compare>   const_iterator;
+        typedef		bidir_iterator<value_type, Compare, Alloc>         iterator;
+		typedef		bidir_iterator<const value_type, Compare, Alloc>   const_iterator;
 		typedef		reverse_iterator<const_iterator>            const_reverse_iterator;
 		typedef		reverse_iterator<iterator>                  reverse_iterator;
 		typedef		int                                         difference_type;
@@ -76,7 +76,7 @@ class ft::map
         pair<iterator,bool> insert (const value_type& val)
         {
             pair<iterator,bool> res;
-            AVL<value_type, Compare>* node = _avl.search(val);
+            AVL<value_type, Compare, Alloc>* node = _avl.search(val);
             if (!node)
             {
                 node = _avl.insert(val);
@@ -124,13 +124,13 @@ class ft::map
 
         iterator find (const key_type& k)
         {
-            AVL<value_type, Compare> *res = _avl.search(ft::make_pair(k, mapped_type()));
+            AVL<value_type, Compare, Alloc> *res = _avl.search(ft::make_pair(k, mapped_type()));
             return iterator(res ? res->value : NULL , &_avl);
         }
 
         const_iterator find (const key_type& k) const
         {
-            AVL<value_type, Compare> *res = _avl.search(ft::make_pair(k, mapped_type()));
+            AVL<value_type, Compare, Alloc> *res = _avl.search(ft::make_pair(k, mapped_type()));
             return const_iterator(res ? res->value : NULL , &_avl);
         }
 
@@ -143,55 +143,28 @@ class ft::map
 
         iterator lower_bound (const key_type& k)
         {
-            AVL<value_type, Compare> *bound = NULL;
+            AVL<value_type, Compare, Alloc> *bound = NULL;
             bound = findBound2(_avl.root, k, bound);
             return iterator(bound ? bound->value : NULL, &_avl);
         }
 
-        // AVL<value_type, Compare>    *findBound(AVL<value_type, Compare> *root, const key_type&k, AVL<value_type, Compare> *bound) const
-        // {
-        //     if (!root) return bound;
-
-        //     if (keyCampare(k, root->value->first) && (!bound ||  !keyCampare(bound->value->first, root->value->first)))
-        //         bound = root;
-
-        //     if (!keyCampare(k, root->value->first))
-        //         return (findBound(root->right, k, bound));
-        //     else
-        //         return (findBound(root->left, k, bound));
-        //     return bound;
-        // }
-
-        // AVL<value_type, Compare>    *findBound2(AVL<value_type, Compare> *root, const key_type&k, AVL<value_type, Compare> *bound) const
-        // {
-        //     if (!root) return bound;
-        //     if (!keyCampare(root->value->first, k) && (!bound || !keyCampare(bound->value->first, root->value->first)))
-        //         bound = root;
-
-        //     if (!keyCampare(k, root->value->first))
-        //         return (findBound2(root->right, k, bound));
-        //     else
-        //         return (findBound2(root->left, k, bound));
-        //     return bound;
-        // }
-
         iterator upper_bound(const key_type& k)
         {
-            AVL<value_type, Compare> *bound = NULL;
+            AVL<value_type, Compare, Alloc> *bound = NULL;
             bound = findBound(_avl.root, k, bound);
             return iterator(bound ? bound->value : NULL, &_avl);
         }
         
         const_iterator lower_bound (const key_type& k) const
         {
-            AVL<value_type, Compare> *bound = NULL;
+            AVL<value_type, Compare, Alloc> *bound = NULL;
             bound = findBound2(_avl.root, k, bound);
             return iterator(bound ? bound->value : NULL, &_avl);
         }
 
         const_iterator upper_bound (const key_type& k) const
         {
-            AVL<value_type, Compare> *bound = NULL;
+            AVL<value_type, Compare, Alloc> *bound = NULL;
             bound = findBound(_avl.root, k, bound);
             return iterator(bound ? bound->value : NULL, &_avl);
         }
@@ -245,7 +218,7 @@ class ft::map
         mapped_type   &operator[](const key_type& key)
         {
             value_type to_find = ft::make_pair<const key_type, mapped_type>(key, mapped_type());
-			AVL<value_type, Compare>* node = _avl.search(to_find);
+			AVL<value_type, Compare, Alloc>* node = _avl.search(to_find);
             if (!node)
             {
                 _size++;
@@ -267,13 +240,13 @@ class ft::map
 
         // // --> Iterators
         iterator begin() {
-            AVL<value_type, Compare>* node = _avl.findMin(_avl.root);
+            AVL<value_type, Compare, Alloc>* node = _avl.findMin(_avl.root);
             if (!node) return iterator(NULL, &_avl);
             return (iterator(node->value, &_avl));
         }
 
         const_iterator begin() const {
-            AVL<value_type, Compare>* node = _avl.findMin(_avl.root);
+            AVL<value_type, Compare, Alloc>* node = _avl.findMin(_avl.root);
             if (!node) return iterator(NULL, &_avl);
             return (iterator(node->value, &_avl));
         }
@@ -286,7 +259,7 @@ class ft::map
 		const_reverse_iterator rbegin() const {return reverse_iterator(iterator(NULL, &_avl));}
 		reverse_iterator rend(){return reverse_iterator(begin());}
         const_reverse_iterator rend() const{
-            AVL<value_type, Compare>* node = _avl.findMin(_avl.root);
+            AVL<value_type, Compare, Alloc>* node = _avl.findMin(_avl.root);
             if (!node) return reverse_iterator(iterator(NULL, &_avl));
             return reverse_iterator(iterator(node->value, &_avl));
         }
@@ -298,7 +271,7 @@ class ft::map
             _size = 0;
         }
     
-        AVL<value_type, Compare>    _avl;
+        AVL<value_type, Compare, Alloc>    _avl;
 
     private:
         size_t  _size;
@@ -327,43 +300,7 @@ class ft::map
 			_size = 0;
 		}
 
-        // Function to print binary tree in 2D
-        // It does reverse inorder traversal
-        // void print2DUtil(AVL<value_type, Compare> *root, int space) const
-        // {
-        //     // Base case
-        //     if (root == NULL)
-        //         return;
-        
-        //     // Increase distance between levels
-        //     space += 3;
-        
-        //     // Process right child first
-        //     print2DUtil(root->right, space);
-        
-        //     // Print current node after space
-        //     // count
-        //     // std::cout<<std::endl;
-        //     for (int i = 3; i < space; i++)
-        //         std::cout<<" ";
-        //     std::cout<<root->value->first;
-        //     if (root->parent)
-        //         std::cout <<"|"<< (root->parent->value->first);
-        //     std::cout<<"\n";
-        
-        //     // Process left child
-        //     print2DUtil(root->left, space);
-        // }
-        // // Wrapper over print2DUtil()
-        // void print2D() const
-        // {
-        //     std::cout << "\n-----------------" << std::endl;
-        //     // Pass initial space count as 0
-        //     print2DUtil((_avl.root), 1);
-        //     std::cout << "-----------------\n" << std::endl;
-        // }
-
-        AVL<value_type, Compare>    *findBound(AVL<value_type, Compare> *root, const key_type&k, AVL<value_type, Compare> *bound) const
+        AVL<value_type, Compare, Alloc>    *findBound(AVL<value_type, Compare, Alloc> *root, const key_type&k, AVL<value_type, Compare> *bound) const
         {
             if (!root) return bound;
 
@@ -377,7 +314,7 @@ class ft::map
             return bound;
         }
 
-        AVL<value_type, Compare>    *findBound2(AVL<value_type, Compare> *root, const key_type&k, AVL<value_type, Compare> *bound) const
+        AVL<value_type, Compare, Alloc>    *findBound2(AVL<value_type, Compare, Alloc> *root, const key_type&k, AVL<value_type, Compare> *bound) const
         {
             if (!root) return bound;
             if (!keyCampare(root->value->first, k) && (!bound || !keyCampare(bound->value->first, root->value->first)))

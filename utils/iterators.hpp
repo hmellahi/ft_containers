@@ -271,7 +271,7 @@ class rand_acc_iterator : public ft::iterator<std::random_access_iterator_tag, T
 };
 
 
-template <typename T, typename Compare>
+template <typename T, typename Compare, typename Alloc>
 class bidir_iterator : public ft::iterator<std::bidirectional_iterator_tag, T>
 {
     public:
@@ -281,7 +281,7 @@ class bidir_iterator : public ft::iterator<std::bidirectional_iterator_tag, T>
         typedef T&                              reference;
         typedef std::bidirectional_iterator_tag iterator_category;
         typedef bidir_iterator                  self_type;
-        bidir_iterator(pointer ptr, const AVL<value_type, Compare>* bst = NULL)
+        bidir_iterator(pointer ptr, const AVL<value_type, Compare, Alloc>* bst = NULL)
         : _ptr(ptr)
         {
             _bst = bst;
@@ -297,13 +297,13 @@ class bidir_iterator : public ft::iterator<std::bidirectional_iterator_tag, T>
             return (*this);
         }
 
-        operator bidir_iterator<const T, Compare> () const { return bidir_iterator<const T, Compare>(_ptr, reinterpret_cast<const AVL<const value_type, Compare>*>(_bst)); }
+        operator bidir_iterator<const T, Compare, Alloc> () const { return bidir_iterator<const T, Compare, Alloc>(_ptr, reinterpret_cast<const AVL<const value_type, Compare, Alloc>*>(_bst)); }
         
         self_type& operator++()
         {
-            AVL<value_type, Compare>* curr = _bst->search(*_ptr);
+            AVL<value_type, Compare, Alloc>* curr = _bst->search(*_ptr);
             if (!curr) { return *this;}
-            AVL<value_type, Compare>* nextNode = curr->next();
+            AVL<value_type, Compare, Alloc>* nextNode = curr->next();
             if (nextNode)
                 _ptr = nextNode->value;
             else
@@ -319,15 +319,14 @@ class bidir_iterator : public ft::iterator<std::bidirectional_iterator_tag, T>
             // if the ptr is NULL then its must be the last element
             if (!_ptr)
             {
-                std::cout << "am here";
-                AVL<value_type, Compare>* max = _bst->findMax(_bst->root);
+                AVL<value_type, Compare, Alloc>* max = _bst->findMax(_bst->root);
                 if (max)
                     _ptr = max->value;
                 return *this;
             }
-            AVL<value_type, Compare>* curr = _bst->search(*_ptr);
+            AVL<value_type, Compare, Alloc>* curr = _bst->search(*_ptr);
             if (!curr) { return *this;}
-            AVL<value_type, Compare>* prevNode = curr->prev();
+            AVL<value_type, Compare, Alloc>* prevNode = curr->prev();
             if (prevNode)
                 _ptr = prevNode->value;
             else
@@ -347,5 +346,5 @@ class bidir_iterator : public ft::iterator<std::bidirectional_iterator_tag, T>
             const bidir_iterator& rhs) { return !(lhs == rhs);}
     public:
         pointer _ptr;
-        const AVL<value_type, Compare>* _bst;
+        const AVL<value_type, Compare, Alloc>* _bst;
 };

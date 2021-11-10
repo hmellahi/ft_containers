@@ -3,11 +3,14 @@
 
 
 template<typename T,
-        class Compare = std::less<T> 
+        class Compare = std::less<T>,
+        // class Alloc
+        // todo alloc
+        class Alloc = std::allocator<T>
         >
 class AVL
 {
-    public: // private bruh
+    public:
         typedef T value_type;
         typedef AVL self_type;
 
@@ -17,8 +20,9 @@ class AVL
         int     height;
         AVL  *root;
         AVL  *parent;
-        std::allocator<self_type> _myAllocater;
-        std::allocator<value_type> _valueAllocator;
+        Alloc _valueAllocator;
+        typename Alloc::template rebind<self_type>::other _myAllocater;
+
         Compare key_compare;
 
         int     getHeight(AVL *node) const
@@ -96,7 +100,7 @@ class AVL
             root = this;
             parent = NULL;
         }
-        AVL(AVL<value_type, Compare> *root)
+        AVL(AVL<value_type, Compare, Alloc> *root)
         {
             right = left = parent = NULL;
             height = root->height;
@@ -129,7 +133,7 @@ class AVL
             return node; 
         }
 
-        void cpy(const AVL<value_type, Compare> *node)
+        void cpy(const AVL<value_type, Compare, Alloc> *node)
         {
             if(!node)
                 return ;
@@ -153,11 +157,6 @@ class AVL
             _valueAllocator.construct(value, *(rhs.value));
             height = rhs.height;
             return (*this);
-        }
-        void   destroy(AVL<value_type, Compare> *node)
-        {
-            _myAllocater.destroy(node); // useless
-            _myAllocater.deallocate(node, 1);
         }
 
         AVL    *balanceTree(AVL* root, const value_type& key)
@@ -230,12 +229,12 @@ class AVL
                 return (find(root->left, val));
         }
 
-        operator AVL<const value_type, Compare> () const 
+        operator AVL<const value_type, Compare, Alloc> () const 
         {
-            return AVL<const value_type, Compare>();
+            return AVL<const value_type, Compare, Alloc>();
         }
 
-        AVL<value_type, Compare> *search(const value_type& val) const
+        AVL<value_type, Compare, Alloc> *search(const value_type& val) const
         {
             return (find(this->root, val));
         }
@@ -258,10 +257,10 @@ class AVL
             return (small);
         }
 
-        AVL<value_type, Compare> *prev()
+        AVL<value_type, Compare, Alloc> *prev()
         {
-            AVL<value_type, Compare>* curr = this;
-            AVL<value_type, Compare>* p;
+            AVL<value_type, Compare, Alloc>* curr = this;
+            AVL<value_type, Compare, Alloc>* p;
             if (root == NULL)
                 return NULL;
             //If the current node has a null right child,
@@ -288,10 +287,10 @@ class AVL
             return (curr);
         }
 
-        AVL<value_type, Compare> *next()
+        AVL<value_type, Compare, Alloc> *next()
         {
-            AVL<value_type, Compare>* curr = this;
-            AVL<value_type, Compare>* p;
+            AVL<value_type, Compare, Alloc>* curr = this;
+            AVL<value_type, Compare, Alloc>* p;
             if (curr == NULL)
                 return NULL;
             //If the current node has a null right child,
@@ -378,5 +377,5 @@ class AVL
             return (is_found);
         }
 
-        std::allocator<T> get_allocator() const { return _myAllocater;}
+        Alloc get_allocator() const { return _myAllocater;}
 };
